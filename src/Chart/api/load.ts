@@ -159,8 +159,8 @@ export default {
 
 		// update classes if exists
 		"classes" in args && Object.keys(args.classes).forEach(id => {
-			config.data_classes[id] = args.classes[id];
-		});
+            throw new Error("STUB");
+        });
 
 		// update categories if exists
 		if ("categories" in args && $$.axis.isCategorized()) {
@@ -169,19 +169,19 @@ export default {
 
 		// update axes if exists
 		"axes" in args && Object.keys(args.axes).forEach(id => {
-			config.data_axes[id] = args.axes[id];
-		});
+            throw new Error("STUB");
+        });
 
 		// update colors if exists
 		"colors" in args && Object.keys(args.colors).forEach(id => {
-			config.data_colors[id] = args.colors[id];
-		});
+            throw new Error("STUB");
+        });
 
 		// update regions if exists
 		"regions" in args && (config.data_regions = args.regions || {});
 
 		const hasDataToLoad = ["data", "columns", "rows", "json", "url"]
-			.some(key => key in args);
+			.some(key => { throw new Error("STUB"); });
 		const hasUnload = "unload" in args && args.unload !== false;
 
 		if ("regions" in args && !hasDataToLoad && !hasUnload) {
@@ -200,16 +200,8 @@ export default {
 			const unloadIds = $$.mapToTargetIds(args.unload === true ? null : args.unload);
 
 			$$.unload(unloadIds, () => {
-				if (!$$.config || !$$.cache) {
-					return;
-				}
-
-				$$.cache.remove(unloadIds);
-
-				// to mitigate improper rendering for multiple consecutive calls
-				// https://github.com/naver/billboard.js/issues/2121
-				requestIdleCallback(() => $$.loadFromArgs(args));
-			});
+                throw new Error("STUB");
+            });
 		} else {
 			$$.loadFromArgs(args);
 		}
@@ -259,18 +251,7 @@ export default {
 		$$.state._eventRectFingerprint = null;
 
 		$$.unload(ids, () => {
-			if (!$$.config || !$$.cache) {
-				return;
-			}
-
-			$$.redraw({
-				withUpdateOrgXDomain: true,
-				withUpdateXDomain: true,
-				withLegend: true
-			});
-
-			$$.cache.remove(ids);
-			callDone.call($$, args.done, args.resizeAfter);
-		});
+            throw new Error("STUB");
+        });
 	}
 };

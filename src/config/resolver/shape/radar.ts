@@ -10,9 +10,4 @@ import optRadar from "../../Options/shape/radar";
 import {internal as axisInternal, options as axisOptions} from "../axis";
 import {extendArc} from "./arc.helpers";
 
-export let radar = (): string => (
-	extendArc(
-		[axisInternal.eventrect, shapePoint, shapeRadar],
-		[optPoint, optRadar, {axis_x_categories: axisOptions.optAxis.axis_x_categories}]
-	), (radar = () => TYPE.RADAR)()
-);
+export let radar = (): string => { throw new Error("STUB"); };

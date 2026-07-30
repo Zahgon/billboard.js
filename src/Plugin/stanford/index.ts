@@ -31,12 +31,7 @@ interface HSLColor {
  * @returns {HSLColor} HSL color object
  */
 function hsl(h: number, s: number, l: number, opacity: number = 1): HSLColor {
-	return {
-		h: +h,
-		s: +s,
-		l: +l,
-		opacity: +opacity
-	};
+    throw new Error("STUB");
 }
 
 /**
@@ -125,165 +120,47 @@ export default class Stanford extends Plugin {
 	private elements;
 
 	constructor(options) {
-		super(options);
-		this.config = new Options();
-
-		return this;
-	}
+        throw new Error("STUB");
+    }
 
 	$beforeInit(): void {
-		const {$$} = this;
-
-		// override on config values & methods
-		$$.config.data_xSort = false;
-		$$.isMultipleX = () => true;
-		$$.showGridFocus = () => {};
-		$$.labelishData = d => d.values;
-		$$.opacityForCircle = () => 1;
-
-		const getCurrentPadding = $$.getCurrentPadding.bind($$);
-
-		$$.getCurrentPadding = () => {
-			const padding = getCurrentPadding();
-
-			padding.right += this.colorScale ? this.colorScale.getColorScalePadding() : 0;
-
-			return padding;
-		};
-	}
+        throw new Error("STUB");
+    }
 
 	$init(): void {
-		const {$$} = this;
-
-		this.loadConfig();
-		$$.color = this.getStanfordPointColor.bind($$);
-
-		this.colorScale = new ColorScale(this);
-		this.elements = new Elements(this);
-
-		this.convertData();
-		this.initStanfordData();
-		this.setStanfordTooltip();
-		this.colorScale.drawColorScale();
-
-		$$.right += this.colorScale ? this.colorScale.getColorScalePadding() : 0;
-
-		this.$redraw();
-	}
+        throw new Error("STUB");
+    }
 
 	$redraw(duration?: number): void {
-		this.colorScale?.drawColorScale();
-		this.elements?.updateStanfordElements(duration);
-	}
+        throw new Error("STUB");
+    }
 
 	getOptions(): Options {
-		return new Options();
-	}
+        throw new Error("STUB");
+    }
 
 	convertData(): void {
 		const data = this.$$.data.targets;
 		const epochs = this.options.epochs;
 
 		data.forEach(d => {
-			d.values.forEach((v, i) => {
-				v.epochs = epochs[i];
-			});
-
-			d.minEpochs = undefined;
-			d.maxEpochs = undefined;
-			d.colors = undefined;
-			d.colorscale = undefined;
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	initStanfordData(): void {
-		const {config} = this;
-		const target = this.$$.data.targets[0];
-
-		// TODO STANFORD see if (data.js -> orderTargets)+ can be used instead
-		// Make larger values appear on top
-		target.values.sort(compareEpochs);
-
-		// Get min/max epochs
-		let minEpoch = Infinity;
-		let maxEpoch = -Infinity;
-
-		for (let i = 0; i < target.values.length; i++) {
-			const e = target.values[i].epochs;
-
-			if (e < minEpoch) minEpoch = e;
-			if (e > maxEpoch) maxEpoch = e;
-		}
-
-		target.minEpochs = !isNaN(config.scale_min) ? config.scale_min : minEpoch;
-		target.maxEpochs = !isNaN(config.scale_max) ? config.scale_max : maxEpoch;
-
-		target.colors = isFunction(config.colors) ?
-			config.colors :
-			d3InterpolateHslLong(hsl(250, 1, 0.5), hsl(0, 1, 0.5));
-
-		target.colorscale = d3ScaleSequentialLog(target.colors)
-			.domain([target.minEpochs, target.maxEpochs]);
-	}
+        throw new Error("STUB");
+    }
 
 	getStanfordPointColor(d) {
-		const target = this.data.targets[0];
-
-		return target.colorscale(d.epochs);
-	}
+        throw new Error("STUB");
+    }
 
 	setStanfordTooltip(): string | undefined {
-		const {config} = this.$$;
-
-		if (isEmpty(config.tooltip_contents)) {
-			config.tooltip_contents = function(d, defaultTitleFormat, defaultValueFormat, color) {
-				const {data_x} = config;
-				let html = `<table class="${$TOOLTIP.tooltip}"><tbody>`;
-
-				d.forEach(v => {
-					const {id = "", value = 0, epochs = 0, x = ""} = v;
-
-					html += `<tr>
-							<th>${data_x || ""}</th>
-							<th class="value">${defaultTitleFormat(x)}</th>
-						</tr>
-						<tr>
-							<th>${v.id}</th>
-							<th class="value">${defaultValueFormat(value)}</th>
-						</tr>
-						<tr class="${$TOOLTIP.tooltipName}-${id}">
-							<td class="name"><span style="background-color:${
-						color(v)
-					}"></span>Epochs</td>
-							<td class="value">${defaultValueFormat(epochs)}</td>
-						</tr>`;
-				});
-
-				return `${html}</tbody></table>`;
-			};
-		}
-	}
+        throw new Error("STUB");
+    }
 
 	countEpochsInRegion(region): {value: number, percentage: number} {
-		const $$ = this;
-		const target = $$.data.targets[0];
-
-		const total = target.values.reduce(
-			(accumulator, currentValue) => accumulator + Number(currentValue.epochs),
-			0
-		);
-
-		const value = target.values.reduce((accumulator, currentValue) => {
-			if (pointInRegion(currentValue, region)) {
-				return accumulator + Number(currentValue.epochs);
-			}
-
-			return accumulator;
-		}, 0);
-
-		return {
-			value,
-			percentage: value !== 0 ? +(value / total * 100).toFixed(1) : 0
-		};
-	}
+        throw new Error("STUB");
+    }
 }

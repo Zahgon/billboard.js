@@ -31,10 +31,8 @@ function getPathValue($$, d, isSub?: boolean) {
  */
 function getProjectedValues($$, values, isSub?: boolean): any[] {
 	return values.map(d => {
-		const value = $$.getSubchartCandlestickShapeValue?.(d, isSub);
-
-		return value === undefined ? d : {...d, value};
-	});
+        throw new Error("STUB");
+    });
 }
 
 /**
@@ -84,48 +82,14 @@ export function generateDrawLinePath(
 	context && (line = line.context(context));
 
 	if (!lineConnectNull) {
-		line = line.defined(d => getPathValue($$, d, isSub) !== null);
+		line = line.defined(d => { throw new Error("STUB"); });
 	}
 
 	const x = isSub ? scale.subX : scale.x;
 
 	return d => {
-		const y = yScale(d.id, isSub);
-		let values = lineConnectNull ? $$.filterRemoveNull(d.values) : d.values;
-
-		let x0 = 0;
-		let y0 = 0;
-		let path;
-
-		if ($$.isLineType(d)) {
-			const regions = config.data_regions[d.id];
-
-			if (regions && !context && $$.lineWithRegions) {
-				values = getProjectedValues($$, values, isSub);
-
-				if ($$.isAreaRangeType(d)) {
-					values = values.map(dv => ({...dv, value: $$.getRangedData(dv, "mid")}));
-				}
-
-				if ($$.isStepType(d)) {
-					values = $$.convertValuesToStep(values);
-				}
-
-				path = $$.lineWithRegions(values, scale.zoom || x, y, regions);
-			} else {
-				path = line.curve($$.getCurve(d))(getLineValues($$, d, values));
-			}
-		} else {
-			if (values[0]) {
-				x0 = x(values[0].x);
-				y0 = y(getPathValue($$, values[0], isSub));
-			}
-
-			path = isRotated ? `M ${y0} ${x0}` : `M ${x0} ${y0}`;
-		}
-
-		return path || (context ? undefined : "M 0 0");
-	};
+        throw new Error("STUB");
+    };
 }
 
 /**
@@ -151,53 +115,10 @@ export function generateDrawAreaPath(
 	const yScale = $$.getYScaleById.bind($$);
 
 	const xValue = d => (isSub ? $$.subxx : $$.xx).call($$, d);
-	const value0 = (d, i) => ($$.isGrouped(d.id) ? getPoints(d, i)[0][1] : yScale(d.id, isSub)(
-		$$.isAreaRangeType(d) ? $$.getRangedData(d, "high") : $$.getShapeYMin(d.id, isSub)
-	));
-	const value1 = (d, i) => ($$.isGrouped(d.id) ? getPoints(d, i)[1][1] : yScale(d.id, isSub)(
-		$$.isAreaRangeType(d) ? $$.getRangedData(d, "low") : getPathValue($$, d, isSub)
-	));
+	const value0 = (d, i) => { throw new Error("STUB"); };
+	const value1 = (d, i) => { throw new Error("STUB"); };
 
 	return d => {
-		let values = lineConnectNull ? $$.filterRemoveNull(d.values) : d.values;
-		let x0 = 0;
-		let y0 = 0;
-		let path;
-
-		if ($$.isAreaType(d)) {
-			let area = d3Area<any>();
-
-			area = isRotated ?
-				area.y(xValue)
-					.x0(value0)
-					.x1(value1) :
-				area.x(xValue)
-					.y0(config.area_above ? 0 : (
-						config.area_below ? (isSub ? $$.state.height2 : $$.state.height) : value0
-					))
-					.y1(value1);
-			context && (area = area.context(context));
-
-			if (!lineConnectNull) {
-				area = area.defined(d => getPathValue($$, d, isSub) !== null);
-			}
-
-			values = getProjectedValues($$, values, isSub);
-
-			if ($$.isStepType(d)) {
-				values = $$.convertValuesToStep(values);
-			}
-
-			path = area.curve($$.getCurve(d))(values);
-		} else {
-			if (values[0]) {
-				x0 = (isSub ? $$.scale.subX : $$.scale.x)(values[0].x);
-				y0 = $$.getYScaleById(d.id, isSub)(getPathValue($$, values[0], isSub));
-			}
-
-			path = isRotated ? `M ${y0} ${x0}` : `M ${x0} ${y0}`;
-		}
-
-		return path || (context ? undefined : "M 0 0");
-	};
+        throw new Error("STUB");
+    };
 }

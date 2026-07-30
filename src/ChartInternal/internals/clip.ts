@@ -49,23 +49,8 @@ export default {
 	 * @private
 	 */
 	setXAxisClipPath(node): void {
-		const $$ = this;
-		const {config, state: {margin, width, height}} = $$;
-		const isRotated = config.axis_rotated;
-		const left = Math.max(30, margin.left) - (isRotated ? 0 : 20);
-
-		// less than 20 is not enough to show the axis label 'outer' without legend
-		const h = (isRotated ? (margin.top + height) + 10 : margin.bottom) + 20;
-		const x = isRotated ? -(1 + left) : -(left - 1);
-		const y = -15; // -Math.max(15, margin.top);
-		const w = isRotated ? margin.left + 20 : width + 10 + left;
-
-		node
-			.attr("x", x)
-			.attr("y", y)
-			.attr("width", w)
-			.attr("height", h);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set y Axis clipPath dimension
@@ -73,26 +58,8 @@ export default {
 	 * @private
 	 */
 	setYAxisClipPath(node): void {
-		const $$ = this;
-		const {config, state: {margin, width, height}} = $$;
-		const isRotated = config.axis_rotated;
-
-		const left = Math.max(30, margin.left) - (isRotated ? 20 : 0);
-		const isInner = config.axis_y_inner;
-
-		const x = isInner && !isRotated ?
-			(config.axis_y_label.text ? -20 : -1) :
-			(isRotated ? -(1 + left) : -(left - 1));
-		const y = -(isRotated ? 20 : margin.top);
-		const w = (isRotated ? width + 15 + left : margin.left + 20) + (isInner ? 20 : 0);
-		const h = (isRotated ? margin.bottom + 10 : (margin.top + height)) + 10;
-
-		node
-			.attr("x", x)
-			.attr("y", y)
-			.attr("width", w)
-			.attr("height", h);
-	},
+        throw new Error("STUB");
+    },
 
 	updateXAxisTickClip(): void {
 		const $$ = this;

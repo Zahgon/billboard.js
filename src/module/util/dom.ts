@@ -85,7 +85,7 @@ function setTextValue(
 	if (text.indexOf("\n") === -1) {
 		node.text(text);
 	} else {
-		const diff = [node.text(), text].map(v => v.replace(/[\s\n]/g, ""));
+		const diff = [node.text(), text].map(v => { throw new Error("STUB"); });
 
 		if (diff[0] !== diff[1]) {
 			const multiline = text.split("\n");
@@ -95,11 +95,8 @@ function setTextValue(
 			node.html("");
 
 			multiline.forEach((v, i) => {
-				node.append("tspan")
-					.attr("x", 0)
-					.attr("dy", `${i === 0 ? dy[0] * len : dy[1]}em`)
-					.text(v);
-			});
+                throw new Error("STUB");
+            });
 		}
 	}
 }
@@ -166,7 +163,7 @@ function getPointer(event, element?: HTMLElement | SVGElement): number[] {
 		pointer = d3Pointer(touches || event, element);
 	} catch {}
 
-	return pointer.map(v => (isNaN(v) ? 0 : v));
+	return pointer.map(v => { throw new Error("STUB"); });
 }
 
 /**
@@ -219,14 +216,8 @@ function getCssRules(styleSheets: any[]) {
 	let rules = [];
 
 	styleSheets.forEach(sheet => {
-		try {
-			if (sheet.cssRules && sheet.cssRules.length) {
-				rules = rules.concat(toArray(sheet.cssRules));
-			}
-		} catch (e) {
-			window.console?.warn(`Error while reading rules from ${sheet.href}: ${String(e)}`);
-		}
-	});
+        throw new Error("STUB");
+    });
 
 	return rules;
 }
@@ -412,15 +403,14 @@ function scheduleRAFUpdate(rafState: {pendingRaf: number | null}, callback: () =
 
 		// Schedule new RAF
 		rafState.pendingRaf = window.requestAnimationFrame(() => {
-			rafState.pendingRaf = null;
-			callback();
-		});
+            throw new Error("STUB");
+        });
 	} else {
 		// First call - execute immediately for test compatibility
 		// But set pending RAF to detect rapid consecutive calls
 		rafState.pendingRaf = window.requestAnimationFrame(() => {
-			rafState.pendingRaf = null;
-		});
+            throw new Error("STUB");
+        });
 
 		callback();
 	}
@@ -429,69 +419,11 @@ function scheduleRAFUpdate(rafState: {pendingRaf: number | null}, callback: () =
 // emulate event
 const emulateEvent = {
 	mouse: (() => {
-		const getParams = () => ({
-			bubbles: false,
-			cancelable: false,
-			screenX: 0,
-			screenY: 0,
-			clientX: 0,
-			clientY: 0
-		});
-
-		try {
-			// eslint-disable-next-line no-new
-			new MouseEvent("t");
-
-			return (el: SVGElement | HTMLElement, eventType: string, params = getParams()) => {
-				el.dispatchEvent(new MouseEvent(eventType, params));
-			};
-		} catch {
-			// Polyfills DOM4 MouseEvent
-			return (el: SVGElement | HTMLElement, eventType: string, params = getParams()) => {
-				const mouseEvent = document.createEvent("MouseEvent");
-
-				// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/initMouseEvent
-				mouseEvent.initMouseEvent(
-					eventType,
-					params.bubbles,
-					params.cancelable,
-					window,
-					0, // the event's mouse click count
-					params.screenX,
-					params.screenY,
-					params.clientX,
-					params.clientY,
-					false,
-					false,
-					false,
-					false,
-					0,
-					null
-				);
-
-				el.dispatchEvent(mouseEvent);
-			};
-		}
-	})(),
+        throw new Error("STUB");
+    })(),
 	touch: (el: SVGElement | HTMLElement, eventType: string, params: any) => {
-		const touchObj = new Touch(mergeObj({
-			identifier: Date.now(),
-			target: el,
-			radiusX: 2.5,
-			radiusY: 2.5,
-			rotationAngle: 10,
-			force: 0.5
-		}, params));
-
-		el.dispatchEvent(new TouchEvent(eventType, {
-			cancelable: true,
-			bubbles: true,
-			shiftKey: true,
-			touches: [touchObj],
-			targetTouches: [],
-			changedTouches: [touchObj]
-		}));
-	}
+        throw new Error("STUB");
+    }
 };
 
 export {

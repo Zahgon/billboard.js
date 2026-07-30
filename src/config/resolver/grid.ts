@@ -33,5 +33,5 @@ export let grid = (): Record<string, never> => {
 	(Chart.prototype as any).xgrids = apiGrid.xgrids;
 	(Chart.prototype as any).ygrids = apiGrid.ygrids;
 	Options.setOptions([optGrid]);
-	return (grid = () => ({}))();
+	return (grid = () => { throw new Error("STUB"); })();
 };

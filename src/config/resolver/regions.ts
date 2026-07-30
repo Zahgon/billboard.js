@@ -29,5 +29,5 @@ export let regions = (): Record<string, never> => {
 	extend(ChartInternal.prototype, internalRegion);
 	// Direct assignment overrides stub installed by Chart/api/stubs.
 	(Chart.prototype as any).regions = apiRegion.regions;
-	return (regions = () => ({}))();
+	return (regions = () => { throw new Error("STUB"); })();
 };

@@ -19,17 +19,6 @@ export default {
 	 *  ]);
 	 */
 	groups<T = string[][]>(groups: T): T {
-		const $$ = this.internal;
-		const {config} = $$;
-
-		if (isUndefined(groups)) {
-			return config.data_groups;
-		}
-
-		config.data_groups = groups;
-		$$.state.dirty.data = true;
-		$$.redraw();
-
-		return config.data_groups;
-	}
+        throw new Error("STUB");
+    }
 };

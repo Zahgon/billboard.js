@@ -19,36 +19,18 @@ export function generateResize(option: boolean | number) {
 	let timeout;
 
 	const callResizeFn = function() {
-		// Delay all resize functions call, to prevent unintended excessive call from resize event
-		callResizeFn.clear();
-
-		if (option === false) {
-			timeout = requestIdleCallback(() => {
-				timeout = null;
-				fn.forEach((f: Function) => f());
-			}, {timeout: 200});
-		} else {
-			timeout = setTimeout(() => {
-				timeout = null;
-				fn.forEach((f: Function) => f());
-			}, isNumber(option) ? option : 200);
-		}
-	};
+        throw new Error("STUB");
+    };
 
 	callResizeFn.clear = () => {
-		if (timeout) {
-			(option === false ? cancelIdleCallback : clearTimeout)(timeout);
-			timeout = null;
-		}
-	};
+        throw new Error("STUB");
+    };
 
-	callResizeFn.add = f => fn.push(f);
+	callResizeFn.add = f => { throw new Error("STUB"); };
 
 	callResizeFn.remove = f => {
-		const index = fn.indexOf(f);
-
-		index !== -1 && fn.splice(index, 1);
-	};
+        throw new Error("STUB");
+    };
 
 	return callResizeFn;
 }
@@ -71,38 +53,17 @@ export function generateWait() {
 		 * @private
 		 */
 		function loop(): boolean {
-			let done = 0;
-
-			for (let i = 0, t; (t = transitionsToWait[i]); i++) {
-				if (t === true || t.empty?.()) {
-					done++;
-					continue;
-				}
-
-				// when tab isn't visible exit loop
-				if (isTabVisible() === false) {
-					done = transitionsToWait.length;
-					break;
-				}
-
-				try {
-					t.transition();
-				} catch {
-					done++;
-				}
-			}
-
-			return done === transitionsToWait.length;
-		}
+            throw new Error("STUB");
+        }
 
 		runUntil(() => {
-			callback?.();
-		}, loop);
+            throw new Error("STUB");
+        }, loop);
 	};
 
 	f.add = function(t: Transition | Transition[]) {
-		isArray(t) ? (transitionsToWait = transitionsToWait.concat(t)) : transitionsToWait.push(t);
-	};
+        throw new Error("STUB");
+    };
 
 	return f;
 }

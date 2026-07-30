@@ -11,9 +11,5 @@ import optZoom from "../../Options/interaction/zoom";
 import Options from "../../Options/Options";
 
 export let zoomModule = (): boolean => {
-	extend(ChartInternal.prototype, zoom);
-	extend(Chart.prototype, apiZoom);
-	Options.setOptions([optZoom]);
-
-	return (zoomModule = () => true)();
+    throw new Error("STUB");
 };

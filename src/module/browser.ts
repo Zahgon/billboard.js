@@ -30,8 +30,8 @@ export function getFallback(w?) {
 		typeof w?.cancelAnimationFrame === "function";
 	const hasRIC = typeof w?.requestIdleCallback === "function" &&
 		typeof w?.cancelIdleCallback === "function";
-	const request = cb => setTimeout(cb, 1);
-	const cancel = id => clearTimeout(id);
+	const request = cb => { throw new Error("STUB"); };
+	const cancel = id => { throw new Error("STUB"); };
 
 	return [
 		hasRAF ? w.requestAnimationFrame : request,

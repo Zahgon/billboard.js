@@ -50,41 +50,7 @@ function _setXS(
 	data: Record<string, number | null>[],
 	params: {appendXs, xs, categorized: boolean, timeSeries: boolean, customX: boolean}
 ): void {
-	const $$ = this;
-	const {config} = $$;
-	let xsData;
-
-	ids.forEach(id => {
-		const xKey = $$.getXKey(id);
-
-		if (params.customX || params.timeSeries) {
-			// if included in input data
-			if (params.xs.indexOf(xKey) >= 0) {
-				xsData = ((params.appendXs && $$.data.xs[id]) || [])
-					.concat(
-						data.map((d, i) => {
-							const rawX = d[xKey];
-							return isValue(rawX) ? $$.generateTargetX(rawX, id, i) : false;
-						}).filter(v => v !== false)
-					);
-			} else if (config.data_x) {
-				// if not included in input data, find from preloaded data of other id's x
-				xsData = this.getOtherTargetXs();
-			} else if (notEmpty(config.data_xs)) {
-				// if not included in input data, find from preloaded data
-				xsData = $$.getXValuesOfXKey(xKey, $$.data.targets);
-			}
-			// MEMO: if no x included, use same x of current will be used
-		} else {
-			xsData = data.map((d, i) => i);
-		}
-
-		if (xsData) {
-			$$.data.xs[id] = xsData;
-		} else {
-			throw new Error(`x is not defined for id = "${id}".`);
-		}
-	});
+    throw new Error("STUB");
 }
 
 /**
@@ -109,12 +75,8 @@ export default {
 
 			["url", "mimeType", "headers", "keys", "json", "rows", "columns"]
 				.forEach(v => {
-					const key = `data_${v}`;
-
-					if (key in args) {
-						data[v] = args[key];
-					}
-				});
+                    throw new Error("STUB");
+                });
 		}
 
 		if (data.url && callback) {
@@ -150,14 +112,8 @@ export default {
 		// Extract ids and xs from data keys to handle x and non-x values
 		const {ids, xs} = dataKeys.length ?
 			dataKeys.reduce((acc, key) => {
-				if ($$.isX.call($$, key)) {
-					acc.xs.push(key);
-				} else {
-					acc.ids.push(key);
-				}
-
-				return acc;
-			}, {ids: [] as string[], xs: [] as string[]}) :
+                throw new Error("STUB");
+            }, {ids: [] as string[], xs: [] as string[]}) :
 			{ids: [], xs: []};
 
 		const params = {
@@ -174,114 +130,40 @@ export default {
 		// Build a Map for O(1) category-to-index lookups
 		const categoryIndexMap =
 			(params.customX && params.categorized && config.axis_x_categories.length) ?
-				new Map<string, number>(config.axis_x_categories.map((cat, i) => [cat, i])) :
+				new Map<string, number>(config.axis_x_categories.map((cat, i) => { throw new Error("STUB"); })) :
 				null;
 
 		// convert to target
 		const idConverter = config.data_idConverter.bind($$.api);
 		const targets = ids.map((id, index) => {
-			const convertedId = idConverter(id);
-			const xKey = $$.getXKey(id);
-			const isCategory = params.customX && params.categorized;
-			const hasCategory = isCategory && index === 0 && (() => {
-				const categorySet = toSet(config.axis_x_categories);
-				return data.every(v => categorySet.has(v[xKey]));
-			})();
-
-			// when .load() with 'append' option is used for indexed axis
-			// @ts-ignore
-			const isDataAppend = data.__append__;
-			const xIndex = xKey === null && isDataAppend ? $$.api.data.values(id).length : 0;
-
-			return {
-				id: convertedId,
-				id_org: id,
-				values: data.map((d, i) => {
-					const rawX = d[xKey];
-					let value = d[id];
-					let x;
-
-					value = value !== null && !isNaN(value) && !isObject(value) ?
-						+value :
-						(isArray(value) || isObject(value) ? value : null);
-
-					// use x as categories if custom x and categorized
-					if ((isCategory || state.hasRadar) && index === 0 && !isUndefined(rawX)) {
-						if (!hasCategory && i === 0 && !isDataAppend) {
-							config.axis_x_categories = [];
-
-							if (categoryIndexMap) {
-								categoryIndexMap.clear();
-							}
-						}
-
-						const rawXStr = String(rawX);
-
-						x = categoryIndexMap?.get(rawXStr) ?? -1;
-
-						if (x === -1) {
-							x = config.axis_x_categories.length;
-							config.axis_x_categories.push(rawX);
-							categoryIndexMap?.set(rawXStr, x);
-						}
-					} else {
-						x = $$.generateTargetX(rawX, id, xIndex + i);
-					}
-
-					// mark as x = undefined if value is undefined and filter to remove after mapped
-					if (isUndefined(value) || $$.data.xs[id].length <= i) {
-						x = undefined;
-					}
-
-					return {
-						x,
-						value,
-						id: convertedId,
-						index: -1
-					};
-				}).filter(v => isDefined(v.x))
-			};
-		});
+            throw new Error("STUB");
+        });
 
 		// finish targets
 		targets.forEach(t => {
-			// sort values by its x
-			if (config.data_xSort) {
-				t.values = t.values.sort((v1, v2) => {
-					const x1 = v1.x || v1.x === 0 ? v1.x : Infinity;
-					const x2 = v2.x || v2.x === 0 ? v2.x : Infinity;
-
-					return x1 - x2;
-				});
-			}
-
-			// indexing each value
-			t.values.forEach((v, i) => (v.index = i));
-
-			// this needs to be sorted because its index and value.index is identical
-			$$.data.xs[t.id]?.sort((v1, v2) => v1 - v2);
-		});
+            throw new Error("STUB");
+        });
 
 		// cache information about values
 		state.hasNegativeValue = targets.some(t =>
-			t.values.some(v => v.value !== null && v.value < 0)
+			{ throw new Error("STUB"); }
 		);
 		state.hasPositiveValue = targets.some(t =>
-			t.values.some(v => v.value !== null && v.value > 0)
+			{ throw new Error("STUB"); }
 		);
 
 		// set target types
 		if (chartType && $$.isValidChartType(chartType)) {
 			const targetIds = $$.mapToIds(targets)
 				.filter(id =>
-					!(id in config.data_types) || !$$.isValidChartType(config.data_types[id])
+					{ throw new Error("STUB"); }
 				);
 
 			$$.setTargetType(targetIds, chartType);
 		}
 
 		// cache as original id keyed
-		targets.forEach(d => $$.cache.add(d.id_org, d, true));
+		targets.forEach(d => { throw new Error("STUB"); });
 
 		return targets as IData[];
 	}

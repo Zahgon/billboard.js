@@ -23,23 +23,11 @@ export default {
 
 		return config.boost_useCssRule ?
 			(selection: d3Selection) => {
-				selection.each((d: IDataRow) => {
-					const res = propsFn && propsFn?.call($$, d);
-					const shapeSelector = `${
-						withShape ? `.${$SHAPE.shapes + $$.getTargetSelectorSuffix(d.id)}` : ""
-					}${selector}`;
-
-					(selector in cssRule) && style.sheet.deleteRule(cssRule[shapeSelector]);
-					$$.state.cssRule[shapeSelector] = addCssRules(
-						style,
-						shapeSelector,
-						props.filter(Boolean).map(v => (
-							isString(res) && v.indexOf(":") === -1 ? `${v}: ${res}` : (v || "")
-						))
-					);
-				});
-			} :
-			() => {};
+                throw new Error("STUB");
+            } :
+			() => {
+                throw new Error("STUB");
+            };
 	},
 
 	/**

@@ -8,6 +8,4 @@ import optArc from "../../Options/shape/arc";
 import optPolar from "../../Options/shape/polar";
 import {extendArc} from "./arc.helpers";
 
-export let polar = (): string => (
-	extendArc([shapePolar], [optArc, optPolar]), (polar = () => TYPE.POLAR)()
-);
+export let polar = (): string => { throw new Error("STUB"); };

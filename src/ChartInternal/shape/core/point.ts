@@ -24,39 +24,7 @@ function _hasValidPointDrawMethods(point: string): boolean {
  * @private
  */
 function _insertPointInfoDefs(point: string, id: string): void {
-	const $$ = this;
-	const copyAttr = (from, target) => {
-		const attribs = from.attributes;
-
-		for (let i = 0, name; (name = attribs[i]); i++) {
-			name = name.name;
-			target.setAttribute(name, from.getAttribute(name));
-		}
-	};
-
-	const doc = new DOMParser().parseFromString(sanitize(point), "image/svg+xml");
-	const node = doc.documentElement;
-	const clone = document.createElementNS(d3Namespaces.svg, node.nodeName.toLowerCase());
-
-	clone.id = id;
-	clone.style.fill = "inherit";
-	clone.style.stroke = "inherit";
-
-	copyAttr(node, clone);
-
-	if (node.childNodes?.length) {
-		const parent = d3Select(clone);
-
-		if ("innerHTML" in clone) {
-			parent.html(sanitize(node.innerHTML));
-		} else {
-			toArray(node.childNodes).forEach(v => {
-				copyAttr(v, parent.append(v.tagName).node());
-			});
-		}
-	}
-
-	$$.$el.defs.node().appendChild(clone);
+    throw new Error("STUB");
 }
 
 export default {
@@ -117,33 +85,7 @@ export default {
 		const pattern = $$.getValidPointPattern();
 
 		return function(method, context, ...args) {
-			return function(d) {
-				const id: string = $$.getTargetSelectorSuffix(d.id || d.data?.id || d);
-				const element = d3Select(this);
-
-				ids.indexOf(id) < 0 && ids.push(id);
-
-				let point = pattern[ids.indexOf(id) % pattern.length];
-
-				if ($$.hasValidPointType(point)) {
-					point = $$[point];
-				} else if (!_hasValidPointDrawMethods(point || config.point_type)) {
-					const pointId = $$.getDefsPointId(id);
-					const defsPoint = $el.defs.select(`#${pointId}`);
-
-					if (defsPoint.size() < 1) {
-						_insertPointInfoDefs.call($$, point, pointId);
-					}
-
-					if (method === "create") {
-						return $$.custom?.create.bind(context)(element, pointId, ...args);
-					} else if (method === "update") {
-						return $$.custom?.update.bind(context)(element, ...args);
-					}
-				}
-
-				return point[method]?.bind(context)(element, ...args);
-			};
-		};
+            throw new Error("STUB");
+        };
 	}
 };

@@ -58,127 +58,32 @@ export default class Sparkline extends Plugin {
 	private element;
 
 	constructor(options) {
-		super(options);
-		this.config = new Options();
-
-		return this;
-	}
+        throw new Error("STUB");
+    }
 
 	$beforeInit(): void {
-		this.loadConfig();
-
-		this.validate();
-		this.element = [].slice.call(document.querySelectorAll(this.config.selector));
-
-		// override internal methods
-		this.overrideInternals();
-
-		// override options
-		this.overrideOptions();
-
-		// bind event handlers's context
-		this.overHandler = this.overHandler.bind(this);
-		this.moveHandler = this.moveHandler.bind(this);
-		this.outHandler = this.outHandler.bind(this);
-	}
+        throw new Error("STUB");
+    }
 
 	validate(): void {
-		const {$$, config} = this;
-		let msg = "";
-
-		if (!config.selector || !document.querySelector(config.selector)) {
-			msg = "No holder elements found from given selector option.";
-		}
-
-		if ($$.hasType("bubble") || $$.hasType("scatter") || $$.hasArcType($$.data.targets)) {
-			msg = "Contains non supported chart types.";
-		}
-
-		if (msg) {
-			throw new Error(`[Sparkline plugin] ${msg}`);
-		}
-	}
+        throw new Error("STUB");
+    }
 
 	overrideInternals(): void {
-		const {$$} = this;
-		const {getBarW, getIndices} = $$;
-
-		// override internal methods to positioning bars
-		$$.getIndices = function(indices, d, caller) {
-			return caller === "getShapeX" ? {} : getIndices.call(this, indices, d);
-		};
-
-		$$.getBarW = function(type, axis) {
-			return getBarW.call(this, type, axis, 1);
-		};
-	}
+        throw new Error("STUB");
+    }
 
 	overrideOptions(): void {
-		const {config} = this.$$;
-
-		config.legend_show = false;
-		config.resize_auto = false;
-		config.axis_x_show = false;
-
-		// set default axes padding
-		if (config.padding !== false) {
-			const hasOption = o => Object.keys(o || {}).length > 0;
-
-			if (hasOption(config.axis_x_padding)) {
-				config.axis_x_padding = {
-					left: 15,
-					right: 15,
-					unit: "px"
-				};
-			}
-
-			if (hasOption(config.axis_y_padding)) {
-				config.axis_y_padding = 5;
-			}
-		}
-
-		config.axis_y_show = false;
-
-		if (!config.tooltip_position) {
-			config.tooltip_position = function(data, width, height) {
-				const {internal: {state: {event}}} = this;
-				let top = event.pageY - (height * 1.35);
-				let left = event.pageX - (width / 2);
-
-				if (top < 0) {
-					top = 0;
-				}
-
-				if (left < 0) {
-					left = 0;
-				}
-
-				return {top, left};
-			};
-		}
-	}
+        throw new Error("STUB");
+    }
 
 	$init(): void {
-		const {$$: {$el}} = this;
-
-		// make disable-ish main chart element
-		$el.chart
-			.style("width", "0")
-			.style("height", "0")
-			.style("pointer-events", "none");
-
-		$el.tooltip?.node() && document.body.appendChild($el.tooltip.node());
-	}
+        throw new Error("STUB");
+    }
 
 	$afterInit(): void {
-		const {$$} = this;
-
-		$$.$el.svg.attr("style", null)
-			.style("width", "0")
-			.style("height", "0");
-
-		this.bindEvents(true);
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Bind tooltip event handlers for each sparkline elements.
@@ -186,109 +91,26 @@ export default class Sparkline extends Plugin {
 	 * @private
 	 */
 	bindEvents(bind = true): void {
-		const {$$: {config}} = this;
-
-		if (config.interaction_enabled && config.tooltip_show) {
-			const method = `${bind ? "add" : "remove"}EventListener`;
-
-			this.element
-				.forEach(el => {
-					const svg = el.querySelector("svg");
-
-					svg[method]("mouseover", this.overHandler);
-					svg[method]("mousemove", this.moveHandler);
-					svg[method]("mouseout", this.outHandler);
-				});
-		}
-	}
+        throw new Error("STUB");
+    }
 
 	overHandler(e): void {
-		const {$$} = this;
-		const {state: {eventReceiver}} = $$;
-
-		eventReceiver.rect = getBoundingRect(e.target, true);
-	}
+        throw new Error("STUB");
+    }
 
 	moveHandler(e): void {
-		const {$$} = this;
-		const index = $$.getDataIndexFromEvent(e);
-		const data = $$.api.data(e.target.__id)?.[0] as IData;
-		const d = data?.values?.[index];
-
-		if (d && !d.name) {
-			d.name = d.id;
-		}
-
-		$$.state.event = e;
-
-		if ($$.isPointFocusOnly?.() && d) {
-			$$.showCircleFocus?.([d]);
-		}
-
-		$$.setExpand(index, data.id, true);
-		$$.showTooltip([d], e.target);
-	}
+        throw new Error("STUB");
+    }
 
 	outHandler(e): void {
-		const {$$} = this;
-
-		$$.state.event = e;
-
-		$$.isPointFocusOnly() ? $$.hideCircleFocus() : $$.unexpandCircles();
-
-		$$.hideTooltip();
-	}
+        throw new Error("STUB");
+    }
 
 	$redraw(): void {
-		const {$$} = this;
-		const {$el} = $$;
-
-		let el = this.element;
-		const data = $$.api.data();
-		const svgWrapper = $el.chart.html().match(/<svg[^>]*>/)?.[0];
-
-		// append sparkline holder if is less than the data length
-		if (el.length < data.length) {
-			const chart = $el.chart.node();
-
-			for (let i = data.length - el.length; i > 0; i--) {
-				chart.parentNode.insertBefore(el[0].cloneNode(), chart.nextSibling);
-			}
-
-			this.element = document.querySelectorAll(this.config.selector);
-			el = this.element;
-		}
-
-		data.map(v => v.id)
-			.forEach((id, i) => {
-				const selector = `.${$COMMON.target}-${id}`;
-				const shape = $el.main.selectAll(selector);
-				let svg = el[i].querySelector("svg");
-
-				if (!svg) {
-					el[i].innerHTML = `${svgWrapper}</svg>`;
-					svg = el[i].querySelector("svg");
-					svg.__id = id;
-				}
-
-				if (!svg.querySelector(selector)) {
-					shape.style("opacity", null);
-				}
-
-				shape
-					.style("fill", "none")
-					.style("opacity", null);
-
-				svg.innerHTML = "";
-				svg.appendChild(shape.node());
-			});
-	}
+        throw new Error("STUB");
+    }
 
 	$willDestroy(): void {
-		this.bindEvents(false);
-		this.element
-			.forEach(el => {
-				el.innerHTML = "";
-			});
-	}
+        throw new Error("STUB");
+    }
 }

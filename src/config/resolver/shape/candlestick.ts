@@ -9,9 +9,4 @@ import optPoint from "../../Options/common/point";
 import optCandlestick from "../../Options/shape/candlestick";
 import {extendAxis} from "./axis.helpers";
 
-export let candlestick = (): string => (
-	extendAxis(
-		[shapeCandlestick, shapePointCommon],
-		[optCandlestick, optPoint]
-	), (candlestick = () => TYPE.CANDLESTICK)()
-);
+export let candlestick = (): string => { throw new Error("STUB"); };

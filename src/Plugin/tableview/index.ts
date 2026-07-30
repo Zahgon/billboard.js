@@ -56,16 +56,7 @@ const optionValidators: { [key in keyof Required<TableViewOptions>]: (v: unknown
  * @private
  */
 export function isValidTableViewOptions(options: unknown): options is TableViewOptions {
-	if (!isObjectType(options) || isArray(options) || options === null) {
-		return false;
-	}
-
-	return Object.entries(options).every(([key, value]) => {
-		const validate = optionValidators[key];
-
-		// unknown keys are ignored; known keys must match their expected type
-		return !isFunction(validate) || value === undefined || validate(value);
-	});
+    throw new Error("STUB");
 }
 
 /**
@@ -127,124 +118,30 @@ export default class TableView extends Plugin {
 	private element;
 
 	constructor(options: TableViewOptions = {}) {
-		super(options);
-
-		// warn (but don't throw) on invalid options so that unsupported values
-		// simply fall back to their defaults, keeping behavior non-breaking.
-		if (!isValidTableViewOptions(options)) {
-			console?.error?.(
-				"[billboard.js] TableView plugin received invalid options; unsupported values will be ignored.",
-				options
-			);
-		}
-
-		this.config = new Options();
-
-		return this;
-	}
+        throw new Error("STUB");
+    }
 
 	$beforeInit(): void {
-		this.loadConfig();
-	}
+        throw new Error("STUB");
+    }
 
 	$init(): void {
-		const {class: className, selector, style} = this.config;
-		let element = document.querySelector(
-			selector || `.${className || defaultStyle.class}`
-		);
-
-		if (!element) {
-			const chart = this.$$.$el.chart.node();
-
-			element = document.createElement("table");
-			chart.parentNode.insertBefore(element, chart.nextSibling);
-		}
-
-		if (element.tagName !== "TABLE") {
-			const table = document.createElement("table");
-
-			element.appendChild(table);
-			element = table;
-		}
-
-		// append default css style
-		if (style && !document.getElementById(defaultStyle.id)) {
-			const s = document.createElement("style");
-
-			s.id = defaultStyle.id;
-			s.innerHTML = defaultStyle.rule;
-
-			(document.head || document.getElementsByTagName("head")[0])
-				.appendChild(s);
-		}
-
-		element.classList.add(...[style && defaultStyle.class, className].filter(Boolean));
-
-		this.element = element;
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Generate table
 	 * @private
 	 */
 	generateTable(): void {
-		const {$$, config, element} = this;
-		const dataToShow = $$.filterTargetsToShow($$.data.targets);
-
-		let thead = tplProcess(tpl.thead, {
-			title: dataToShow.length ? this.config.categoryTitle : ""
-		});
-		let tbody = "";
-		const rows: (number | string)[][] = [];
-
-		dataToShow.forEach(v => {
-			thead += tplProcess(tpl.thead, {title: v.id});
-
-			// make up value rows
-			v.values.forEach((d, i: number) => {
-				if (!rows[i]) {
-					rows[i] = [d.x];
-				}
-
-				rows[i].push(d.value);
-			});
-		});
-
-		rows.forEach(v => {
-			tbody += `<tr>${
-				v.map((d, i) =>
-					tplProcess(i ? tpl.tbody : tpl.tbodyHeader, {
-						value: i === 0 ?
-							config.categoryFormat.bind(this)(d) :
-							(isNumber(d) ? config.numberFormat.bind(this)(d) : config.nullString)
-					})
-				).join("")
-			}</tr>`;
-		});
-
-		element.innerHTML = tplProcess(tpl.body, {
-			...config,
-			title: config.title || $$.config.title_text || "",
-			thead,
-			tbody
-		});
-	}
+        throw new Error("STUB");
+    }
 
 	$redraw(): void {
-		const {state} = this.$$;
-		const doNotUpdate = state.resizing || (!this.config.updateOnToggle && state.toggling);
-
-		!doNotUpdate && this.generateTable();
-	}
+        throw new Error("STUB");
+    }
 
 	$willDestroy(): void {
-		this.element.parentNode?.removeChild(this.element);
-
-		// remove default css style when left one chart instance
-		if (this.$$.charts.length === 1) {
-			const s = document.getElementById(defaultStyle.id);
-
-			s?.parentNode?.removeChild(s);
-		}
-	}
+        throw new Error("STUB");
+    }
 }

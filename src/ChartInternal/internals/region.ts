@@ -52,13 +52,8 @@ export default {
 			.attr("class", $$.classRegion.bind($$));
 
 		region.list.each(function(d) {
-			const g = d3Select(this);
-
-			if (g.select("text").empty() && d.label?.text) {
-				d3Select(this).append("text")
-					.style("opacity", "0");
-			}
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	redrawRegion(withTransition: boolean) {
@@ -77,40 +72,22 @@ export default {
 			.attr("height", $$.regionHeight.bind($$));
 
 		label = $T(label, withTransition)
-			.text(d => d.label?.text)
+			.text(d => { throw new Error("STUB"); })
 			// pre-rotate so that the centering math below measures the rotated bounding box
-			.attr("transform", ({label}) => label.rotated ? ` rotate(-90)` : null)
+			.attr("transform", ({label}) => { throw new Error("STUB"); })
 			.attr("transform", function(d) {
-				const {x = 0, y = 0, center = false, rotated = false} = d.label ?? {};
-				const rect = this.previousElementSibling;
-				const pos = {x: 0, y: 0};
-
-				if (isString(center)) {
-					["x", "y"].forEach((v, i) => {
-						if (center.indexOf(v) > -1) {
-							pos[v] =
-								(+rect.getAttribute(attr[i]) - getBoundingRect(this)[attr[i]]) / 2;
-						}
-					});
-				}
-
-				return `translate(${regionX(d) + pos.x + x}, ${regionY(d) + pos.y + y})${
-					rotated ? ` rotate(-90)` : ``
-				}`;
-			})
-			.attr("text-anchor", ({label}) => label?.rotated ? "end" : null)
+                throw new Error("STUB");
+            })
+			.attr("text-anchor", ({label}) => { throw new Error("STUB"); })
 			.attr("dy", "1em")
-			.style("fill", ({label}) => label?.color ?? null);
+			.style("fill", ({label}) => { throw new Error("STUB"); });
 
 		return [
 			regions
-				.style("fill-opacity", d => (isValue(d.opacity) ? d.opacity : null))
+				.style("fill-opacity", d => { throw new Error("STUB"); })
 				.on("end", function() {
-					// remove unnecessary rect after transition
-					d3Select(this.parentNode)
-						.selectAll("rect:not([x])")
-						.remove();
-				}),
+                    throw new Error("STUB");
+                }),
 			label.style("opacity", null)
 		];
 	},
@@ -124,12 +101,12 @@ export default {
 	},
 
 	regionWidth(d: RegionOptions): number {
-		return this.getRegionSize("width", d);
-	},
+        throw new Error("STUB");
+    },
 
 	regionHeight(d: RegionOptions): number {
-		return this.getRegionSize("height", d);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get Region size according start/end position
@@ -182,6 +159,6 @@ export default {
 	},
 
 	isRegionOnX(d: RegionOptions): boolean {
-		return !d.axis || d.axis === "x";
-	}
+        throw new Error("STUB");
+    }
 };

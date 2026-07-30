@@ -8,6 +8,4 @@ import optArc from "../../Options/shape/arc";
 import optGauge from "../../Options/shape/gauge";
 import {extendArc} from "./arc.helpers";
 
-export let gauge = (): string => (
-	extendArc([shapeGauge], [optArc, optGauge]), (gauge = () => TYPE.GAUGE)()
-);
+export let gauge = (): string => { throw new Error("STUB"); };

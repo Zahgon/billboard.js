@@ -35,13 +35,8 @@ type TTextLabelDimension = {bbox?: DOMRect | SVGRect, rect: DOMRect | SVGRect};
 
 export default {
 	opacityForText(d): null | "0" {
-		const $$ = this;
-
-		return $$.isBarType(d) &&
-				!meetsLabelThreshold.call($$, Math.abs($$.getRatio("bar", d)), "bar") ?
-			"0" :
-			($$.hasDataLabel() ? null : "0");
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Initializes the text
@@ -69,7 +64,7 @@ export default {
 		const mainTextUpdate = $$.$el.main.select(`.${$TEXT.chartTexts}`)
 			.selectAll(`.${$TEXT.chartText}`)
 			.data($$.filterNullish(targets))
-			.attr("class", d => `${classChartText(d)}${classFocus(d)}`.trim());
+			.attr("class", d => { throw new Error("STUB"); });
 
 		const mainTextEnter = mainTextUpdate.enter().append("g")
 			.style("opacity", "0")
@@ -106,47 +101,13 @@ export default {
 			.merge(text)
 			.attr("class", classText)
 			.attr("text-anchor", d => {
-				const isInverted = config[`axis_${axis?.getId(d.id)}_inverted`];
-
-				// when value is negative or
-				let isEndAnchor = isInverted ? d.value > 0 : d.value < 0;
-
-				if ($$.isCandlestickType(d)) {
-					const data = $$.getCandlestickData(d);
-
-					isEndAnchor = !data?._isUp;
-				} else if ($$.isTreemapType(d)) {
-					return labelsCentered ? "middle" : "start";
-				}
-
-				return (config.axis_rotated ? (isEndAnchor ? "end" : "start") : "middle");
-			})
+                throw new Error("STUB");
+            })
 			.style("fill", $$.getStylePropValue($$.updateTextColor))
 			.style("fill-opacity", "0")
 			.each(function(d, i, texts) {
-				const node = d3Select(this);
-				let {value} = d;
-
-				if ($$.isBubbleZType(d)) {
-					value = $$.getBubbleZData(value, "z");
-				} else if ($$.isCandlestickType(d)) {
-					const data = $$.getCandlestickData(d);
-
-					if (data) {
-						value = data.close;
-					}
-				}
-
-				value = $$.isTreemapType(d) ?
-					$$.treemapDataLabelFormat(d)(node) :
-					$$.dataLabelFormat(d.id)(value, d.id, d.index, texts);
-
-				if (isNumber(value)) {
-					this.textContent = value;
-				} else {
-					setTextValue(node, value, undefined, true);
-				}
-			});
+                throw new Error("STUB");
+            });
 
 		// Add images if imgUrl is specified
 		updateTextImage.call($$);
@@ -246,7 +207,7 @@ export default {
 		const text = $$.$el.text
 			.style("fill", $$.getStylePropValue($$.updateTextColor))
 			.attr("filter",
-				d => $$.updateTextBGColor.bind($$)(d, config.data_labels_backgroundColors))
+				d => { throw new Error("STUB"); })
 			.style("fill-opacity", forFlow ? 0 : $$.opacityForText.bind($$));
 
 		// Phase 1: collect text dimensions before mutating label positions.
@@ -254,53 +215,19 @@ export default {
 		const elementsToMeasure: SVGTextElement[] = [];
 
 		text.each(function(d) {
-			const element = this as SVGTextElement;
-
-			dimensions.set(element, {rect: getBoundingRect(element)});
-
-			if (config.data_labels.centered && ($$.isBarType(d) || $$.isTreemapType(d))) {
-				elementsToMeasure.push(element);
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		if (elementsToMeasure.length > 0) {
 			batchGetBBox(elementsToMeasure).forEach((bbox, element) => {
-				const dimension = dimensions.get(element);
-
-				dimension && (dimension.bbox = bbox);
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		// Phase 2: apply cached dimensions during position calculation.
 		text.each(function(d: IDataRow, i: number) {
-			const labelDimension = dimensions.get(this);
-			// do not apply transition for newly added text elements
-			const node = $T(hasTreemap && this.childElementCount ? this.parentNode : this,
-				!!(withTransition &&
-					(this.getAttribute("x") || this.getAttribute("transform"))), t);
-			const isInverted = config[`axis_${axis?.getId(d.id)}_inverted`];
-			let pos = {
-				x: getX.call(this, d, i, labelDimension),
-				y: getY.call(this, d, i, labelDimension)
-			};
-
-			if (angle) {
-				pos = setRotatePos.bind($$)(d, pos, anchorString, isRotated, isInverted);
-				node.attr("text-anchor", anchorString);
-			}
-
-			updateTextImagePos.call($$, this, pos, labelDimension?.rect);
-
-			// when is multiline
-			if (this.childElementCount || angle) {
-				node.attr("transform", `translate(${pos.x} ${pos.y}) ${rotateString}`);
-			} else {
-				node.attr("x", pos.x).attr("y", pos.y);
-			}
-
-			config.data_labels.border &&
-				updateTextBorder.call($$, node.node(), pos, `${$TEXT.textBorderRect}-${i}`);
-		});
+            throw new Error("STUB");
+        });
 
 		// need to return 'true' as of being pushed to the redraw list
 		// ref: getRedrawList()
@@ -344,10 +271,10 @@ export default {
 				.style("visibility", "hidden")
 				.style("font", base ? d3Select(base).style("font") : null)
 				.classed(className || $COMMON.dummy, true)
-				.text(d => d)
+				.text(d => { throw new Error("STUB"); })
 				.each(function(v, i) {
-					rect[i] = getBoundingRect(this);
-				})
+                    throw new Error("STUB");
+                })
 				.remove();
 
 			$$.cache.add(cacheKey, rect);
@@ -376,19 +303,12 @@ export default {
 		hasTreemap && types.push("treemap");
 
 		types.forEach(v => {
-			points[v] = $$[`generateGet${capitalize(v)}Points`](indices[v], false);
-		});
+            throw new Error("STUB");
+        });
 
 		return function(d, i, labelDimension?: TTextLabelDimension) {
-			const type = ($$.isAreaType(d) && "area") ||
-				($$.isBarType(d) && "bar") ||
-				($$.isCandlestickType(d) && "candlestick") ||
-				($$.isFunnelType(d) && "funnel") ||
-				($$.isRadarType(d) && "radar") ||
-				($$.isTreemapType(d) && "treemap") || "line";
-
-			return getter.call($$, points[type](d, i), d, this, labelDimension);
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -403,44 +323,8 @@ export default {
 	 */
 	getCenteredTextPos(d, points, textElement: SVGTextElement, type: "x" | "y",
 		labelDimension?: TTextLabelDimension): number {
-		const $$ = this;
-		const {config} = $$;
-		const isRotated = config.axis_rotated;
-		const isBarType = $$.isBarType(d);
-		const isTreemapType = $$.isTreemapType(d);
-
-		if (config.data_labels.centered && (isBarType || isTreemapType)) {
-			const rect = labelDimension?.bbox || getBBox(textElement);
-
-			if (isBarType) {
-				const isPositive = $$.getRangedData(d, null, "bar") >= 0;
-
-				if (isRotated) {
-					const w = (
-								isPositive ?
-									points[1][1] - points[0][1] :
-									points[0][1] - points[1][1]
-							) / 2 + (rect.width / 2);
-
-					return isPositive ? -w - 3 : w + 2;
-				} else {
-					const h = (
-								isPositive ?
-									points[0][1] - points[1][1] :
-									points[1][1] - points[0][1]
-							) / 2 + (rect.height / 2);
-
-					return isPositive ? h : -h - 2;
-				}
-			} else if (isTreemapType) {
-				return type === "x" ?
-					(points[1][0] - points[0][0]) / 2 : // X: Move to horizontal center of rect
-					(points[1][1] - points[0][1]) / 2 - rect.y - rect.height / 2; // Y: Calculate true vertical center
-			}
-		}
-
-		return 0;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Gets the x coordinate of the text
@@ -452,49 +336,8 @@ export default {
 	 * @private
 	 */
 	getXForText(points, d: IDataRow, textElement, labelDimension?: TTextLabelDimension): number {
-		const $$ = this;
-		const {config} = $$;
-		const isRotated = config.axis_rotated;
-		const isFunnelType = $$.isFunnelType(d);
-		const isTreemapType = $$.isTreemapType(d);
-
-		let xPos = points ? points[0][0] : 0;
-
-		if ($$.isCandlestickType(d)) {
-			if (isRotated) {
-				xPos = $$.getCandlestickData(d)?._isUp ? points[2][2] + 4 : points[2][1] - 4;
-			} else {
-				xPos += (points[1][0] - xPos) / 2;
-			}
-		} else if (isFunnelType) {
-			// Use pre-calculated center x from points[2]
-			// Preserve current position when points unavailable (during hide transition)
-			if (points) {
-				xPos = points[2]?.[0] ?? xPos;
-			} else {
-				return getElementPos(textElement, "x");
-			}
-		} else if (isTreemapType) {
-			xPos += config.data_labels.centered ? 0 : 5;
-		} else {
-			if (isRotated) {
-				const isInverted = config[`axis_${$$.axis.getId(d.id)}_inverted`];
-				const padding = $$.isBarType(d) ? 4 : 6;
-				const value = d.value as number;
-
-				xPos = points[2][1];
-				xPos += padding * ((isInverted ? value > 0 : value < 0) ? -1 : 1);
-			} else {
-				xPos = $$.hasType("bar") ? (points[2][0] + points[0][0]) / 2 : xPos;
-			}
-		}
-
-		if (isRotated || isTreemapType || isFunnelType) {
-			xPos += $$.getCenteredTextPos(d, points, textElement, "x", labelDimension);
-		}
-
-		return xPos + getTextPos.call(this, d, "x");
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Gets the y coordinate of the text
@@ -506,82 +349,8 @@ export default {
 	 * @private
 	 */
 	getYForText(points, d, textElement, labelDimension?: TTextLabelDimension): number {
-		const $$ = this;
-		const {axis, config, state} = $$;
-		const isRotated = config.axis_rotated;
-		const isInverted = config[`axis_${axis?.getId(d.id)}_inverted`];
-		const isBarType = $$.isBarType(d);
-		const isFunnelType = $$.isFunnelType(d);
-		const isTreemapType = $$.isTreemapType(d);
-		const r = config.point_r;
-		const rect = labelDimension?.rect || getBoundingRect(textElement);
-		let {value} = d;
-		let baseY = 3;
-		let yPos;
-
-		if ($$.isCandlestickType(d)) {
-			value = $$.getCandlestickData(d);
-
-			if (isRotated) {
-				yPos = points[0][0];
-				yPos += ((points[1][0] - yPos) / 2) + baseY;
-			} else {
-				yPos = value && value._isUp ? points[2][2] - baseY : points[2][1] + (baseY * 4);
-
-				if (isInverted) {
-					yPos += 15 * (value._isUp ? 1 : -1);
-				}
-			}
-		} else if (isFunnelType) {
-			// Use pre-calculated center y from points[2]
-			// Preserve current position when points unavailable (during hide transition)
-			if (points) {
-				yPos = (points[2]?.[1] ?? points[0][1]) + rect.height / 2 - 3;
-			} else {
-				return getElementPos(textElement, "y");
-			}
-		} else if (isTreemapType) {
-			yPos = points[0][1] + (config.data_labels.centered ? 0 : rect.height + 5);
-		} else {
-			if (isRotated) {
-				yPos = (points[0][0] + points[2][0] + rect.height * 0.6) / 2;
-			} else {
-				yPos = points[2][1];
-
-				if (isNumber(r) && r > 5 && ($$.isLineType(d) || $$.isScatterType(d))) {
-					baseY += config.point_r / 2.3;
-				}
-
-				if (
-					value < 0 || (value === 0 && !state.hasPositiveValue && state.hasNegativeValue)
-				) {
-					yPos += isInverted ? (isBarType ? -3 : -5) : (
-						rect.height + (isBarType ? -baseY : baseY)
-					);
-				} else {
-					let diff = -baseY * 2;
-
-					if (isBarType) {
-						diff = -baseY;
-					} else if ($$.isBubbleType(d)) {
-						diff = baseY;
-					}
-
-					if (isInverted) {
-						diff = isBarType ? 10 : 15;
-					}
-
-					yPos += diff;
-				}
-			}
-		}
-
-		if (!isRotated || isTreemapType) {
-			yPos += $$.getCenteredTextPos(d, points, textElement, "y", labelDimension);
-		}
-
-		return yPos + getTextPos.call(this, d, "y");
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Calculate if two or more text nodes are overlapping
@@ -593,28 +362,16 @@ export default {
 	 */
 	markOverlapped(id: AxisType, $$, selector: string): void {
 		const textNodes = $$.$el.arcs.selectAll(selector);
-		const filteredTextNodes = textNodes.filter(node => node.data.id !== id);
-		const textNode = textNodes.filter(node => node.data.id === id);
+		const filteredTextNodes = textNodes.filter(node => { throw new Error("STUB"); });
+		const textNode = textNodes.filter(node => { throw new Error("STUB"); });
 		const translate = getTranslation(textNode.node());
 
 		// Calculates the length of the hypotenuse
 		const calcHypo = (x, y) => Math.sqrt(x * x + y * y);
 
 		textNode.node() && filteredTextNodes.each(function() {
-			const coordinate = getTranslation(this);
-			const filteredTextNode = d3Select(this);
-			const nodeForWidth =
-				calcHypo(translate.e, translate.f) > calcHypo(coordinate.e, coordinate.f) ?
-					textNode :
-					filteredTextNode;
-
-			const overlapsX = Math.ceil(Math.abs(translate.e - coordinate.e)) <
-				Math.ceil(nodeForWidth.node().getComputedTextLength());
-			const overlapsY = Math.ceil(Math.abs(translate.f - coordinate.f)) <
-				parseInt(textNode.style("font-size"), 10);
-
-			filteredTextNode.classed($TEXT.TextOverlapping, overlapsX && overlapsY);
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -627,8 +384,7 @@ export default {
 	undoMarkOverlapped($$, selector): void {
 		$$.$el.arcs.selectAll(selector)
 			.each(function() {
-				d3SelectAll([this, this.previousSibling])
-					.classed($TEXT.TextOverlapping, false);
-			});
+                throw new Error("STUB");
+            });
 	}
 };

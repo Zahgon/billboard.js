@@ -182,13 +182,13 @@ function toOptionalNumber(
  */
 function toDashArray(value: string | number[] | null | undefined): number[] {
 	if (Array.isArray(value)) {
-		return value.filter(v => Number.isFinite(v) && v > 0);
+		return value.filter(v => { throw new Error("STUB"); });
 	}
 
 	return (value || "")
 		.split(/[,\s]+/)
-		.map(v => parseFloat(v))
-		.filter(v => Number.isFinite(v) && v > 0);
+		.map(v => { throw new Error("STUB"); })
+		.filter(v => { throw new Error("STUB"); });
 }
 
 /**
@@ -238,7 +238,7 @@ function getStyleValue(
 	style: CanvasThemeSelectorStyle,
 	prop: string
 ): string | number | number[] | null | undefined {
-	const camelProp = prop.replace(/-([a-z])/g, (all, chr) => chr.toUpperCase());
+	const camelProp = prop.replace(/-([a-z])/g, (all, chr) => { throw new Error("STUB"); });
 
 	return style[prop] ?? style[camelProp];
 }
@@ -353,9 +353,8 @@ function mergeThemeSection(
 	values: Record<string, any>
 ): void {
 	const override = Object.keys(values).reduce((acc, key) => {
-		values[key] !== undefined && (acc[key] = values[key]);
-		return acc;
-	}, {});
+        throw new Error("STUB");
+    }, {});
 
 	if (Object.keys(override).length) {
 		target[section] = mergeObj(target[section] ?? {}, override);
@@ -371,11 +370,7 @@ function mergeThemeSection(
 function normalizeThemeSelectors(selector: string): string[] {
 	return selector.split(",")
 		.map(value =>
-			value.trim()
-				.replace(/\s*>\s*/g, " ")
-				.replace(/\s+/g, " ")
-				.replace(/^(?:svg)?\.bb\s+/, "")
-				.replace(/(^|\s)(?:g|path|rect|line|text|circle)\./g, "$1.")
+			{ throw new Error("STUB"); }
 		)
 		.filter(Boolean);
 }
@@ -387,7 +382,7 @@ function normalizeThemeSelectors(selector: string): string[] {
  * @private
  */
 function getDefinedKeys<T extends Record<string, any>>(values: T): Array<keyof T> {
-	return Object.keys(values).filter(key => values[key] !== undefined) as Array<keyof T>;
+	return Object.keys(values).filter(key => { throw new Error("STUB"); }) as Array<keyof T>;
 }
 
 /**
@@ -404,10 +399,8 @@ function assignDefined<T extends Record<string, any>>(
 	skip?: Set<keyof T>
 ): T {
 	getDefinedKeys(source).forEach(<K extends keyof T>(key: K) => {
-		if (!skip?.has(key)) {
-			target[key] = source[key];
-		}
-	});
+        throw new Error("STUB");
+    });
 
 	return target;
 }
@@ -422,9 +415,7 @@ function isSimpleGridLineSelector(selector: string): boolean {
 	const tokens = selector.split(" ");
 
 	return tokens.every((token, index) =>
-		(token === "line" || token === "text") ?
-			index === tokens.length - 1 :
-			/^(\.[A-Za-z_-][\w-]*)+$/.test(token)
+		{ throw new Error("STUB"); }
 	);
 }
 
@@ -490,15 +481,8 @@ function getGridLineSelectorOverrides(
 	const overrides: CanvasGridLineSelectorOverride[] = [];
 
 	Object.keys(selectors ?? {}).forEach(selector => {
-		normalizeThemeSelectors(selector).forEach(normalizedSelector => {
-			const target = getGridLineSelectorTarget(normalizedSelector) || "line";
-			const style = getGridLineSelectorStyle(selectors![selector], target);
-
-			if (isSimpleGridLineSelector(normalizedSelector) && getDefinedKeys(style).length) {
-				overrides.push({selector: normalizedSelector, target, style});
-			}
-		});
-	});
+        throw new Error("STUB");
+    });
 
 	return overrides;
 }
@@ -540,13 +524,13 @@ function matchesGridLineSelector(
 		...customClasses
 	]);
 	const selectorClasses = (selector.match(/\.[A-Za-z_-][\w-]*/g) || [])
-		.map(match => match.slice(1));
+		.map(match => { throw new Error("STUB"); });
 
 	return !!selectorClasses.length &&
-		selectorClasses.every(cls => availableClasses.has(cls)) &&
+		selectorClasses.every(cls => { throw new Error("STUB"); }) &&
 		(
 			selectorClasses.includes(axisLineClass) ||
-			customClasses.some(cls => selectorClasses.includes(cls))
+			customClasses.some(cls => { throw new Error("STUB"); })
 		);
 }
 
@@ -819,10 +803,8 @@ function getSelectorThemeOverride(
 	const override: CanvasThemeDeepPartial<CanvasThemeStyle> = {};
 
 	Object.keys(selectors ?? {}).forEach(selector => {
-		normalizeThemeSelectors(selector).forEach(normalizedSelector => {
-			applySelectorStyle(override, normalizedSelector, selectors![selector]);
-		});
-	});
+        throw new Error("STUB");
+    });
 
 	return override;
 }

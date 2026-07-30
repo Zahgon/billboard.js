@@ -161,5 +161,7 @@ export default {
 	subchart_axis_y2_tick_format: <Function | string | undefined>undefined,
 	subchart_axis_y2_tick_text_show: true,
 	subchart_init_range: <undefined | [number, number]>undefined,
-	subchart_onbrush: () => {}
+	subchart_onbrush: () => {
+        throw new Error("STUB");
+    }
 };

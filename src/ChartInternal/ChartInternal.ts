@@ -157,19 +157,8 @@ export default class ChartInternal {
 	};
 
 	constructor(api) {
-		const $$ = this;
-
-		$$.api = api; // Chart class instance alias
-		$$.config = new Options();
-		$$.cache = new Cache();
-
-		const store = new Store();
-
-		$$.$el = store.getStore("element");
-		$$.state = store.getStore("state");
-
-		$$.$T = $$.$T.bind($$);
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Get the selection based on transition config
@@ -211,13 +200,8 @@ export default class ChartInternal {
 	}
 
 	beforeInit(): void {
-		const $$ = this;
-
-		$$.callPluginHook("$beforeInit");
-
-		// can do something
-		callFn($$.config.onbeforeinit, $$.api);
-	}
+        throw new Error("STUB");
+    }
 
 	afterInit(): void {
 		const $$ = this;
@@ -305,11 +289,8 @@ export default class ChartInternal {
 
 		if (isLazy && MutationObserver && config.render.observe !== false && !forced) {
 			new MutationObserver((mutation, observer) => {
-				if (!isHidden()) {
-					observer.disconnect();
-					!state.rendered && $$.initToRender(true);
-				}
-			}).observe(chart.node(), {
+                throw new Error("STUB");
+            }).observe(chart.node(), {
 				attributes: true,
 				attributeFilter: ["class", "style"]
 			});
@@ -317,9 +298,8 @@ export default class ChartInternal {
 
 		if (!isLazy || forced) {
 			$$.convertData(config, res => {
-				$$.initWithData(res);
-				$$.afterInit();
-			});
+                throw new Error("STUB");
+            });
 		}
 	}
 
@@ -357,21 +337,8 @@ export default class ChartInternal {
 			const isDragZoom = config.zoom_enabled && config.zoom_type === "drag";
 
 			format.defaultAxisTime = d => {
-				const {x, zoom} = $$.scale;
-				const isZoomed = isDragZoom ?
-					zoom :
-					zoom && x.orgDomain().toString() !== zoom.domain().toString();
-
-				const specifier: string = (d.getMilliseconds() && ".%L") ||
-					(d.getSeconds() && ".:%S") ||
-					(d.getMinutes() && "%I:%M") ||
-					(d.getHours() && "%I %p") ||
-					(d.getDate() !== 1 && "%b %d") ||
-					(isZoomed && d.getDate() === 1 && "%b'%y") ||
-					(d.getMonth() && "%-m/%-d") || "%Y";
-
-				return format.axisTime(specifier)(d);
-			};
+                throw new Error("STUB");
+            };
 		}
 
 		const {legend_position, legend_inset_anchor, axis_rotated} = config;
@@ -533,8 +500,8 @@ export default class ChartInternal {
 
 			if (hasAxis) {
 				["id", "idXAxis", "idYAxis", "idGrid"].forEach(v => {
-					$$.appendClip($el.defs, state.clip[v]);
-				});
+                    throw new Error("STUB");
+                });
 			}
 
 			// Append data background color filter definition
@@ -542,7 +509,7 @@ export default class ChartInternal {
 
 			// set color patterns
 			if (hasColorPatterns) {
-				$$.patterns.forEach(p => $el.defs.append(() => p.node));
+				$$.patterns.forEach(p => { throw new Error("STUB"); });
 			}
 		}
 
@@ -838,7 +805,7 @@ export default class ChartInternal {
 		}
 
 		$T(svg.selectAll(selector)
-			.filter(d => $$.isTargetToShow(d.id))).style("opacity", null);
+			.filter(d => { throw new Error("STUB"); })).style("opacity", null);
 	}
 
 	getWithOption(options) {
@@ -867,11 +834,8 @@ export default class ChartInternal {
 	}
 
 	initialOpacity(d): null | "0" {
-		const $$ = <any>this;
-		const {withoutFadeIn} = $$.state;
-
-		return $$.getBaseValue(d) !== null && withoutFadeIn[d.id] ? null : "0";
-	}
+        throw new Error("STUB");
+    }
 
 	bindResize(): void {
 		const $$ = <any>this;
@@ -880,42 +844,20 @@ export default class ChartInternal {
 		const {resize_auto} = config;
 		const list: (() => void)[] = [];
 
-		list.push(() => callFn(config.onresize, $$.api));
+		list.push(() => { throw new Error("STUB"); });
 
 		if (/^(true|parent)$/.test(resize_auto)) {
 			list.push(() => {
-				// Skip resize if dimensions haven't changed
-				const prevWidth = state.current.width;
-				const prevHeight = state.current.height;
-
-				$$.setContainerSize();
-
-				if (
-					prevWidth === state.current.width &&
-					prevHeight === state.current.height
-				) {
-					return;
-				}
-
-				state.resizing = true;
-
-				// https://github.com/naver/billboard.js/issues/2650
-				if (config.legend_show) {
-					$$.updateSizes();
-					state.isCanvasMode ? $$.updateHtmlLegend?.() : $$.updateLegend();
-				}
-
-				$$.api.flush(false);
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		list.push(() => {
-			callFn(config.onresized, $$.api);
-			state.resizing = false;
-		});
+            throw new Error("STUB");
+        });
 
 		// add resize functions
-		list.forEach(v => resizeFunction.add(v));
+		list.forEach(v => { throw new Error("STUB"); });
 		$$.resizeFunction = resizeFunction;
 
 		// attach resize event
@@ -943,13 +885,8 @@ export default class ChartInternal {
 	 */
 	callPluginHook(phase, ...args): void {
 		this.config.plugins.forEach(v => {
-			if (phase === "$beforeInit") {
-				v.$$ = this;
-				this.api.plugins.push(v);
-			}
-
-			v[phase](...args);
-		});
+            throw new Error("STUB");
+        });
 	}
 }
 

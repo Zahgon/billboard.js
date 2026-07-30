@@ -49,10 +49,8 @@ function syncSubchartGridFocusStyle($$, line): void {
 	const style = window.getComputedStyle(source);
 
 	FOCUS_GRID_STYLE_PROPS.forEach(prop => {
-		const value = style.getPropertyValue(prop);
-
-		value && line.style(prop, value);
-	});
+        throw new Error("STUB");
+    });
 }
 
 /**
@@ -206,28 +204,16 @@ export default {
 		if (state.inputType === "mouse") {
 			eventRect
 				.on("mouseover mousemove", function(event) {
-					if ($$.isSubchartBrushEnabled()) {
-						return;
-					}
-
-					dispatchSubchartEvent($$, event.type, event, this);
-				})
+                    throw new Error("STUB");
+                })
 				.on("mouseout", function(event) {
-					if ($$.isSubchartBrushEnabled()) {
-						return;
-					}
-
-					dispatchSubchartEvent($$, "mouseout", event, this);
-				});
+                    throw new Error("STUB");
+                });
 		} else if (state.inputType === "touch") {
 			eventRect
 				.on("touchstart touchmove touchend", function(event) {
-					if ($$.isSubchartBrushEnabled() || event.touches?.length > 1) {
-						return;
-					}
-
-					dispatchSubchartEvent($$, event.type, event, this);
-				});
+                    throw new Error("STUB");
+                });
 		}
 	},
 
@@ -251,91 +237,23 @@ export default {
 
 		// bind brush event
 		$$.brush.on("start brush end", event => {
-			const {selection, sourceEvent, target, type} = event;
-
-			if (type === "start") {
-				$$.state.inputType === "touch" && $$.hideTooltip();
-				lastSelection = sourceEvent ? selection : null;
-				// sourceEvent && (state.domain = null);
-			}
-
-			// if (type === "brush") {
-			if (/(start|brush)/.test(type)) {
-				// when brush selection updates happens on one edge, update only chainging edge and
-				// is only for adjustment of given domain range to be used to return current domain range.
-				type === "brush" && sourceEvent && state.domain &&
-					lastSelection?.forEach((v, i) => {
-						if (v !== selection[i]) {
-							state.domain[i] = scale.x.orgDomain()[i];
-						}
-					});
-
-				$$.redrawForBrush(type !== "start");
-			}
-
-			if (type === "end") {
-				lastDomain = scale.x.orgDomain();
-			}
-
-			// handle brush's handle position & visibility
-			if (target?.handle) {
-				if (selection === null) {
-					$$.brush.handle.attr("display", "none");
-				} else {
-					$$.brush.handle.attr("display", null)
-						.attr("transform", (d, i) => {
-							const pos = [selection[i], height / 2];
-
-							return `translate(${isRotated ? pos.reverse() : pos})`;
-						});
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		$$.brush.updateResize = function() {
-			timeout && clearTimeout(timeout);
-			timeout = setTimeout(() => {
-				const selection = this.getSelection();
-
-				lastDomain && d3BrushSelection(selection.node()) &&
-					this.move(selection, lastDomain.map(scale.subX.orgScale()));
-			}, 0);
-		};
+            throw new Error("STUB");
+        };
 
 		$$.brush.update = function() {
-			const extent = this.extent()();
-
-			if (extent[1].filter(v => isNaN(v)).length === 0) {
-				subchart.main?.select(`.${CLASS.brush}`).call(this);
-			}
-
-			return this;
-		};
+            throw new Error("STUB");
+        };
 
 		// set the brush extent
 		$$.brush.scale = function(scale) {
-			const h = config.subchart_size_height;
-			let extent = $$.axis.getExtent();
+            throw new Error("STUB");
+        };
 
-			if (!extent && scale.range) {
-				extent = [[0, 0], [scale.range()[1], h]];
-			} else if (isArray(extent)) {
-				extent = extent.map((v, i) => [v, i > 0 ? h : i]);
-			}
-
-			// [[x0, y0], [x1, y1]], where [x0, y0] is the top-left corner and [x1, y1] is the bottom-right corner
-			isRotated && extent[1].reverse();
-			this.extent(extent);
-
-			// when extent updates, brush selection also be re-applied
-			// https://github.com/d3/d3/issues/2918
-			this.update();
-		};
-
-		$$.brush.getSelection = () => (
-			// @ts-ignore
-			subchart.main ? subchart.main.select(`.${CLASS.brush}`) : d3Select([])
-		);
+		$$.brush.getSelection = () => { throw new Error("STUB"); };
 	},
 
 	/**
@@ -372,22 +290,8 @@ export default {
 			.attr("class", CLASS.chart);
 
 		$$.withSubchartTypeContext(() => {
-			// Define g for chart types area
-			SUBCHART_TYPES.forEach(v => {
-				const type = capitalize(/^(bubble|scatter)$/.test(v) ? "circle" : v);
-
-				if ($$.hasType(v) || $$.hasTypeOf(type)) {
-					const chart = main.select(`.${CLASS.chart}`);
-					const chartClassName = CLASS[`chart${type}s`];
-
-					if (chart.select(`.${chartClassName}`).empty()) {
-						chart
-							.append("g")
-							.attr("class", chartClassName);
-					}
-				}
-			});
-		});
+            throw new Error("STUB");
+        });
 
 		// Add extent rect for Brush
 		const brush = main.append("g")
@@ -457,7 +361,7 @@ export default {
 			.append("path")
 			.attr("class", customHandleClass)
 			.attr("cursor", `${isRotated ? "ns" : "ew"}-resize`)
-			.attr("d", d => path[/[se]/.test(d.type) ? "end" : "start"])
+			.attr("d", d => { throw new Error("STUB"); })
 			.attr("display", initRange ? null : "none");
 	},
 
@@ -472,46 +376,8 @@ export default {
 
 		if (config.subchart_show) {
 			$$.withSubchartTypeContext(() => {
-				SUBCHART_TYPES
-					.filter(v => $$.hasType(v) || $$.hasTypeOf(capitalize(v)))
-					.forEach(v => {
-						const isPointType = /^(bubble|scatter)$/.test(v);
-						const name = capitalize(isPointType ? "circle" : v);
-						const chartClass = $$.getChartClass(name, true);
-						const shapeClass = $$.getClass(isPointType ? "circles" : `${v}s`, true);
-
-						const shapeChart = main.select(`.${CLASS[`chart${`${name}s`}`]}`);
-
-						if (isPointType) {
-							const circle = shapeChart
-								.selectAll(`.${CLASS.circles}`)
-								.data(targets.filter($$[`is${capitalize(v)}Type`].bind($$)))
-								.attr("class", shapeClass);
-
-							circle.exit().remove();
-							circle.enter().append("g")
-								.attr("class", shapeClass);
-						} else {
-							const shapeUpdate = shapeChart
-								.selectAll(`.${CLASS[`chart${name}`]}`)
-								.attr("class", chartClass)
-								.data(targets.filter($$[`is${name}Type`].bind($$)));
-
-							const shapeEnter = shapeUpdate.enter()
-								.append("g")
-								.style("opacity", "0")
-								.attr("class", chartClass)
-								.append("g")
-								.attr("class", shapeClass);
-
-							shapeUpdate.exit().remove();
-
-							// Area
-							v === "line" && $$.hasTypeOf("Area") &&
-								shapeEnter.append("g").attr("class", $$.getClass("areas", true));
-						}
-					});
-			});
+                throw new Error("STUB");
+            });
 
 			// -- Brush --//
 			main.selectAll(`.${CLASS.brush} rect`)
@@ -575,30 +441,8 @@ export default {
 				!brushEmpty($$) && $$.brush.update();
 
 				$$.withSubchartTypeContext(() => {
-					const targetsToShow = state._targetsToShow ||
-						$$.filterTargetsToShow($$.data.targets);
-
-					$$.updateSubchartYDomain(targetsToShow);
-
-					const subchartShape = $$.getDrawShape();
-
-					Object.keys(subchartShape.type).forEach(v => {
-						const name = capitalize(v);
-						const drawFn = $$[`generateDraw${name}`](subchartShape.indices[v], true);
-
-						// call shape's update & redraw method
-						$$[`update${name}`](withTransition, true);
-						$$[`redraw${name}`](drawFn, withTransition, true);
-					});
-
-					if ($$.hasType("bubble") || $$.hasType("scatter")) {
-						const {cx} = subchartShape.pos;
-						const cy = $$.updateCircleY(true);
-
-						$$.updateCircle(true);
-						$$.redrawCircle(cx, cy, withTransition, undefined, true);
-					}
-				});
+                    throw new Error("STUB");
+                });
 
 				if (!state.rendered && initRange) {
 					state.domain = initRange;
@@ -633,7 +477,7 @@ export default {
 		}
 
 		const focusData = Array.isArray(data) ? data : [data];
-		const focus = focusData.find(d => d && $$.getBaseValue(d) != null);
+		const focus = focusData.find(d => { throw new Error("STUB"); });
 
 		if (!focus) {
 			$$.hideSubchartGridFocus();

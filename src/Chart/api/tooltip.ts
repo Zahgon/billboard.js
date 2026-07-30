@@ -72,83 +72,8 @@ const tooltip = {
 	 *  });
 	 */
 	show: function(args): void {
-		const $$ = this.internal;
-		const {$el, config, state: {eventReceiver, hasFunnel, hasTreemap, inputType}} = $$;
-		let index;
-		let mouse;
-
-		// determine mouse position on the chart
-		if (args.mouse) {
-			mouse = args.mouse;
-		}
-
-		// determine focus data
-		if (args.data) {
-			const {data} = args;
-			const y = $$.getYScaleById(data.id)?.(data.value);
-
-			if ((hasFunnel || hasTreemap) && data.id) {
-				const selector = $$.selectorTarget(data.id, undefined, `.${$SHAPE.shape}`);
-
-				eventReceiver.rect = $el.main.select(selector);
-			} else if ($$.isMultipleX()) {
-				// if multiple xs, target point will be determined by mouse
-				mouse = [$$.xx(data), y];
-			} else {
-				if (!config.tooltip_grouped) {
-					mouse = [0, y];
-				}
-
-				index = data.index ?? (
-					$$.hasArcType() && data.id ?
-						$$.getArcElementByIdOrIndex(data.id)?.datum().index :
-						$$.getIndexByX(data.x)
-				);
-			}
-		} else if (isDefined(args.x)) {
-			index = $$.getIndexByX(args.x);
-		} else if (isDefined(args.index)) {
-			index = args.index;
-		}
-
-		if ($$.state.isCanvasMode) {
-			const targets = $$.filterTargetsToShow?.() || $$.data.targets;
-			const selectedData = args.data?.id && !config.tooltip_grouped ?
-				targets
-					.filter(target => target.id === args.data.id)
-					.map(target => target.values[index ?? args.data.index])
-					.filter(Boolean) :
-				targets
-					.map(target => target.values[index])
-					.filter(Boolean);
-			const canvas = $el.canvas?.node?.();
-			const shape = $$.state.canvasShape || $$.getDrawShape?.();
-			const first = selectedData[0];
-			const point = mouse || (
-				first && shape?.pos?.cx && shape?.pos?.cy ?
-					[
-						$$.state.margin.left + shape.pos.cx(first),
-						$$.state.margin.top + shape.pos.cy(first)
-					] :
-					undefined
-			);
-
-			if (!selectedData.length || !canvas) {
-				return;
-			}
-
-			$$.state.canvasFocusKey = selectedData
-				.map(v => `${v.id}:${v.index}`)
-				.join("|");
-			$$.renderCanvasFocus?.(selectedData, point);
-			$$.showTooltip?.(selectedData, canvas);
-			return;
-		}
-
-		(inputType === "mouse" ? ["mouseover", "mousemove"] : ["touchstart"]).forEach(eventName => {
-			$$.dispatchEvent(eventName, index, mouse);
-		});
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Hide tooltip
@@ -157,35 +82,8 @@ const tooltip = {
 	 * @memberof Chart
 	 */
 	hide: function(): void {
-		const $$ = this.internal;
-		const {state: {inputType, isCanvasMode}, $el: {tooltip}} = $$;
-		const data = tooltip?.datum();
-
-		if (isCanvasMode) {
-			$$.state.canvasFocusKey = null;
-			$$.hideTooltip(true);
-			$$.clearCanvasFocus?.();
-			return;
-		}
-
-		if (data?.data?.[0]) {
-			const {index} = data.data[0];
-
-			// make to finalize, possible pending event flow set from '.tooltip.show()' call
-			(inputType === "mouse" ? ["mouseout"] : ["touchend"]).forEach(eventName => {
-				$$.dispatchEvent(eventName, index);
-			});
-		}
-
-		// reset last touch point index
-		inputType === "touch" && $$.callOverOutForTouch();
-
-		$$.hideTooltip(true);
-		$$.hideGridFocus?.();
-
-		$$.unexpandCircles?.();
-		$$.expandBarTypeShapes?.(false);
-	}
+        throw new Error("STUB");
+    }
 };
 
 export default {tooltip};

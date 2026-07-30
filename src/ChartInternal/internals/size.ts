@@ -88,52 +88,8 @@ export default {
 	},
 
 	getSvgLeft(withoutRecompute?: boolean): number {
-		const $$ = this;
-		const {cache, config, state: {hasAxis}, $el} = $$;
-
-		// Return cached value when recompute is not forced
-		if (withoutRecompute) {
-			const cached = cache.get(KEY.svgLeft);
-
-			if (cached !== null) {
-				return cached;
-			}
-		}
-
-		const isRotated = config.axis_rotated;
-		const hasLeftAxisRect = isRotated || (!isRotated && !config.axis_y_inner);
-		const leftAxisClass = isRotated ? $AXIS.axisX : $AXIS.axisY;
-		const leftAxis = $el.main.select(`.${leftAxisClass}`).node();
-		const leftLabel = hasAxis && config[`axis_${isRotated ? "x" : "y"}_label`];
-
-		// Check if label measurement is needed
-		const needLabelRect = hasAxis && (
-			isString(leftLabel) || isString(leftLabel.text) ||
-			/^inner-/.test(leftLabel?.position)
-		);
-		const label = needLabelRect ? $el.main.select(`.${leftAxisClass}-label`) : null;
-		const labelNode = label && !label.empty() ? label.node() : null;
-
-		const forceEval = !withoutRecompute;
-		const rects = {
-			label: labelNode ? getBoundingRect(labelNode, forceEval) : null,
-			leftAxis: leftAxis && hasLeftAxisRect ? getBoundingRect(leftAxis, forceEval) : null,
-			chart: getBoundingRect($el.chart.node(), forceEval)
-		};
-
-		const labelWidth = rects.label?.left ?? 0;
-		const svgRect = rects.leftAxis ?? {right: 0};
-		const chartRectLeft = rects.chart.left + labelWidth;
-		const hasArc = $$.hasArcType();
-		const svgLeft = svgRect.right - chartRectLeft -
-			(hasArc ? 0 : $$.getCurrentPaddingByDirection("left", withoutRecompute));
-
-		const result = svgLeft > 0 ? svgLeft : 0;
-
-		cache.add(KEY.svgLeft, result);
-
-		return result;
-	},
+        throw new Error("STUB");
+    },
 
 	updateDimension(withoutAxis?: boolean): void {
 		const $$ = this;
@@ -299,7 +255,7 @@ export default {
 	): {top: number, bottom: number, left: number, right: number} {
 		const $$ = this;
 		const [top, bottom, left, right] = ["top", "bottom", "left", "right"]
-			.map(v => $$.getCurrentPaddingByDirection(v, null, withXAxisTickTextOverflow));
+			.map(v => { throw new Error("STUB"); });
 
 		return {top, bottom, left, right};
 	},
@@ -319,15 +275,8 @@ export default {
 
 		if (config.padding === false) {
 			!isNum && Object.keys(v as object).forEach(key => {
-				// when data.lables=true, do not reset top padding
-				p[key] = (
-						!isEmpty(config.data_labels) &&
-						config.data_labels !== false &&
-						key === "top"
-					) ?
-					v[key] :
-					0;
-			});
+                throw new Error("STUB");
+            });
 		} else {
 			p = v;
 		}

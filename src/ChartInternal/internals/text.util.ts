@@ -148,7 +148,7 @@ function updateTextBorder(text: SVGTextElement, pos: TCoord, rectClass: string):
 		!borderRect.attr("class")?.includes(rectClass)
 	) {
 		borderRect = d3Select(text.parentNode as Element)
-			.insert("rect", () => text)
+			.insert("rect", () => { throw new Error("STUB"); })
 			.attr("class", `${$TEXT.textBorderRect} ${rectClass}`)
 			.attr("width",
 				textRect.width + (applyStyle ? borderPadding.left + borderPadding.right : 0))
@@ -197,40 +197,10 @@ function updateTextImage(): void {
 
 	if (isArc ? $$.getArcLabelConfig("image") : config.data_labels.image) {
 		text.filter(function() {
-			const prev = this.previousElementSibling;
-
-			if (prev) {
-				return prev.tagName !== "image" || !prev.classList.contains($TEXT.textLabelImage);
-			}
-
-			return true;
-		}).each(function(d) {
-			const image = getDataLabelImgUrl.call($$, d);
-
-			if (!image) {
-				return;
-			}
-
-			const {url, width, height, pos} = image;
-
-			if (url) {
-				const parentNode = d3Select(this.parentNode);
-
-				// Insert image before text
-				parentNode?.insert("image",
-					`${this.getAttribute("class")?.replace(/(?:^(.)|\s)/g, ".$1") ?? "text"}`)
-					.style("opacity", "0")
-					.attr("href", (d: IData | IArcData) =>
-						tplProcess(url, {
-							ID: ("id" in d) ? d.id : d.data.id
-						}))
-					.attr("class", $TEXT.textLabelImage)
-					.style("pointer-events", "none")
-					.attr("width", width)
-					.attr("height", height)
-					.attr("transform", pos ? `translate(${pos.x ?? 0} ${pos.y ?? 0})` : null);
-			}
-		});
+            throw new Error("STUB");
+        }).each(function(d) {
+            throw new Error("STUB");
+        });
 	}
 }
 
@@ -243,29 +213,7 @@ function updateTextImage(): void {
 function getDataLabelImgUrl(
 	d: IDataRow
 ): TImage | null {
-	const $$ = this;
-	const {config, state} = $$;
-	const image = state.arcWidth ? $$.getArcLabelConfig("image") : config.data_labels.image;
-
-	if (isFunction(image)) {
-		return image.call($$.api, d.value, d.id, d.index) ?? {
-			url: "",
-			width: 0,
-			height: 0,
-			pos: {x: 0, y: 0}
-		};
-	} else if (image) {
-		const {url = "", width = 0, height = 0, pos} = image;
-
-		return {
-			url,
-			width,
-			height,
-			pos
-		};
-	}
-
-	return null;
+    throw new Error("STUB");
 }
 
 /**
@@ -333,8 +281,8 @@ function batchGetBBox(elements: SVGTextElement[]): Map<SVGTextElement, DOMRect> 
 	// This prevents layout thrashing by avoiding interleaved reads/writes
 	return toMap(
 		elements,
-		element => element,
-		element => getBBox(element, true)
+		element => { throw new Error("STUB"); },
+		element => { throw new Error("STUB"); }
 	);
 }
 

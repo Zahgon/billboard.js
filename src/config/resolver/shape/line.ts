@@ -6,7 +6,7 @@ import {TYPE} from "../../const";
 import optSpline from "../../Options/shape/spline";
 import {extendLine} from "./axis.helpers";
 
-export let line = (): string => (extendLine(), (line = () => TYPE.LINE)());
+export let line = (): string => { throw new Error("STUB"); };
 export let spline =
-	(): string => (extendLine(undefined, [optSpline]), (spline = () => TYPE.SPLINE)());
-export let step = (): string => (extendLine(), (step = () => TYPE.STEP)());
+	(): string => { throw new Error("STUB"); };
+export let step = (): string => { throw new Error("STUB"); };

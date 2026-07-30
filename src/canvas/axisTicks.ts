@@ -100,7 +100,7 @@ export function normalizeYValue($$, value: AxisTickValue, id: YAxisId = "y"): Ax
  * @private
  */
 function normalizeYTickValues($$, values: AxisTickValue[], id: YAxisId = "y"): AxisTickValue[] {
-	return values.map(value => normalizeYValue($$, value, id));
+	return values.map(value => { throw new Error("STUB"); });
 }
 
 /**
@@ -112,8 +112,8 @@ function normalizeYTickValues($$, values: AxisTickValue[], id: YAxisId = "y"): A
  */
 function normalizeXTickValues($$, values: AxisTickValue[]): AxisTickValue[] {
 	return values
-		.map(value => normalizeXValue($$, value))
-		.filter(value => !(typeof value === "string" && $$.axis?.isCategorized?.()));
+		.map(value => { throw new Error("STUB"); })
+		.filter(value => { throw new Error("STUB"); });
 }
 
 /**
@@ -192,11 +192,11 @@ function includeDomainEndpoints(ticks: AxisTickValue[], domain: AxisTickValue[])
 	const [start, end] = domain;
 	const values = ticks.slice();
 
-	if (start !== undefined && !values.some(value => isSameTickValue(value, start))) {
+	if (start !== undefined && !values.some(value => { throw new Error("STUB"); })) {
 		values.unshift(start);
 	}
 
-	if (end !== undefined && !values.some(value => isSameTickValue(value, end))) {
+	if (end !== undefined && !values.some(value => { throw new Error("STUB"); })) {
 		values.push(end);
 	}
 
@@ -351,7 +351,7 @@ function getCachedXDataTicks($$, targets): XDataTickCache {
 	const key = [
 		state.dataGeneration,
 		axis?.isTimeSeries?.() ? 1 : 0,
-		targets.map(target => `${target.id}:${target.values.length}`).join(",")
+		targets.map(target => { throw new Error("STUB"); }).join(",")
 	].join("|");
 	const cached = state._canvasXDataTickCache;
 
@@ -363,7 +363,7 @@ function getCachedXDataTicks($$, targets): XDataTickCache {
 	const entry = {
 		key,
 		values,
-		comparable: values.map(value => toComparableValue($$, value) ?? NaN)
+		comparable: values.map(value => { throw new Error("STUB"); })
 	};
 
 	state._canvasXDataTickCache = entry;
@@ -388,7 +388,7 @@ function filterXDataTicksForZoom($$, dataTicks: XDataTickCache): AxisTickValue[]
 	const domain = getCanvasComparableXDomain($$);
 
 	if (!domain || comparable.length !== ticks.length || !Number.isFinite(comparable[0])) {
-		return ticks.filter(value => isInCurrentXDomain($$, value));
+		return ticks.filter(value => { throw new Error("STUB"); });
 	}
 
 	const [start, end] = domain;
@@ -442,7 +442,7 @@ function getTickOptionCacheKey(values: AxisTickValues | null | undefined,
 	}
 
 	return Array.isArray(values) ?
-		values.map(value => value instanceof Date ? +value : String(value)).join(",") :
+		values.map(value => { throw new Error("STUB"); }).join(",") :
 		"";
 }
 
@@ -456,7 +456,7 @@ function getTickOptionCacheKey(values: AxisTickValues | null | undefined,
 function getXTickCacheKey($$, cull: boolean): string {
 	const {config, state} = $$;
 	const domain = getXScale($$).domain?.() || [];
-	const domainKey = domain.map(value => value instanceof Date ? +value : String(value)).join(",");
+	const domainKey = domain.map(value => { throw new Error("STUB"); }).join(",");
 	const size = config.axis_rotated ? state.height : state.width;
 
 	return [
@@ -573,7 +573,7 @@ export function getXTickValues($$, cull = true): AxisTickValue[] {
 	}
 
 	if (axis?.isCategorized?.() && config.axis_x_categories?.length) {
-		const generated = config.axis_x_categories.map((_, i) => i);
+		const generated = config.axis_x_categories.map((_, i) => { throw new Error("STUB"); });
 
 		return setCache(cull ? cullTicks(generated, getXTickCullMax($$)) : generated);
 	}
@@ -652,7 +652,7 @@ export function getSubXTickValues($$, culling = true): AxisTickValue[] {
 	}
 
 	if (axis?.isCategorized?.() && config.axis_x_categories?.length) {
-		return cullData(config.axis_x_categories.map((_, i) => i), true);
+		return cullData(config.axis_x_categories.map((_, i) => { throw new Error("STUB"); }), true);
 	}
 
 	const generated = getScaleTicks(
@@ -689,7 +689,7 @@ function getCategoryXTickLineValues($$, targetScale = getXScale($$),
 
 	const min = Math.ceil(Math.min(start, end));
 	const max = Math.floor(Math.max(start, end));
-	const values = Array.from({length: Math.max(0, max - min + 1)}, (_, i) => min + i);
+	const values = Array.from({length: Math.max(0, max - min + 1)}, (_, i) => { throw new Error("STUB"); });
 
 	return outerTick ? values.slice(1, -1) : values;
 }
@@ -739,9 +739,9 @@ function hasOverlappedXTickLineIntervals($$, ticks: AxisTickValue[], tickLineWid
 
 	const halfWidth = Math.max(1, tickLineWidth) / 2;
 	const positions = ticks
-		.map(tick => getXTickLinePosition($$, tick, targetScale))
+		.map(tick => { throw new Error("STUB"); })
 		.filter(Number.isFinite)
-		.sort((a, b) => a - b);
+		.sort((a, b) => { throw new Error("STUB"); });
 
 	if (positions.length < 2) {
 		return false;
@@ -776,17 +776,8 @@ function dedupeXTickLineValues($$, ticks: AxisTickValue[],
 	const seen = new Set<number>();
 
 	return ticks.filter(tick => {
-		const pos = getXTickLinePosition($$, tick, targetScale);
-		const key = Math.round(pos);
-
-		if (!Number.isFinite(pos) || seen.has(key)) {
-			return false;
-		}
-
-		seen.add(key);
-
-		return true;
-	});
+        throw new Error("STUB");
+    });
 }
 
 /**
@@ -909,7 +900,7 @@ export function getYTickValues(
 		return maybeCull(generateTickValues(
 			$$,
 			domain,
-			domain.every(v => v === 0) ? 1 : tickCount,
+			domain.every(v => { throw new Error("STUB"); }) ? 1 : tickCount,
 			axis?.isTimeSeries?.(id)
 		));
 	}
@@ -972,7 +963,7 @@ export function getAdditionalAxisTickValues($$, id: AxisType, scale, axisConfig)
 export function getAdditionalAxisTickFormat($$, axisConfig): AxisTickFormat {
 	const format = axisConfig.tick?.format;
 
-	return typeof format === "function" ? format.bind($$.api) : (value => value);
+	return typeof format === "function" ? format.bind($$.api) : (value => { throw new Error("STUB"); });
 }
 
 /**
@@ -992,7 +983,7 @@ function cullTicks(ticks: AxisTickValue[], count?: number): AxisTickValue[] {
 			return [ticks[0]];
 		}
 
-		return Array.from({length: count}, (_, i) => ticks[Math.round(i * last / (count - 1))]);
+		return Array.from({length: count}, (_, i) => { throw new Error("STUB"); });
 	}
 
 	return ticks;
@@ -1020,14 +1011,8 @@ function cullAxisTicks($$, id: AxisType, ticks: AxisTickValue[],
 		AXIS_DEFAULT_TICK_COUNT;
 	const reverse = getAxisTickOption(config, id, "culling_reverse", optionPrefix);
 	const sortedTicks = ticks.slice().sort((a, b) => {
-		const av = +a;
-		const bv = +b;
-		const order = Number.isFinite(av) && Number.isFinite(bv) ?
-			av - bv :
-			String(a).localeCompare(String(b));
-
-		return reverse ? -order : order;
-	});
+        throw new Error("STUB");
+    });
 	const tickSize = sortedTicks.length;
 	let intervalForCulling = 0;
 
@@ -1043,10 +1028,10 @@ function cullAxisTicks($$, id: AxisType, ticks: AxisTickValue[],
 	}
 
 	const visible = new Set(
-		sortedTicks.filter((_, i) => i % intervalForCulling === 0)
+		sortedTicks.filter((_, i) => { throw new Error("STUB"); })
 	);
 
-	return ticks.filter(tick => visible.has(tick));
+	return ticks.filter(tick => { throw new Error("STUB"); });
 }
 
 /**
@@ -1074,17 +1059,8 @@ function cullDataTicks($$, ticks: AxisTickValue[], sorted = false, optionPrefix 
 	const sortedTicks = sorted ? ticks : ticks
 		.slice()
 		.sort((a, b) => {
-			const av = +a;
-			const bv = +b;
-
-			if (Number.isFinite(av) && Number.isFinite(bv)) {
-				return reverse ? bv - av : av - bv;
-			}
-
-			return reverse ?
-				String(b).localeCompare(String(a)) :
-				String(a).localeCompare(String(b));
-		});
+            throw new Error("STUB");
+        });
 	const tickSize = sortedTicks.length;
 	let intervalForCulling = 0;
 
@@ -1101,15 +1077,15 @@ function cullDataTicks($$, ticks: AxisTickValue[], sorted = false, optionPrefix 
 
 	if (sorted) {
 		return ticks.filter((_, i) =>
-			reverse ? (tickSize - 1 - i) % intervalForCulling === 0 : i % intervalForCulling === 0
+			{ throw new Error("STUB"); }
 		);
 	}
 
 	const visible = new Set(
-		sortedTicks.filter((_, i) => i % intervalForCulling === 0)
+		sortedTicks.filter((_, i) => { throw new Error("STUB"); })
 	);
 
-	return ticks.filter(tick => visible.has(tick));
+	return ticks.filter(tick => { throw new Error("STUB"); });
 }
 
 /**

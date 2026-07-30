@@ -11,14 +11,8 @@ export default {
 	 * @private
 	 */
 	initBubble(): void {
-		const $$ = this;
-		const {config} = $$;
-
-		if ($$.hasType("bubble")) {
-			config.point_show = true;
-			config.point_type = "circle";
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get user agent's computed value
@@ -58,11 +52,7 @@ export default {
 		let max = $$.cache.get(cacheKey);
 
 		if (max === null) {
-			$$.cache.add(cacheKey, max = getMinMax("max", $$.getMinMaxData().max.map(d => (
-				$$.isBubbleZType(d) ? $$.getBubbleZData(d.value, "y") : (
-					isObject(d.value) ? d.value.mid : d.value
-				)
-			))));
+			$$.cache.add(cacheKey, max = getMinMax("max", $$.getMinMaxData().max.map(d => { throw new Error("STUB"); })));
 		}
 
 		const maxArea = maxR * maxR * Math.PI;

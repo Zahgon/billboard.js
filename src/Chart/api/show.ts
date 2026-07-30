@@ -19,66 +19,7 @@ function showHide(
 	options: any,
 	skipRedraw = false
 ): void {
-	const $$ = this.internal;
-	const targetIds = $$.mapToTargetIds(targetIdsValue);
-	const targetIdSet = new Set(targetIds);
-	const hiddenIds = [...$$.state.hiddenTargetIds].filter(v => targetIdSet.has(v));
-
-	$$.state.toggling = true;
-	$$.state.dirty.visibility = true;
-
-	$$[`${show ? "remove" : "add"}HiddenTargetIds`](targetIds);
-
-	if ($$.state.isCanvasMode) {
-		if (show && hiddenIds.length) {
-			callFn($$.config.data_onshown, this, hiddenIds);
-		} else if (!show && hiddenIds.length === 0) {
-			callFn($$.config?.data_onhidden, this, targetIds);
-		}
-
-		if (!skipRedraw) {
-			$$.redraw({
-				withUpdateOrgXDomain: true,
-				withUpdateXDomain: true,
-				withLegend: true
-			});
-		}
-
-		$$.state.toggling = false;
-		return;
-	}
-
-	const targets = $$.$el.svg.selectAll($$.selectorTargets(targetIds));
-	const opacity = show ? null : "0";
-
-	if (show && hiddenIds.length) {
-		targets.style("display", null);
-		callFn($$.config.data_onshown, this, hiddenIds);
-	}
-
-	$$.$T(targets)
-		.style("opacity", opacity, "important")
-		.call(endall, () => {
-			// https://github.com/naver/billboard.js/issues/1758
-			if (!show && hiddenIds.length === 0) {
-				targets.style("display", "none");
-				callFn($$.config?.data_onhidden, this, targetIds);
-			}
-
-			targets.style("opacity", opacity);
-		});
-
-	options.withLegend && $$[`${show ? "show" : "hide"}Legend`](targetIds);
-
-	if (!skipRedraw) {
-		$$.redraw({
-			withUpdateOrgXDomain: true,
-			withUpdateXDomain: true,
-			withLegend: true
-		});
-	}
-
-	$$.state.toggling = false;
+    throw new Error("STUB");
 }
 
 export default {
@@ -153,7 +94,7 @@ export default {
 
 		// sort show & hide target ids
 		$$.mapToTargetIds(targetIds)
-			.forEach((id: string) => targets[$$.isTargetToShow(id) ? "hide" : "show"].push(id));
+			.forEach((id: string) => { throw new Error("STUB"); });
 
 		if (targets.show.length && targets.hide.length) {
 			// Batch both operations with a single redraw

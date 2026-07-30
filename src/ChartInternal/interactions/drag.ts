@@ -42,54 +42,8 @@ export default {
 
 		// Use RAF batching to smooth out rapid drag events
 		const executeDrag = () => {
-			// Check if chart still exists before executing
-			if (!$$ || !$$.$el || !$$.$el.main) {
-				return;
-			}
-
-			main.select(`.${$DRAG.dragarea}`)
-				.attr("x", minX)
-				.attr("y", minY)
-				.attr("width", maxX - minX)
-				.attr("height", maxY - minY);
-
-			// TODO: binary search when multiple xs
-			main.selectAll(`.${$SHAPE.shapes}`)
-				.selectAll(`.${$SHAPE.shape}`)
-				.filter(d => isSelectable?.bind($$.api)(d))
-				.each(function(d, i) {
-					const shape: d3Selection = d3Select(this);
-					const isSelected = shape.classed($SELECT.SELECTED);
-					const isIncluded = shape.classed($DRAG.INCLUDED);
-					let isWithin;
-					let toggle;
-
-					if (shape.classed($CIRCLE.circle)) {
-						const x: number = +shape.attr("cx");
-						const y: number = +shape.attr("cy");
-
-						toggle = $$.togglePoint;
-						isWithin = minX < x && x < maxX && minY < y && y < maxY;
-					} else if (shape.classed($BAR.bar)) {
-						const {x, y, width, height} = getPathBox(this);
-
-						toggle = $$.togglePath;
-						isWithin = !(maxX < x || x + width < minX) &&
-							!(maxY < y || y + height < minY);
-					} else {
-						// line/area selection not supported yet
-						return;
-					}
-
-					// @ts-ignore
-					if (isWithin ^ isIncluded) {
-						shape.classed($DRAG.INCLUDED, !isIncluded);
-						// TODO: included/unincluded callback here
-						shape.classed($SELECT.SELECTED, !isSelected);
-						toggle.call($$, !isSelected, shape, d, i);
-					}
-				});
-		};
+            throw new Error("STUB");
+        };
 
 		scheduleRAFUpdate($$.state, executeDrag);
 	},

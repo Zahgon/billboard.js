@@ -41,7 +41,7 @@ export default {
 	 *    }
 	 * }
 	 */
-	data_idConverter: id => id,
+	data_idConverter: id => { throw new Error("STUB"); },
 
 	/**
 	 * Set custom data name.
@@ -622,7 +622,9 @@ export default {
 	 *     }
 	 * }
 	 */
-	data_onclick: () => {},
+	data_onclick: () => {
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set a callback for mouse/touch over event on each data point.<br><br>
@@ -643,7 +645,9 @@ export default {
 	 *     }
 	 * }
 	 */
-	data_onover: () => {},
+	data_onover: () => {
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set a callback for mouse/touch out event on each data point.<br><br>
@@ -664,7 +668,9 @@ export default {
 	 *     }
 	 * }
 	 */
-	data_onout: () => {},
+	data_onout: () => {
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set a callback for when data is shown.<br>

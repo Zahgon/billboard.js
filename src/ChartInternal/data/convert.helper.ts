@@ -23,22 +23,8 @@ function columns(columns) {
 	const newRows: any[] = [];
 
 	columns.forEach(function(col, i) {
-		const key = col[0];
-
-		col.forEach(function(v, j) {
-			if (j > 0) {
-				if (typeof newRows[j - 1] === "undefined") {
-					newRows[j - 1] = {};
-				}
-
-				if (typeof v === "undefined") {
-					throw new Error(`Source data is missing a component at (${i}, ${j})!`);
-				}
-
-				newRows[j - 1][key] = v;
-			}
-		});
-	});
+        throw new Error("STUB");
+    });
 
 	return newRows;
 }
@@ -54,20 +40,8 @@ function rows(rows) {
 	const newRows: any[] = [];
 
 	rows.forEach(function(row, i) {
-		if (i > 0) {
-			const newRow = {};
-
-			row.forEach(function(v, j) {
-				if (typeof v === "undefined") {
-					throw new Error(`Source data is missing a component at (${i}, ${j})!`);
-				}
-
-				newRow[keys[j]] = v;
-			});
-
-			newRows.push(newRow);
-		}
-	});
+        throw new Error("STUB");
+    });
 
 	return newRows;
 }
@@ -94,12 +68,8 @@ function json(json, keysParam) {
 			let target = object;
 
 			pathArray.some(function(k) {
-				return !(
-					target = target && typeof target === "object" && k in target ?
-						target[k] :
-						undefined
-				);
-			});
+                throw new Error("STUB");
+            });
 
 			return target;
 		};
@@ -113,28 +83,14 @@ function json(json, keysParam) {
 		newRows.push(targetKeys);
 
 		json.forEach(function(o) {
-			const newRow = targetKeys.map(function(key) {
-				// convert undefined to null because undefined data will be removed in convertDataToTargets()
-				let v = findValueInJson(o, key);
-
-				if (typeof v === "undefined") {
-					v = null;
-				}
-
-				return v;
-			});
-
-			newRows.push(newRow);
-		});
+            throw new Error("STUB");
+        });
 
 		data = rows(newRows);
 	} else {
 		Object.keys(json).forEach(function(key) {
-			const tmp: any[] = [].concat(json[key]);
-
-			tmp.unshift?.(key);
-			newRows.push(tmp);
-		});
+            throw new Error("STUB");
+        });
 
 		data = columns(newRows);
 	}
@@ -160,24 +116,13 @@ function url(url: string, mimeType = "csv", headers: object, keys: object, done:
 
 	if (headers) {
 		Object.keys(headers).forEach(function(key) {
-			req.setRequestHeader(key, headers[key]);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	req.onreadystatechange = function() {
-		if (req.readyState === 4) {
-			if (req.status === 200) {
-				const response = req.responseText;
-
-				response && done.call(this, converter[mimeType](
-					mimeType === "json" ? JSON.parse(response) : response,
-					keys
-				));
-			} else {
-				throw new Error(`${url}: Something went wrong loading!`);
-			}
-		}
-	};
+        throw new Error("STUB");
+    };
 
 	req.send();
 }
@@ -197,8 +142,8 @@ function convertCsvTsvToData(parser, xsv) {
 		d = [{}];
 
 		rows[0].forEach(id => {
-			d[0][id] = null;
-		});
+            throw new Error("STUB");
+        });
 	} else {
 		d = parser.parse(xsv);
 	}

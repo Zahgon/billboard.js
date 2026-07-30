@@ -120,9 +120,8 @@ export default {
 		const subchartType = config.subchart_type;
 
 		$$.mapToIds(data.targets).forEach(id => {
-			subchartSourceTypes[id] = $$.getTargetType(id);
-			subchartTypes[id] = $$.getSubchartTargetType(id);
-		});
+            throw new Error("STUB");
+        });
 
 		config.data_type = subchartType && $$.isValidChartType(subchartType) ?
 			subchartType :
@@ -146,9 +145,8 @@ export default {
 		const {config, state: {withoutFadeIn}} = $$;
 
 		$$.mapToTargetIds(targetIds).forEach(id => {
-			withoutFadeIn[id] = type === config.data_types[id];
-			config.data_types[id] = type;
-		});
+            throw new Error("STUB");
+        });
 
 		if (!targetIds) {
 			config.data_type = type;
@@ -164,16 +162,8 @@ export default {
 		const {state: {current}} = $$;
 
 		Object.keys(TYPE).forEach(v => {
-			const t = TYPE[v];
-			const has = $$.hasType(t, null, true);
-			const idx = current.types.indexOf(t);
-
-			if (idx === -1 && has) {
-				current.types.push(t);
-			} else if (idx > -1 && !has) {
-				current.types.splice(idx, 1);
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		// Update current chart elements reference
 		$$.setChartElements();
@@ -197,12 +187,10 @@ export default {
 			return true;
 		} else if (targets?.length) {
 			return targets.some(target => {
-				const t = types[target.id];
-
-				return t === type || (!t && type === "line");
-			});
+                throw new Error("STUB");
+            });
 		} else if (Object.keys(types).length) {
-			return Object.values(types).some(t => t === type);
+			return Object.values(types).some(t => { throw new Error("STUB"); });
 		}
 
 		return config.data_type === type;
@@ -219,8 +207,8 @@ export default {
 	hasTypeOf(type, targets, exclude: string[] = []): boolean {
 		if (type in TYPE_BY_CATEGORY) {
 			return !TYPE_BY_CATEGORY[type]
-				.filter((v: string) => exclude.indexOf(v) === -1)
-				.every((v: string) => !this.hasType(v, targets));
+				.filter((v: string) => { throw new Error("STUB"); })
+				.every((v: string) => { throw new Error("STUB"); });
 		}
 
 		return false;
@@ -351,12 +339,12 @@ export default {
 	},
 
 	lineData(d) {
-		return this.isLineType(d) ? [d] : [];
-	},
+        throw new Error("STUB");
+    },
 
 	arcData(d) {
-		return this.isArcType(d.data) ? [d] : [];
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get data adapt for data label showing
@@ -373,13 +361,13 @@ export default {
 				this.isFunnelType(d) ||
 				this.isRadarType(d) ||
 				this.isTreemapType(d) ?
-			d.values.filter(v => isNumber(v.value) || Boolean(v.value)) :
+			d.values.filter(v => { throw new Error("STUB"); }) :
 			[];
 	},
 
 	barLineBubbleData(d) {
-		return this.isBarType(d) || this.isLineType(d) || this.isBubbleType(d) ? d.values : [];
-	},
+        throw new Error("STUB");
+    },
 
 	isInterpolationType(type: string): boolean {
 		return INTERPOLATION_TYPES.has(type);

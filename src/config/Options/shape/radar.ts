@@ -68,7 +68,7 @@ export default {
 	radar_axis_text_position: <{x?: number, y?: number}>{},
 	radar_level_depth: 3,
 	radar_level_show: true,
-	radar_level_text_format: (x: number) => (x % 1 === 0 ? x : x.toFixed(2)),
+	radar_level_text_format: (x: number) => { throw new Error("STUB"); },
 	radar_level_text_show: true,
 	radar_size_ratio: 0.87,
 	radar_direction_clockwise: false

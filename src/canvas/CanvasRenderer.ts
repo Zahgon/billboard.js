@@ -98,13 +98,13 @@ function applyCssMatrixTransform(ctx: CanvasRenderingContext2D, transform?: stri
 	const matrix3d = transform.match(/^matrix3d\(([^)]+)\)$/);
 
 	if (matrix) {
-		const values = matrix[1].split(",").map(value => Number(value.trim()));
+		const values = matrix[1].split(",").map(value => { throw new Error("STUB"); });
 
 		values.length === 6 &&
 			values.every(Number.isFinite) &&
 			ctx.transform(values[0], values[1], values[2], values[3], values[4], values[5]);
 	} else if (matrix3d) {
-		const values = matrix3d[1].split(",").map(value => Number(value.trim()));
+		const values = matrix3d[1].split(",").map(value => { throw new Error("STUB"); });
 
 		values.length === 16 &&
 			values.every(Number.isFinite) &&
@@ -170,8 +170,8 @@ function getBackgroundImageOffset($$): {x: number, y: number} {
  */
 function drawCanvasLine($$, target, indices, painter: CanvasPainter, isSub = false): void {
 	painter.strokePath(ctx => {
-		generateDrawLinePath($$, indices, isSub, ctx)(target);
-	}, {lineDash: []});
+        throw new Error("STUB");
+    }, {lineDash: []});
 }
 
 /**
@@ -185,8 +185,8 @@ function drawCanvasLine($$, target, indices, painter: CanvasPainter, isSub = fal
  */
 function drawCanvasArea($$, target, indices, painter: CanvasPainter, isSub = false): void {
 	painter.fillPath(ctx => {
-		generateDrawAreaPath($$, indices, isSub, ctx)(target);
-	});
+        throw new Error("STUB");
+    });
 }
 
 /**
@@ -382,15 +382,8 @@ function getCanvasAreaBounds($$, target, indices, isSub = false): CanvasRect | n
 		}
 
 		getPoints(d, i).forEach(([x, y]) => {
-			if (!isFiniteCanvasCoordinate(x, y)) {
-				return;
-			}
-
-			minX = Math.min(minX, x);
-			minY = Math.min(minY, y);
-			maxX = Math.max(maxX, x);
-			maxY = Math.max(maxY, y);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	return Number.isFinite(minX) && Number.isFinite(minY) ?
@@ -450,15 +443,8 @@ function getCanvasLinearGradientFill(
 	);
 
 	stops.forEach(([offset, stopColor, stopOpacity]) => {
-		const colorValue = isFunction(stopColor) ? stopColor.call($$.api, target.id) : stopColor;
-		const color = String(colorValue || baseColor);
-		const numericOffset = Number(offset);
-		const parsedOffset = Number.isFinite(numericOffset) ?
-			Math.max(0, Math.min(1, numericOffset)) :
-			0;
-
-		gradient.addColorStop(parsedOffset, withOpacity(color, stopOpacity));
-	});
+        throw new Error("STUB");
+    });
 
 	return gradient;
 }
@@ -596,16 +582,8 @@ function drawBarConnectLine(
 	let movePoint = getMovePoint(boxes[0]);
 
 	painter.strokePath(() => {
-		for (let i = 1; i < boxes.length; i++) {
-			const linePoint = getLinePoint(boxes[i]);
-
-			painter.traceLine(movePoint.x, movePoint.y, linePoint.x, linePoint.y);
-
-			if (i < boxes.length - 1) {
-				movePoint = getMovePoint(boxes[i]);
-			}
-		}
-	}, {
+        throw new Error("STUB");
+    }, {
 		alpha,
 		stroke: $$.canvasTheme.style.shape.barConnectLineColor,
 		lineWidth: $$.canvasTheme.style.shape.barConnectLineWidth,
@@ -683,20 +661,8 @@ function getPointFillStyle(
 	);
 
 	stops.forEach(([offset, stopColor, stopOpacity]) => {
-		let color = isFunction(stopColor) ? stopColor.bind($$.api)(d.id) : stopColor;
-
-		if (!color) {
-			color = fallback;
-		}
-
-		// addColorStop throws IndexSizeError for out-of-range offsets
-		const numericOffset = Number(offset);
-		const parsedOffset = Number.isFinite(numericOffset) ?
-			Math.max(0, Math.min(1, numericOffset)) :
-			0;
-
-		gradient.addColorStop(parsedOffset, withOpacity(color, stopOpacity));
-	});
+        throw new Error("STUB");
+    });
 
 	return gradient;
 }
@@ -737,7 +703,7 @@ function shouldDrawPoints($$, target): boolean {
  * @private
  */
 function isSameDash(a: number[], b: number[]): boolean {
-	return a.length === b.length && a.every((value, index) => value === b[index]);
+	return a.length === b.length && a.every((value, index) => { throw new Error("STUB"); });
 }
 
 /**
@@ -753,7 +719,7 @@ function drawCanvasLineWithDataRegions($$, target, painter: CanvasPainter): void
 	const y = $$.getYScaleById(target.id);
 	const rawValues = config.line_connectNull ? $$.filterRemoveNull(target.values) : target.values;
 	let values = $$.isAreaRangeType(target) ?
-		rawValues.map(d => ({...d, value: $$.getRangedData(d, "mid")})) :
+		rawValues.map(d => { throw new Error("STUB"); }) :
 		rawValues;
 
 	if ($$.isStepType(target)) {
@@ -770,13 +736,8 @@ function drawCanvasLineWithDataRegions($$, target, painter: CanvasPainter): void
 		}
 
 		painter.strokePath(ctx => {
-			const [start, ...rest] = currentPoints;
-
-			ctx.moveTo(start[0], start[1]);
-			rest.forEach(point => {
-				ctx.lineTo(point[0], point[1]);
-			});
-		}, {lineDash: currentDash});
+            throw new Error("STUB");
+        }, {lineDash: currentDash});
 
 		currentPoints = [];
 	};
@@ -841,8 +802,8 @@ export default class CanvasRenderer {
 	 * @private
 	 */
 	get ctx(): CanvasRenderingContext2D {
-		return this.painter.context;
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Run renderer draw calls on another canvas context.
@@ -859,17 +820,8 @@ export default class CanvasRenderer {
 	 * @private
 	 */
 	destroy(): void {
-		const clearImageHandler = (entry: LabelImageCacheEntry) => {
-			entry.image.onload = null;
-			entry.image.onerror = null;
-		};
-
-		this.labelImageCache.forEach(clearImageHandler);
-		this.backgroundImageCache.forEach(clearImageHandler);
-		this.labelImageCache.clear();
-		this.backgroundImageCache.clear();
-		this.backgroundClassStyleCache.clear();
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Get cached image for data label.
@@ -895,14 +847,11 @@ export default class CanvasRenderer {
 			this.labelImageCache.set(url, entry);
 
 			nextEntry.image.onload = () => {
-				nextEntry.loaded = true;
-				nextEntry.loading = false;
-				$$.redraw?.();
-			};
+                throw new Error("STUB");
+            };
 			nextEntry.image.onerror = () => {
-				nextEntry.loaded = false;
-				nextEntry.loading = false;
-			};
+                throw new Error("STUB");
+            };
 			nextEntry.image.src = url;
 		}
 
@@ -933,14 +882,11 @@ export default class CanvasRenderer {
 			this.backgroundImageCache.set(url, entry);
 
 			nextEntry.image.onload = () => {
-				nextEntry.loaded = true;
-				nextEntry.loading = false;
-				$$.renderCanvasFrame?.(undefined, null, false);
-			};
+                throw new Error("STUB");
+            };
 			nextEntry.image.onerror = () => {
-				nextEntry.loaded = false;
-				nextEntry.loading = false;
-			};
+                throw new Error("STUB");
+            };
 			nextEntry.image.src = url;
 		}
 
@@ -1002,35 +948,8 @@ export default class CanvasRenderer {
 		const classStyle = this.getBackgroundClassStyle($$, bg.class);
 
 		painter.withState(() => {
-			if (classStyle.opacity !== undefined) {
-				ctx.globalAlpha *= classStyle.opacity;
-			}
-
-			if (bg.imgUrl) {
-				const entry = this.getBackgroundImage(bg.imgUrl, $$);
-
-				if (entry?.loaded) {
-					const offset = getBackgroundImageOffset($$);
-					const rect = getPreservedAspectRatioRect(
-						entry.image,
-						current.width,
-						current.height
-					);
-
-					ctx.translate(offset.x, offset.y);
-					applyCssMatrixTransform(ctx, classStyle.transform);
-					ctx.drawImage(entry.image, rect.x, rect.y, rect.w, rect.h);
-				}
-			} else if (bg.color) {
-				applyCssMatrixTransform(ctx, classStyle.transform);
-				painter.fillRect({
-					x: margin.left,
-					y: margin.top,
-					w: width,
-					h: height
-				}, {fill: bg.color});
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1111,13 +1030,10 @@ export default class CanvasRenderer {
 
 		const {ctx, theme: {style}} = this;
 		const rows = selectedData.filter(d =>
-			d &&
-			hasCanvasDrawableValue($$, d) &&
-			isCanvasPointType($$, d) &&
-			isCanvasRenderableTarget($$, {id: d.id})
+			{ throw new Error("STUB"); }
 		);
 		const texts = {
-			size: () => rows.length
+			size: () => { throw new Error("STUB"); }
 		};
 
 		if (!rows.length) {
@@ -1127,23 +1043,8 @@ export default class CanvasRenderer {
 		ctx.font = style.label.font;
 
 		rows.forEach(d => {
-			const text = getLabelText($$, d);
-			let {x, y} = getRenderDataPoint($$, d);
-
-			if (!text) {
-				return;
-			}
-
-			({x, y} = getPointLabelAnchor($$, ctx, d, x, y));
-			x += getLabelPosition($$, d, "x", texts);
-			y += getLabelPosition($$, d, "y", texts);
-
-			if (!isFiniteCanvasCoordinate(x, y)) {
-				return;
-			}
-
-			this.drawDataLabel($$, d, text, x, y);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1217,190 +1118,8 @@ export default class CanvasRenderer {
 		const rect = {x: margin2.left, y: margin2.top, w: width2, h: height2};
 
 		$$.withSubchartTypeContext(() => {
-			const targets = $$.filterTargetsToShow()
-				.filter(isCanvasRenderableTarget.bind(null, $$));
-			const shape = $$.getDrawShape();
-
-			$$.updateSubchartYDomain?.(targets);
-
-			painter.withState(() => {
-				painter.clipRect(rect, () => {
-					painter.withTranslation(rect.x, rect.y, () => {
-						const areaTargets = targets.filter(isCanvasAreaType.bind(null, $$));
-						const areaIndices = getCanvasShapeIndices(
-							$$,
-							shape,
-							TYPE.AREA,
-							isCanvasAreaType.bind(null, $$)
-						);
-
-						for (const target of areaTargets) {
-							if (!target.values.some(hasCanvasDrawableValue.bind(null, $$))) {
-								continue;
-							}
-
-							ctx.globalAlpha = style.shape.areaOpacity *
-								getCanvasTargetFocusOpacity($$, target);
-							ctx.fillStyle = $$.color(target.id);
-							drawCanvasArea($$, target, areaIndices, painter, true);
-						}
-						ctx.globalAlpha = 1;
-
-						const barTargets = targets.filter(isCanvasBarType.bind(null, $$));
-						const barIndices = getCanvasShapeIndices(
-							$$,
-							shape,
-							TYPE.BAR,
-							isCanvasBarType.bind(null, $$)
-						);
-						const getBarPoints = $$.generateGetBarPoints?.(barIndices, true);
-
-						if (getBarPoints) {
-							for (const target of barTargets) {
-								ctx.globalAlpha = style.shape.barOpacity *
-									getCanvasTargetFocusOpacity($$, target);
-								ctx.fillStyle = $$.color(target.id);
-								target.values.forEach((d, i) => {
-									if (!hasCanvasDrawableValue($$, d)) {
-										return;
-									}
-
-									const geometry = getCanvasBarGeometry($$, getBarPoints, d, i);
-									const fill = $$.getSubchartCandlestickBarColor?.(d, true) ||
-										ctx.fillStyle;
-
-									geometry && painter.fillRect(geometry.rect, {fill});
-								});
-							}
-							ctx.globalAlpha = 1;
-						}
-
-						const candlestickTargets = targets.filter(
-							isCanvasCandlestickType.bind(null, $$)
-						);
-						const candlestickIndices = getCanvasShapeIndices(
-							$$,
-							shape,
-							TYPE.CANDLESTICK,
-							isCanvasCandlestickType.bind(null, $$)
-						);
-						const getCandlestickPoints = $$.generateGetCandlestickPoints?.(
-							candlestickIndices,
-							true
-						);
-
-						if (getCandlestickPoints) {
-							ctx.lineWidth = style.shape.candlestickLineWidth;
-							for (const target of candlestickTargets) {
-								const targetOpacity = getCanvasTargetFocusOpacity($$, target);
-
-								ctx.globalAlpha = targetOpacity;
-								target.values.forEach((d, i) => {
-									const value = $$.getCandlestickData?.(d);
-									const geometry = value && getCanvasCandlestickGeometry(
-										$$,
-										getCandlestickPoints,
-										d,
-										i
-									);
-
-									if (!geometry) {
-										return;
-									}
-
-									const color = getCandlestickColor($$, {id: target.id}, value);
-
-									ctx.strokeStyle = color;
-									ctx.fillStyle = color;
-									painter.strokePath(() => {
-										painter.traceLine(
-											geometry.wickStart[0],
-											geometry.wickStart[1],
-											geometry.wickEnd[0],
-											geometry.wickEnd[1]
-										);
-									});
-									painter.fillRect(geometry.body, {fill: ctx.fillStyle});
-								});
-							}
-						}
-
-						const lineTargets = targets.filter(isCanvasLineType.bind(null, $$));
-						const lineIndices = getCanvasShapeIndices(
-							$$,
-							shape,
-							TYPE.LINE,
-							isCanvasLineType.bind(null, $$)
-						);
-
-						ctx.globalAlpha = 1;
-						for (const target of lineTargets) {
-							if (!target.values.some(hasCanvasDrawableValue.bind(null, $$))) {
-								continue;
-							}
-
-							ctx.globalAlpha = getCanvasTargetFocusOpacity($$, target);
-							ctx.lineWidth = isCanvasTargetFocused($$, target) ?
-								style.shape.lineFocusedWidth :
-								style.shape.lineWidth;
-							ctx.strokeStyle = $$.color(target.id);
-							drawCanvasLine($$, target, lineIndices, painter, true);
-						}
-						ctx.globalAlpha = 1;
-
-						if (config.point_show && !$$.isPointFocusOnly?.()) {
-							const cy = $$.updateCircleY?.(true);
-							const cx = $$.subxx?.bind($$);
-
-							if (cx && cy) {
-								for (const target of targets) {
-									if (
-										!isCanvasScatterType($$, target) &&
-										!isCanvasBubbleType($$, target)
-									) {
-										continue;
-									}
-
-									const color = $$.color(target.id);
-									const pointFill = style.shape.pointFillColor || color;
-									const pointStroke = style.shape.pointStrokeColor || color;
-									const pointLineWidth = pointStroke ?
-										(style.shape.pointLineWidth ?? 1) :
-										0;
-									const pointStyle = pointStroke && pointLineWidth > 0 ?
-										{
-											fill: pointFill,
-											stroke: pointStroke,
-											lineWidth: pointLineWidth
-										} :
-										{fill: pointFill};
-
-									ctx.globalAlpha = getPointOpacity($$, target) *
-										getCanvasTargetFocusOpacity($$, target);
-									target.values.forEach((d, i) => {
-										if (!hasCanvasDrawableValue($$, d)) {
-											return;
-										}
-
-										const x = config.axis_rotated ? cy(d, i) : cx(d);
-										const y = config.axis_rotated ? cx(d) : cy(d, i);
-										const r = Math.min(getTargetPointRadius($$, target, d), 3);
-
-										if (isFiniteCanvasCoordinate(x, y)) {
-											drawPointPattern(painter, "circle", x, y, r,
-												pointStyle);
-										}
-									});
-								}
-								ctx.globalAlpha = 1;
-							}
-						}
-					});
-				});
-
-				this.drawSubchartBrush($$);
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1477,15 +1196,8 @@ export default class CanvasRenderer {
 		}
 
 		painter.withState(() => {
-			ctx.translate(x, y);
-			ctx.fillStyle = fill;
-			ctx.strokeStyle = stroke;
-			ctx.lineWidth = style.subchartBrush.handleLineWidth;
-			ctx.globalAlpha = style.subchartBrush.handleOpacity;
-			ctx.fill(path);
-			ctx.globalAlpha = 1;
-			ctx.stroke(path);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1515,96 +1227,8 @@ export default class CanvasRenderer {
 		}
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			for (const target of targets) {
-				const range = getCanvasTargetVisibleRange($$, target);
-				const connectLineType = getBarConnectLineType($$, target.id);
-				const targetOpacity = getCanvasTargetFocusOpacity($$, target);
-				const connectLineBoxes: CanvasBarConnectLineBox[] = [];
-				const bars: Array<
-					{
-						d: any,
-						points: number[][],
-						rect: CanvasRect,
-						radiusInfo: ReturnType<typeof getBarRadiusInfo>
-					}
-				> = [];
-
-				for (let i = range.start; i < range.end; i++) {
-					const d = target.values[i];
-
-					if (!hasCanvasDrawableValue($$, d)) {
-						continue;
-					}
-
-					const geometry = getCanvasBarGeometry($$, getPoints, d, i);
-
-					if (!geometry) {
-						continue;
-					}
-
-					const {points, rect} = geometry;
-					const radiusInfo = getBarRadiusInfo(
-						$$,
-						d,
-						points,
-						getRadius,
-						stackingRadiusSet,
-						$$.isStackingRadiusData?.bind($$)
-					);
-
-					bars.push({d, points, rect, radiusInfo});
-
-					if (connectLineType) {
-						connectLineBoxes.push(getBarConnectLineBox($$, points, radiusInfo));
-					}
-				}
-
-				if (connectLineType && style.shape.barConnectLineWidth > 0) {
-					drawBarConnectLine(
-						$$,
-						painter,
-						connectLineType,
-						connectLineBoxes,
-						targetOpacity
-					);
-				}
-
-				for (const {d, rect, radiusInfo} of bars) {
-					const overColor = getCanvasOverColor($$, getFocusedCanvasDatum(focusData, d));
-					const color = overColor || $$.color(target.id);
-					const fillAlpha = isExpanded(d) ?
-						style.shape.barExpandedOpacity :
-						style.shape.barOpacity;
-					const alpha = fillAlpha * targetOpacity;
-
-					ctx.fillStyle = overColor ?
-						color :
-						getCanvasLinearGradientFill($$, ctx, target, "bar", rect, color);
-
-					getRadius ?
-						painter.fillRoundRect(
-							rect,
-							radiusInfo.corners,
-							{alpha}
-						) :
-						painter.fillRect(rect, {alpha});
-
-					if (style.shape.barLineWidth > 0) {
-						ctx.strokeStyle = style.shape.barStrokeColor;
-						ctx.lineWidth = style.shape.barLineWidth;
-						getRadius ?
-							painter.strokeRoundRect(
-								rect,
-								radiusInfo.corners,
-								{alpha: style.shape.barOpacity * targetOpacity}
-							) :
-							painter.strokeRect(rect, {
-								alpha: style.shape.barOpacity * targetOpacity
-							});
-					}
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1632,51 +1256,8 @@ export default class CanvasRenderer {
 		}
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			ctx.lineWidth = style.shape.candlestickLineWidth;
-
-			for (const target of targets) {
-				const range = getCanvasTargetVisibleRange($$, target);
-				const targetOpacity = getCanvasTargetFocusOpacity($$, target);
-				const lineWidth = style.shape.candlestickLineWidth;
-				const strokeColor = style.shape.candlestickStrokeColor || "#000";
-
-				for (let i = range.start; i < range.end; i++) {
-					const d = target.values[i];
-					const value = $$.getCandlestickData?.(d);
-
-					if (!value) {
-						continue;
-					}
-
-					const geometry = getCanvasCandlestickGeometry($$, getPoints, d, i);
-
-					if (!geometry) {
-						continue;
-					}
-
-					const {body: rect, wickStart, wickEnd} = geometry;
-
-					ctx.fillStyle = getCanvasOverColor($$, getFocusedCanvasDatum(focusData, d)) ||
-						getCandlestickColor($$, d, value);
-					ctx.strokeStyle = strokeColor;
-					ctx.globalAlpha = targetOpacity;
-					lineWidth > 0 && painter.strokePath(() => {
-						painter.traceLine(wickStart[0], wickStart[1], wickEnd[0], wickEnd[1]);
-					});
-					painter.fillRect(rect, {
-						alpha: (
-							isExpanded(d) ? style.shape.candlestickExpandedOpacity : 1
-						) * targetOpacity
-					});
-					lineWidth > 0 && painter.strokeRect(rect, {
-						alpha: targetOpacity,
-						lineWidth,
-						stroke: strokeColor
-					});
-				}
-			}
-			ctx.globalAlpha = 1;
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1688,11 +1269,7 @@ export default class CanvasRenderer {
 	 */
 	hasExpandedShapeFocus($$, selectedData): boolean {
 		return !!selectedData?.some(d =>
-			d &&
-			(
-				isCanvasBarType($$, d) ||
-				isCanvasCandlestickType($$, d)
-			)
+			{ throw new Error("STUB"); }
 		);
 	}
 
@@ -1716,24 +1293,8 @@ export default class CanvasRenderer {
 		}
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			for (const target of targets) {
-				const visibleTarget = getVisibleCanvasTarget($$, target);
-
-				if (!visibleTarget.values.some(hasCanvasDrawableValue.bind(null, $$))) {
-					continue;
-				}
-
-				ctx.globalAlpha = getCanvasTargetFocusOpacity($$, target);
-				ctx.lineWidth = isCanvasTargetFocused($$, target) ?
-					style.shape.lineFocusedWidth :
-					style.shape.lineWidth;
-				ctx.strokeStyle = $$.color(target.id);
-				$$.config.data_regions?.[visibleTarget.id] ?
-					drawCanvasLineWithDataRegions($$, visibleTarget, painter) :
-					drawCanvasLine($$, visibleTarget, indices, painter);
-			}
-			ctx.globalAlpha = 1;
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1757,30 +1318,8 @@ export default class CanvasRenderer {
 		}
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			for (const target of targets) {
-				const visibleTarget = getVisibleCanvasTarget($$, target);
-
-				if (!visibleTarget.values.some(hasCanvasDrawableValue.bind(null, $$))) {
-					continue;
-				}
-
-				const color = getCanvasRenderColor($$, visibleTarget, focusData);
-
-				ctx.globalAlpha = style.shape.areaOpacity * getCanvasTargetFocusOpacity($$, target);
-				ctx.fillStyle = getCanvasLinearGradientFill(
-					$$,
-					ctx,
-					visibleTarget,
-					"area",
-					// Bounds computation walks visible rows, so skip it when no gradient is set.
-					// Use the original target so the range cache stays aligned with unsliced values.
-					$$.config.area_linearGradient ? getCanvasAreaBounds($$, target, indices) : null,
-					color
-				);
-				drawCanvasArea($$, visibleTarget, indices, painter);
-			}
-			ctx.globalAlpha = 1;
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1799,176 +1338,15 @@ export default class CanvasRenderer {
 		const {cx, cy} = shape.pos;
 		const {margin} = $$.state;
 		const isExpanded = getExpandedFocusMatcher($$, focusData, isCanvasPointType);
-		const hasExpandedFocus = !!focusData?.some(d => d && isCanvasPointType($$, d));
+		const hasExpandedFocus = !!focusData?.some(d => { throw new Error("STUB"); });
 
 		if (!cx || !cy) {
 			return;
 		}
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			for (const target of $$.filterTargetsToShow()) {
-				if (
-					!isCanvasPointType($$, target) ||
-					!isCanvasRenderableTarget($$, target) ||
-					(isCanvasLineType($$, target) && !shouldDrawPoints($$, target))
-				) {
-					continue;
-				}
-
-				const color = $$.color(target.id);
-				const pointType = getPointType($$, target);
-				const targetOpacity = getCanvasTargetFocusOpacity($$, target);
-				const hasGradient = !!$$.config.point_radialGradient;
-				const cullDenseScatter = shouldCullDenseScatterPoints(
-					$$,
-					target,
-					pointType,
-					hasGradient
-				);
-				const range = getCanvasTargetVisibleRange($$, target);
-				const visibleCount = range.end - range.start;
-				const occupancy = cullDenseScatter ?
-					createCanvasPointOccupancyGrid(
-						$$.state.width,
-						$$.state.height,
-						getTargetPointRadius($$, target,
-							target.values[range.start] || target.values[0])
-					) :
-					null;
-
-				const pointAlpha = getPointOpacity($$, target) * targetOpacity;
-
-				ctx.fillStyle = color;
-				ctx.globalAlpha = pointAlpha;
-				const pointFill = style.shape.pointFillColor || color;
-				const pointStroke = style.shape.pointStrokeColor || color;
-				const pointLineWidth = pointStroke ? (style.shape.pointLineWidth ?? 1) : 0;
-				const hasPointStroke = !!pointStroke && pointLineWidth > 0;
-				const mergeSameColorStroke = hasPointStroke &&
-					pointType === "circle" &&
-					isNumber(pointAlpha) &&
-					pointAlpha < 1 &&
-					pointFill === pointStroke;
-
-				if (!hasExpandedFocus && !hasGradient && pointType === "circle") {
-					ctx.fillStyle = pointFill;
-					if (hasPointStroke && !mergeSameColorStroke) {
-						ctx.strokeStyle = pointStroke;
-						ctx.lineWidth = pointLineWidth;
-					}
-
-					if (visibleCount > MAX_BATCHED_CIRCLE_POINTS) {
-						for (let i = range.start; i < range.end; i++) {
-							const d = target.values[i];
-
-							if (!hasCanvasDrawableValue($$, d)) {
-								continue;
-							}
-
-							const baseR = getTargetPointRadius($$, target, d);
-							const r = mergeSameColorStroke ? baseR + pointLineWidth / 2 : baseR;
-							const x = cx(d, i);
-							const y = cy(d, i);
-
-							if (!isFiniteCanvasCoordinate(x, y)) {
-								continue;
-							}
-
-							if (occupancy && !markCanvasPointOccupancy(occupancy, x, y)) {
-								continue;
-							}
-
-							ctx.beginPath();
-							ctx.arc(x, y, r, 0, Math.PI * 2);
-							ctx.fill();
-							hasPointStroke && !mergeSameColorStroke && ctx.stroke();
-						}
-					} else {
-						ctx.beginPath();
-						for (let i = range.start; i < range.end; i++) {
-							const d = target.values[i];
-
-							if (!hasCanvasDrawableValue($$, d)) {
-								continue;
-							}
-
-							const baseR = getTargetPointRadius($$, target, d);
-							const r = mergeSameColorStroke ? baseR + pointLineWidth / 2 : baseR;
-							const x = cx(d, i);
-							const y = cy(d, i);
-
-							if (!isFiniteCanvasCoordinate(x, y)) {
-								continue;
-							}
-
-							painter.traceCircle(x, y, r);
-						}
-						ctx.fill();
-						hasPointStroke && !mergeSameColorStroke && ctx.stroke();
-					}
-				} else {
-					for (let i = range.start; i < range.end; i++) {
-						const d = target.values[i];
-
-						if (!hasCanvasDrawableValue($$, d)) {
-							continue;
-						}
-
-						const expanded = isExpanded(d);
-						const baseR = getTargetPointRadius($$, target, d);
-						const r = expanded ?
-							($$.pointExpandedR?.(d) ??
-								(baseR * 1.75)) :
-							baseR;
-						const x = cx(d, i);
-						const y = cy(d, i);
-						const overColor = getCanvasOverColor($$, d);
-						const renderColor = overColor || color;
-						const renderPointFill = style.shape.pointFillColor || renderColor;
-						const renderPointStroke = style.shape.pointStrokeColor || renderColor;
-						const fill = expanded ?
-							(overColor || style.focusPoint.fill || renderPointFill) :
-							renderPointFill;
-						const stroke = expanded ?
-							(overColor || style.focusPoint.stroke || renderColor) :
-							renderPointStroke;
-						const lineWidth = expanded ? style.focusPoint.lineWidth : pointLineWidth;
-						const alpha = getPointOpacity($$, d) * targetOpacity;
-						const hasStroke = !!stroke && (lineWidth ?? 0) > 0;
-						const mergeSameColorStroke = pointType === "circle" &&
-							hasStroke &&
-							isNumber(alpha) &&
-							alpha < 1 &&
-							fill === stroke;
-						const drawR = mergeSameColorStroke ? r + (lineWidth || 0) / 2 : r;
-
-						if (!isFiniteCanvasCoordinate(x, y)) {
-							continue;
-						}
-
-						ctx.fillStyle = hasGradient ?
-							getPointFillStyle($$, ctx, d, x, y, r, renderColor) :
-							fill;
-						ctx.globalAlpha = alpha;
-						drawPointPattern(
-							painter,
-							pointType,
-							x,
-							y,
-							drawR,
-							hasStroke && !mergeSameColorStroke ?
-								{
-									fill: ctx.fillStyle,
-									stroke,
-									lineWidth
-								} :
-								undefined,
-							baseR
-						);
-					}
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -2004,79 +1382,8 @@ export default class CanvasRenderer {
 		const stackingRadiusSet = getRadius ? getStackingBarRadiusSet($$) : new Set<string>();
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			selectedData.forEach(d => {
-				const color = $$.color(d.id);
-
-				if (isBar(d) && barPoints) {
-					const geometry = getCanvasBarGeometry($$, barPoints, d, d.index);
-
-					if (!geometry) {
-						return;
-					}
-
-					const {points, rect} = geometry;
-					const corners = getRadius ?
-						getBarRadiusInfo($$, d, points, getRadius, stackingRadiusSet).corners :
-						0;
-
-					getRadius ?
-						painter.fillRoundRect(rect, corners, {fill: "#fff", alpha: 0.3}) :
-						painter.fillRect(rect, {fill: "#fff", alpha: 0.3});
-					getRadius ?
-						painter.strokeRoundRect(rect, corners, {stroke: color, lineWidth: 2}) :
-						painter.strokeRect(rect, {stroke: color, lineWidth: 2});
-				} else if (isCandlestick(d) && candlestickPoints) {
-					const value = $$.getCandlestickData?.(d);
-
-					if (!value) {
-						return;
-					}
-
-					const geometry = getCanvasCandlestickGeometry($$, candlestickPoints, d,
-						d.index);
-
-					if (!geometry) {
-						return;
-					}
-
-					const {body, wickStart, wickEnd} = geometry;
-
-					painter.strokePath(() => {
-						painter.traceLine(wickStart[0], wickStart[1], wickEnd[0], wickEnd[1]);
-					}, {stroke: color, lineWidth: 3});
-					painter.fillRect(body, {fill: "#fff", alpha: 0.3});
-					painter.strokeRect(body, {stroke: color, lineWidth: 2});
-				} else if (isCanvasPointType($$, d)) {
-					const pointType = getPointType($$, {id: d.id});
-					const {x, y} = getRenderDataPoint($$, d);
-					const r = $$.pointR?.(d) ?? 2.5;
-					const selectR = $$.pointSelectR?.(d) ?? (r * 2);
-
-					if (!isFiniteCanvasCoordinate(x, y)) {
-						return;
-					}
-
-					drawPointPattern(painter, "circle", x, y, selectR, {
-						fill: style.selectedPoint.fill,
-						lineWidth: style.selectedPoint.lineWidth,
-						stroke: style.selectedPoint.stroke || color
-					});
-
-					// with point.focus.only, the data point is rendered only while it's
-					// focused, so a selected-but-unfocused point shows just the selection
-					// ring (matching SVG). Skip drawing the data point itself here.
-					if (!$$.isPointFocusOnly?.()) {
-						drawPointPattern(painter, pointType, x, y, r, {
-							fill: style.shape.pointFillColor || color,
-							stroke: style.shape.pointStrokeColor || color,
-							lineWidth: style.shape.pointLineWidth ?? 1
-						});
-					}
-				}
-			});
-
-			ctx.globalAlpha = 1;
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -2109,127 +1416,22 @@ export default class CanvasRenderer {
 			null;
 		const targets = $$.filterTargetsToShow()
 			.filter(target =>
-				(
-					isCanvasBarType($$, target) ||
-					isCanvasPointType($$, target) ||
-					isCanvasAreaType($$, target) ||
-					isCanvasCandlestickType($$, target)
-				) &&
-				isCanvasRenderableTarget($$, target)
+				{ throw new Error("STUB"); }
 			);
 		const targetRows: Array<{d, text: string}[]> = [];
 		let labelCount = 0;
 
 		targets.forEach(target => {
-			const range = getCanvasTargetVisibleRange($$, target);
-			const data = $$.labelishData(target);
-			const rows: {d, text: string}[] = [];
-
-			for (let i = 0; i < data.length; i++) {
-				const d = data[i];
-				const text = getLabelText($$, d);
-
-				if (
-					text &&
-					d.index >= range.start &&
-					d.index < range.end &&
-					hasCanvasDrawableValue($$, d)
-				) {
-					rows.push({d, text});
-				}
-			}
-
-			labelCount += rows.length;
-			rows.length && targetRows.push(rows);
-		});
+            throw new Error("STUB");
+        });
 
 		const texts = {
-			size: () => labelCount
+			size: () => { throw new Error("STUB"); }
 		};
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			ctx.font = style.label.font;
-			ctx.textAlign = "center";
-
-			targetRows
-				.forEach(rows => {
-					for (const {d, text} of rows) {
-						let x;
-						let y;
-
-						if (isCanvasBarType($$, d) && barPoints) {
-							const geometry = getCanvasBarGeometry($$, barPoints, d, d.index);
-
-							if (!geometry) {
-								continue;
-							}
-
-							const {points, rect} = geometry;
-							const value = $$.getBaseValue(d);
-							const end = getRenderPoint($$, points[2]);
-							const isNegative = value < 0;
-							const labelHeight = getLabelDecorationBox(ctx, text, 0, 0).h;
-
-							x = $$.config.axis_rotated && !$$.config.data_labels.centered ?
-								end[0] + (isNegative ? -4 : 4) :
-								rect.x + rect.w / 2;
-							y = $$.config.data_labels.centered ?
-								rect.y + rect.h / 2 :
-								($$.config.axis_rotated ? rect.y + rect.h / 2 : end[1] + (
-									isNegative ? labelHeight - 3 : -3
-								));
-							ctx.textAlign = $$.config.axis_rotated &&
-									!$$.config.data_labels.centered ?
-								(isNegative ? "right" : "left") :
-								"center";
-							ctx.textBaseline = $$.config.data_labels.centered ?
-								"middle" :
-								($$.config.axis_rotated ? "middle" : "alphabetic");
-						} else if (isCanvasCandlestickType($$, d) && candlestickPoints) {
-							const value = $$.getCandlestickData?.(d);
-							const geometry = getCanvasCandlestickGeometry(
-								$$,
-								candlestickPoints,
-								d,
-								d.index
-							);
-							const isUp = value?._isUp;
-
-							if (!geometry) {
-								continue;
-							}
-
-							const {wickEnd, wickStart} = geometry;
-							const isInverted = $$.config[`axis_${$$.axis?.getId(d.id)}_inverted`];
-
-							x = $$.config.axis_rotated ?
-								(isUp ? wickEnd[0] + 4 : wickStart[0] - 4) :
-								wickStart[0];
-							y = $$.config.axis_rotated ?
-								wickStart[1] + 3 :
-								(isUp ? wickEnd[1] - 3 : wickStart[1] + 12);
-							!$$.config.axis_rotated && isInverted &&
-								(y += 15 * (isUp ? 1 : -1));
-							ctx.textAlign = $$.config.axis_rotated ?
-								(isUp ? "left" : "right") :
-								"center";
-							ctx.textBaseline = "alphabetic";
-						} else if (cx && cy) {
-							({x, y} = getShapePoint(shape.pos, d, d.index));
-							({x, y} = getPointLabelAnchor($$, ctx, d, x, y));
-						}
-
-						x += getLabelPosition($$, d, "x", texts);
-						y += getLabelPosition($$, d, "y", texts);
-
-						if (!isFiniteCanvasCoordinate(x, y)) {
-							continue;
-						}
-
-						this.drawDataLabel($$, d, text, x, y);
-					}
-				});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -2328,85 +1530,8 @@ export default class CanvasRenderer {
 		const nodes = root?.children || [];
 
 		painter.withState(() => {
-			ctx.lineWidth = style.treemap.lineWidth;
-			ctx.strokeStyle = style.treemap.stroke;
-
-			for (const node of nodes) {
-				const {data} = node;
-
-				if (!isCanvasTreemapType($$, data)) {
-					continue;
-				}
-
-				const {x, y, w, h} = getTreemapNodeRect($$, node, root, true);
-
-				if (
-					!isFiniteCanvasCoordinate(x, y) ||
-					!isFiniteCanvasCoordinate(x + w, y + h) ||
-					w <= 0 ||
-					h <= 0
-				) {
-					continue;
-				}
-
-				const rect = {x, y, w, h};
-
-				ctx.fillStyle = $$.color(data.name);
-				painter.fillRect(rect);
-				painter.strokeRect(rect);
-
-				if (
-					!config.treemap_label_show ||
-					(data.ratio || 0) < (config.treemap_label_threshold || 0)
-				) {
-					continue;
-				}
-
-				const label = getTreemapLabelText($$, data, w, h);
-
-				if (!label) {
-					continue;
-				}
-
-				const lines = label.split("\n");
-				const isCentered = !!config.data_labels.centered;
-
-				ctx.font = style.label.font;
-				const lineHeight = getFontSize(ctx.font);
-				const metrics = ctx.measureText(lines[0] ?? "");
-				const fontBoundingHeight = (
-					(metrics.fontBoundingBoxAscent || 0) +
-					(metrics.fontBoundingBoxDescent || 0)
-				) || (
-					(metrics.actualBoundingBoxAscent || 0) +
-					(metrics.actualBoundingBoxDescent || 0)
-				);
-				const textHeight = Math.max(lineHeight, fontBoundingHeight) +
-					((lines.length - 1) * lineHeight);
-				const blockY = isCentered ? y + h / 2 : y + textHeight + 5;
-				let textX = isCentered ? x + w / 2 : x + 5;
-				let textY = blockY - (lines.length - 1) * lineHeight / (isCentered ? 2 : 1);
-
-				ctx.textAlign = isCentered ? "center" : "left";
-				ctx.textBaseline = isCentered ? "middle" : "alphabetic";
-				({x: textX, y: textY} = this.drawLabelImage($$, data, label, textX, textY));
-				ctx.fillStyle = getLabelColor($$, data, style.label.color);
-				drawLabelDecorations(
-					$$,
-					painter,
-					data,
-					label,
-					textX,
-					isCentered ? textY + ((lines.length - 1) * lineHeight / 2) : blockY
-				);
-
-				lines.forEach((line, i) => {
-					painter.text(line, textX, textY + i * lineHeight, {
-						maxWidth: Math.max(0, w - 8)
-					});
-				});
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -2418,8 +1543,7 @@ export default class CanvasRenderer {
 	drawSubchartFocus($$, selectedData): void {
 		const {config, scale, state} = $$;
 		const focus = selectedData?.find(d =>
-			d &&
-			hasCanvasDrawableValue($$, d)
+			{ throw new Error("STUB"); }
 		);
 
 		if (
@@ -2450,10 +1574,8 @@ export default class CanvasRenderer {
 		const y = painter.crisp(margin2.top + pos, lineWidth);
 
 		painter.strokePath(() => {
-			config.axis_rotated ?
-				painter.traceLine(margin2.left, y, margin2.left + width2, y) :
-				painter.traceLine(x, margin2.top, x, margin2.top + height2);
-		}, {
+            throw new Error("STUB");
+        }, {
 			lineDash: style.focusGrid.dashArray,
 			lineWidth: style.focusGrid.lineWidth,
 			stroke: style.focusGrid.lineColor
@@ -2475,141 +1597,14 @@ export default class CanvasRenderer {
 		const {style} = this.theme;
 		const {margin} = $$.state;
 		const focus = selectedData.find(d =>
-			d &&
-			hasCanvasDrawableValue($$, d)
+			{ throw new Error("STUB"); }
 		);
 
 		!isContinuousGridFocusEnabled($$) &&
 			this.drawSubchartFocus($$, selectedData);
 
 		painter.withTranslation(margin.left, margin.top, () => {
-			if (
-				$$.config.tooltip_show &&
-				$$.config.grid_focus_show !== false &&
-				!$$.config.axis_tooltip &&
-				focus
-			) {
-				const {x, y} = getRenderDataPoint($$, focus);
-				const axisLineWidth = style.axis.lineWidth;
-				const isRotated = $$.config.axis_rotated;
-				const hasIndexCoordinate = Number.isFinite(isRotated ? y : x);
-				const hasValueCoordinate = Number.isFinite(isRotated ? x : y);
-				const crispEdgeX = value =>
-					painter.crisp(margin.left + value, axisLineWidth) - margin.left;
-				const crispEdgeY = value =>
-					painter.crisp(margin.top + value, axisLineWidth) - margin.top;
-				const isEdge = $$.config.grid_focus_edge && !$$.config.tooltip_grouped;
-				const continuousFocus = isContinuousGridFocusEnabled($$);
-				const focusEndX = continuousFocus ?
-					$$.state.margin2.left - margin.left + $$.state.width2 :
-					$$.state.width;
-				const focusEndY = continuousFocus ?
-					$$.state.margin2.top - margin.top + $$.state.height2 :
-					$$.state.height;
-
-				if (hasIndexCoordinate) {
-					painter.strokePath(() => {
-						if (isRotated) {
-							painter.traceLine(
-								crispEdgeX(0),
-								y,
-								isEdge && hasValueCoordinate ? x : crispEdgeX(focusEndX),
-								y
-							);
-
-							if (
-								hasValueCoordinate &&
-								$$.config.grid_focus_y &&
-								!$$.config.tooltip_grouped
-							) {
-								const isY2 = $$.axis?.getId(focus.id) === "y2";
-
-								painter.traceLine(
-									x,
-									isEdge && !isY2 ? y : crispEdgeY(0),
-									x,
-									isEdge && isY2 ? y : crispEdgeY($$.state.height)
-								);
-							}
-						} else {
-							painter.traceLine(
-								x,
-								isEdge && hasValueCoordinate ? y : crispEdgeY(0),
-								x,
-								crispEdgeY(focusEndY)
-							);
-
-							if (
-								hasValueCoordinate &&
-								$$.config.grid_focus_y &&
-								!$$.config.tooltip_grouped
-							) {
-								const isY2 = $$.axis?.getId(focus.id) === "y2";
-
-								painter.traceLine(
-									isEdge && isY2 ? x : crispEdgeX(0),
-									y,
-									isEdge && !isY2 ? x : crispEdgeX($$.state.width),
-									y
-								);
-							}
-						}
-					}, {
-						lineDash: style.focusGrid.dashArray,
-						lineWidth: style.focusGrid.lineWidth,
-						stroke: style.focusGrid.lineColor
-					});
-				}
-			}
-
-			if ($$.config.point_show && !$$.state.canvasFocusMainRedraw) {
-				selectedData
-					.filter(d =>
-						d &&
-						hasCanvasDrawableValue($$, d) &&
-						isCanvasPointType($$, d) &&
-						isCanvasRenderableTarget($$, {id: d.id})
-					)
-					.forEach(d => {
-						const pointType = getPointType($$, {id: d.id});
-						const {x, y} = getRenderDataPoint($$, d);
-						const baseR = $$.pointR?.(d) ?? 2.5;
-						const r = $$.pointExpandedR?.(d) ?? (baseR * 1.75);
-						const overColor = getCanvasOverColor($$, d);
-						const color = overColor || $$.color(d.id);
-						const fill = overColor ||
-							style.focusPoint.fill ||
-							style.shape.pointFillColor ||
-							color;
-						const stroke = overColor || style.focusPoint.stroke || color;
-						const lineWidth = style.focusPoint.lineWidth;
-						const alpha = getPointOpacity($$, d);
-						const hasStroke = !!stroke && (lineWidth ?? 0) > 0;
-						const mergeSameColorStroke = pointType === "circle" &&
-							hasStroke &&
-							isNumber(alpha) &&
-							alpha < 1 &&
-							fill === stroke;
-
-						if (!isFiniteCanvasCoordinate(x, y)) {
-							return;
-						}
-
-						drawPointPattern(
-							painter,
-							pointType,
-							x,
-							y,
-							mergeSameColorStroke ? r + (lineWidth || 0) / 2 : r,
-							hasStroke && !mergeSameColorStroke ?
-								{fill, lineWidth, stroke, alpha} :
-								{fill, alpha},
-							baseR
-						);
-					});
-			}
-
-			this.drawFocusLabels($$, selectedData);
-		});
+            throw new Error("STUB");
+        });
 	}
 }

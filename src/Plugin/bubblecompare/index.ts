@@ -47,18 +47,12 @@ export default class BubbleCompare extends Plugin {
 	static version = `0.0.1`;
 
 	constructor(options) {
-		super(options);
-
-		return this;
-	}
+        throw new Error("STUB");
+    }
 
 	$init(): void {
-		const {$$} = this;
-
-		$$.findClosest = this.findClosest.bind(this);
-		$$.getBubbleR = this.getBubbleR.bind(this);
-		$$.pointExpandedR = this.pointExpandedR.bind(this);
-	}
+        throw new Error("STUB");
+    }
 
 	pointExpandedR(d): number {
 		const baseR = this.getBubbleR(d);
@@ -82,12 +76,10 @@ export default class BubbleCompare extends Plugin {
 		const {$$} = this;
 
 		return values
-			.filter(v => v && !$$.isBarType(v.id))
+			.filter(v => { throw new Error("STUB"); })
 			.reduce((acc, cur) => {
-				const d = $$.dist(cur, pos);
-
-				return d < this.getBubbleR(cur) ? cur : acc;
-			}, 0);
+                throw new Error("STUB");
+            }, 0);
 	}
 
 	getBubbleR(d): number {
@@ -98,10 +90,8 @@ export default class BubbleCompare extends Plugin {
 
 		const [min, max] = this.$$.data.targets.reduce(
 			([accMin, accMax], cur) => {
-				const val = this.getZData(cur.values[0]);
-
-				return [Math.min(accMin, val), Math.max(accMax, val)];
-			},
+                throw new Error("STUB");
+            },
 			[10000, 0]
 		);
 		const size = min > 0 && max === min ? 0 : curVal / max;

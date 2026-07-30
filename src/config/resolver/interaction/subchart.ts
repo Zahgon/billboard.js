@@ -11,9 +11,5 @@ import optSubchart from "../../Options/interaction/subchart";
 import Options from "../../Options/Options";
 
 export let subchartModule = (): boolean => {
-	extend(ChartInternal.prototype, subchart);
-	extend(Chart.prototype, apiSubchart);
-	Options.setOptions([optSubchart]);
-
-	return (subchartModule = () => true)();
+    throw new Error("STUB");
 };

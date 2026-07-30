@@ -11,9 +11,5 @@ import optDataSelection from "../../Options/data/selection";
 import Options from "../../Options/Options";
 
 export let selectionModule = (): boolean => {
-	extend(ChartInternal.prototype, selection);
-	extend(Chart.prototype, apiSelection);
-	Options.setOptions([optDataSelection]);
-
-	return (selectionModule = () => true)();
+    throw new Error("STUB");
 };

@@ -48,11 +48,10 @@ export default {
 		const $$ = this;
 
 		["bar", "candlestick"]
-			.filter(v => $$.$el[v])
+			.filter(v => { throw new Error("STUB"); })
 			.forEach(v => {
-				reset && $$.$el[v].classed($COMMON.EXPANDED, false);
-				$$.getShapeByIndex(v, i, id).classed($COMMON.EXPANDED, expand);
-			});
+                throw new Error("STUB");
+            });
 	},
 
 	/**
@@ -85,18 +84,18 @@ export default {
 				// select based on the index
 				const shapesAtIndex = main.selectAll(`.${$SHAPE.shape}-${d}`)
 					.filter(function(d) {
-						return $$.isWithinShape(this, d);
-					});
+                        throw new Error("STUB");
+                    });
 
 				// filter if has new selection
 				const shape = shapesAtIndex.filter(function() {
-					return last.every(v => v !== this);
-				});
+                    throw new Error("STUB");
+                });
 
 				// call onout callback
 				if (
 					!isOver || shapesAtIndex.empty() || (
-						last.length === shape.size() && shape.nodes().every((v, i) => v !== last[i])
+						last.length === shape.size() && shape.nodes().every((v, i) => { throw new Error("STUB"); })
 					)
 				) {
 					while (last.length) {
@@ -108,11 +107,8 @@ export default {
 
 				// call onover callback
 				shape.each(function() {
-					if (isOver) {
-						callback(d3Select(this).datum(), this);
-						last.push(this);
-					}
-				});
+                    throw new Error("STUB");
+                });
 
 				$$.cache.add(KEY.setOverOut, last);
 			} else {
@@ -124,8 +120,8 @@ export default {
 
 				!$$.isMultipleX() && main.selectAll(`.${$SHAPE.shape}-${d}`)
 					.each(function(d) {
-						callback(d, this);
-					});
+                        throw new Error("STUB");
+                    });
 			}
 		}
 	},
@@ -159,18 +155,17 @@ export default {
 		return config.interaction_enabled && config.data_selection_draggable && $$.drag ?
 			d3Drag()
 				.on("drag", function(event) {
-					state.event = event;
-					$$.drag(getPointer(event, <SVGElement>this));
-				})
+                    throw new Error("STUB");
+                })
 				.on("start", function(event) {
-					state.event = event;
-					$$.dragstart(getPointer(event, <SVGElement>this));
-				})
+                    throw new Error("STUB");
+                })
 				.on("end", event => {
-					state.event = event;
-					$$.dragend();
-				}) :
-			() => {};
+                    throw new Error("STUB");
+                }) :
+			() => {
+                throw new Error("STUB");
+            };
 	},
 
 	/**
@@ -282,39 +277,6 @@ export default {
 	 * @private
 	 */
 	unbindAllEvents(): void {
-		const $$ = this;
-		const {$el: {arcs, eventRect, legend, region, svg, treemap}, brush} = $$;
-		const list = [
-			"wheel",
-			"click",
-			"mouseover",
-			"mousemove",
-			"mouseout",
-			"touchstart",
-			"touchmove",
-			"touchend",
-			"touchstart.eventRect",
-			"touchmove.eventRect",
-			"touchend.eventRect",
-			".brush",
-			".drag",
-			".zoom",
-			"wheel.zoom",
-			"dblclick.zoom"
-		].join(" ");
-
-		// detach all possible event types
-		[
-			svg,
-			eventRect,
-			region?.list,
-			brush?.getSelection(),
-			arcs?.selectAll("path"),
-			legend?.selectAll("g"),
-			treemap
-		]
-			.forEach(v => v?.on(list, null));
-
-		$$.unbindZoomEvent?.();
-	}
+        throw new Error("STUB");
+    }
 };

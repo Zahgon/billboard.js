@@ -95,29 +95,8 @@ export default class AxisRenderer {
 	}
 
 	constructor(params: any = {}) {
-		const config = {
-			innerTickSize: AXIS_TICK_SIZE,
-			outerTickSize: params.outerTick ? AXIS_TICK_SIZE : 0,
-			orient: "bottom",
-			range: [],
-			tickArguments: null,
-			tickCentered: null,
-			tickCulling: true,
-			tickFormat: null,
-			tickLength: AXIS_TICK_LENGTH,
-			tickOffset: 0,
-			tickPadding: AXIS_TICK_PADDING,
-			tickValues: null,
-			transition: null,
-			noTransition: params.noTransition
-		};
-
-		config.tickLength = Math.max(config.innerTickSize, 0) + config.tickPadding;
-
-		this.config = config;
-		this.params = params;
-		this.helper = new Helper(this);
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Create axis element
@@ -166,194 +145,8 @@ export default class AxisRenderer {
 		let $g;
 
 		g.each(function() {
-			const g = d3Select(this);
-			let scale0 = this.__chart__ || scale;
-			let scale1 = helper.copyScale();
-
-			$g = g;
-			this.__chart__ = scale1;
-
-			config.tickOffset = params.isCategory ? (scale1(1) - scale1(0)) / 2 : 0;
-
-			// update selection - data join
-			const path = g.selectAll(".domain").data([0]);
-
-			// enter + update selection
-			path.enter().append("path")
-				.attr("class", "domain")
-				// https://observablehq.com/@d3/d3-selection-2-0
-				.merge(path as d3Selection)
-				.attr("d", () => {
-					const outerTickSized = config.outerTickSize * sign;
-
-					return isTopBottom ?
-						`M${range[0]},${outerTickSized}V0H${range[1]}V${outerTickSized}` :
-						`M${outerTickSized},${range[0]}H0V${range[1]}H${outerTickSized}`;
-				});
-
-			if (tickShow.tick || tickShow.text) {
-				// count of tick data in array
-				const ticks = config.tickValues ||
-					helper.generateTicks(scale1, isLeftRight || params.config.axis_rotated);
-
-				// set generated ticks
-				ctx.generatedTicks = ticks;
-
-				// update selection
-				let tick: d3Selection = g.selectAll(".tick");
-				const canReuseTickNodes = ctx.canReuseTickNodesOnResize(
-					tick,
-					ticks,
-					isLeftRight || params.config.axis_rotated,
-					tickShow
-				);
-
-				if (canReuseTickNodes) {
-					tickTransform(tick, scale1);
-				} else {
-					tick = tick.data(ticks, scale1);
-
-					// enter selection
-					const tickEnter = tick
-						.enter()
-						.insert("g", ".domain")
-						.attr("class", "tick");
-
-					// MEMO: No exit transition. The reason is this transition affects max tick width calculation because old tick will be included in the ticks.
-					const tickExit = tick.exit().remove();
-
-					// enter + update selection
-					tick = tickEnter.merge(tick);
-
-					tickShow.tick && tickEnter.append("line");
-					tickShow.text && tickEnter.append("text");
-
-					const hasTickChange = !tickEnter.empty() || !tickExit.empty();
-					const reuseTickText = tickShow.text && !hasTickChange &&
-						ctx.canReuseTickTextOnResize(isLeftRight || params.config.axis_rotated);
-					let sizeFor1Char = {w: 0, h: 0};
-					let textUpdate = tick.selectAll("text.__bb-empty");
-
-					if (tickShow.text && !reuseTickText) {
-						const tickText = tick.select("text");
-						const counts: number[] = [];
-
-						textUpdate = tickText;
-
-						if (isFunction(evalTextSize)) {
-							// set evalTextSize to dummy axis element to be used in .getMaxTickSize()
-							sizeFor1Char = evalTextSize.bind(ctx.params.owner.api)(tickText.node(),
-								id);
-
-							if (this.classList.contains($COMMON.dummy)) {
-								this.sizeFor1Char = sizeFor1Char;
-							}
-						}
-
-						if (!sizeFor1Char || sizeFor1Char.w === 0 || sizeFor1Char.h === 0) {
-							sizeFor1Char = ctx.helper.getSizeFor1Char(orient, tickText,
-								!!evalTextSize);
-						}
-
-						let tspan: d3Selection = tickText
-							.selectAll("tspan")
-							.data((d, index) => {
-								let split;
-
-								if (params.tickMultiline) {
-									split = splitTickText(d, scale1, ticks, isLeftRight,
-										sizeFor1Char.w);
-								} else {
-									const formatted = helper.textFormatted(d);
-
-									split = isArray(formatted) ? formatted.concat() : [formatted];
-								}
-
-								counts[index] = split.length;
-
-								return split.map(splitted => ({index, splitted}));
-							});
-
-						tspan.exit().remove();
-
-						tspan = tspan
-							.enter()
-							.append("tspan")
-							.merge(tspan)
-							.text(d => d.splitted);
-
-						// set <tspan>'s position
-						tspan
-							.attr("x", isTopBottom ? 0 : tickLength * sign)
-							.attr("dx", (() => {
-								let dx = 0;
-
-								if (/(top|bottom)/.test(orient) && rotate) {
-									dx = 8 * Math.sin(Math.PI * (rotate / 180)) *
-										(orient === "top" ? -1 : 1);
-								}
-
-								return dx + (tickTextPos.x || 0);
-							})())
-							.attr("dy", (d, i) => {
-								const defValue = ".71em";
-								let dy: number | string = 0;
-
-								if (orient !== "top") {
-									dy = sizeFor1Char.h;
-
-									if (i === 0) {
-										dy = isLeftRight ?
-											-((counts[d.index] - 1) * (sizeFor1Char.h / 2) - 3) :
-											(tickTextPos.y === 0 ? defValue : 0);
-									}
-								}
-
-								return isNumber(dy) && tickTextPos.y ?
-									dy + tickTextPos.y :
-									dy || defValue;
-							});
-					}
-
-					const lineUpdate = tick.select("line");
-
-					tickEnter.select("line").attr(`${axisPx}2`, innerTickSize * sign);
-					tickEnter.select("text").attr(axisPx, tickLength * sign);
-
-					ctx.setTickLineTextPosition(lineUpdate, textUpdate, sizeFor1Char);
-
-					// Append <title> for tooltip display
-					if (params.tickTitle) {
-						const title = textUpdate.select("title");
-						const tickTitle = params.tickTitle;
-
-						(title.empty() ? textUpdate.append("title") : title)
-							.text(index => tickTitle[Number(index)]);
-					}
-
-					if (scale1.bandwidth) {
-						const x = scale1;
-						const dx = x.bandwidth() / 2;
-
-						scale0 = d => x(d) + dx;
-						scale1 = scale0;
-					} else if (scale0.bandwidth) {
-						scale0 = scale1;
-					} else {
-						tickTransform(tickExit, scale1);
-					}
-
-					// when .flow(), it should follow flow's transition config
-					// otherwise make to use ChartInternals.$T()
-					tick = params.owner.state.flowing ?
-						helper.transitionise(tick) :
-						params.owner.$T(tick);
-
-					tickTransform(tickEnter, scale0);
-					tickTransform(tick.style("opacity", null), scale1);
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		this.g = $g;
 	}
@@ -372,8 +165,8 @@ export default class AxisRenderer {
 			const interval = Math.round((len / count) + 0.1);
 
 			res = this.generatedTicks
-				.map((v, i) => (i % interval === 0 ? v : null))
-				.filter(v => v !== null)
+				.map((v, i) => { throw new Error("STUB"); })
+				.filter(v => { throw new Error("STUB"); })
 				.splice(0, count) as (Date | number)[];
 		}
 
@@ -404,15 +197,8 @@ export default class AxisRenderer {
 	 * @private
 	 */
 	getTickSize(d): number {
-		const {scale} = this.helper;
-		const {config} = this;
-		const {innerTickSize, range} = config;
-
-		const tickPosition = scale(d) +
-			(config.tickCentered ? 0 : config.tickOffset);
-
-		return range[0] < tickPosition && tickPosition < range[1] ? innerTickSize : 0;
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Set tick's line & text position
@@ -458,22 +244,14 @@ export default class AxisRenderer {
 				lineUpdate
 					.attr("x1", tickPos.x)
 					.attr("x2", tickPos.x)
-					.attr("y2", d => this.getTickSize.bind(this)(d) * (tickLineInner ? -1 : 1));
+					.attr("y2", d => { throw new Error("STUB"); });
 
 				textUpdate
 					.attr("x", 0)
 					.attr("y", yForText(rotate))
 					.style("text-anchor", (d, i, {length}) => {
-						if (!isRotated && i === 0 && (inner === true || inner.first)) {
-							return "start";
-						} else if (
-							!isRotated && i === length - 1 && (inner === true || inner.last)
-						) {
-							return "end";
-						}
-
-						return textAnchorForText(rotate);
-					})
+                        throw new Error("STUB");
+                    })
 					.attr("transform", textTransform(rotate));
 				break;
 			case "top":
@@ -581,21 +359,8 @@ export default class AxisRenderer {
 	}
 
 	orient(x): AxisRenderer {
-		if (!arguments.length) {
-			return this.config.orient;
-		}
-
-		this.config.orient = x in {
-				top: 1,
-				right: 1,
-				bottom: 1,
-				left: 1
-			} ?
-			String(x) :
-			"bottom";
-
-		return this;
-	}
+        throw new Error("STUB");
+    }
 
 	tickFormat(format): AxisRenderer {
 		const {config} = this;
@@ -683,16 +448,8 @@ export default class AxisRenderer {
 	}
 
 	tickCulling(culling): AxisRenderer {
-		const {config} = this;
-
-		if (!arguments.length) {
-			return config.tickCulling;
-		}
-
-		config.tickCulling = culling;
-
-		return this;
-	}
+        throw new Error("STUB");
+    }
 
 	tickValues(
 		x?: (number | Date | string)[] | Function
@@ -700,7 +457,7 @@ export default class AxisRenderer {
 		const {config} = this;
 
 		if (isFunction(x)) {
-			config.tickValues = () => x(this.helper.scale.domain());
+			config.tickValues = () => { throw new Error("STUB"); };
 		} else {
 			if (!arguments.length) {
 				return config.tickValues;

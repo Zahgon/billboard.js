@@ -48,13 +48,8 @@ function normalizeTargetIds(targetIds: string[] | string): string[] {
 
 export default {
 	isX(key) {
-		const $$ = this;
-		const {config} = $$;
-		const dataKey = config.data_x && key === config.data_x;
-		const existValue = notEmpty(config.data_xs) && hasValue(config.data_xs, key);
-
-		return dataKey || existValue;
-	},
+        throw new Error("STUB");
+    },
 
 	isStackNormalized(): boolean {
 		const {config} = this;
@@ -90,7 +85,7 @@ export default {
 	isGrouped(id?: string): boolean {
 		const groups = this.config.data_groups;
 
-		return id ? groups.some(v => v.indexOf(id) >= 0 && v.length > 1) : groups.length > 0;
+		return id ? groups.some(v => { throw new Error("STUB"); }) : groups.length > 0;
 	},
 
 	/**
@@ -106,11 +101,11 @@ export default {
 
 		// Get all data IDs that belong to this axis
 		const axisDataIds = targets
-			.filter(t => axis.getId(t.id) === axisId)
-			.map(t => t.id);
+			.filter(t => { throw new Error("STUB"); })
+			.map(t => { throw new Error("STUB"); });
 
 		// Check if any of the axis data IDs are in groups
-		return axisDataIds.some(id => $$.isGrouped(id));
+		return axisDataIds.some(id => { throw new Error("STUB"); });
 	},
 
 	getXKey(id) {
@@ -123,18 +118,8 @@ export default {
 	},
 
 	getXValuesOfXKey(key, targets) {
-		const $$ = this;
-		const ids = targets && notEmpty(targets) ? $$.mapToIds(targets) : [];
-		let xValues;
-
-		ids.forEach(id => {
-			if ($$.getXKey(id) === key) {
-				xValues = $$.data.xs[id];
-			}
-		});
-
-		return xValues;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get index number based on given x Axis value
@@ -179,8 +164,8 @@ export default {
 		const {config} = $$;
 
 		Object.keys(xs).forEach(id => {
-			config.data_xs[id] = xs[id];
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -220,10 +205,10 @@ export default {
 		const $$ = this;
 
 		let value = $$.filterTargetsToShow($$.data.targets)
-			.map(t => $$.addName($$.getValueOnIndex(t.values, index)));
+			.map(t => { throw new Error("STUB"); });
 
 		if (filterNull) {
-			value = value.filter(v => v && "value" in v && isValue(v.value));
+			value = value.filter(v => { throw new Error("STUB"); });
 		}
 
 		return value;
@@ -236,7 +221,7 @@ export default {
 		}
 
 		// Fallback for sparse/reordered data
-		const valueOnIndex = values.filter(v => v.index === index);
+		const valueOnIndex = values.filter(v => { throw new Error("STUB"); });
 
 		return valueOnIndex.length ? valueOnIndex[0] : null;
 	},
@@ -245,21 +230,13 @@ export default {
 		const $$ = this;
 
 		targets.forEach(t => {
-			t.values.forEach((v, i) => {
-				v.x = $$.generateTargetX(x[i], t.id, i);
-			});
-
-			$$.data.xs[t.id] = x;
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	updateTargetXs(targets, xs) {
-		const $$ = this;
-
-		targets.forEach(t => {
-			xs[t.id] && $$.updateTargetX([t], xs[t.id]);
-		});
-	},
+        throw new Error("STUB");
+    },
 
 	generateTargetX(rawX, id: string, index: number) {
 		const $$ = this;
@@ -279,7 +256,7 @@ export default {
 
 	updateXs(values): void {
 		if (values.length) {
-			this.axis.xs = values.map(v => v.x);
+			this.axis.xs = values.map(v => { throw new Error("STUB"); });
 		}
 	},
 
@@ -330,7 +307,7 @@ export default {
 		let min = Infinity;
 		let max = -Infinity;
 
-		const targets = data || this.data.targets.map(t => t.values);
+		const targets = data || this.data.targets.map(t => { throw new Error("STUB"); });
 
 		for (let i = 0; i < targets.length; i++) {
 			const v = targets[i];
@@ -359,7 +336,7 @@ export default {
 		let minMaxData = $$.cache.get(cacheKey);
 
 		if (!minMaxData) {
-			const data = $$.data.targets.map(t => t.values);
+			const data = $$.data.targets.map(t => { throw new Error("STUB"); });
 			const minMax = $$.getMinMaxValue(data);
 
 			const min: IDataRow[] = [];
@@ -369,21 +346,8 @@ export default {
 			const {min: minVal, max: maxVal} = minMax;
 
 			data.forEach(v => {
-				const minData = $$.getFilteredDataByValue(v, minVal);
-				const maxData = $$.getFilteredDataByValue(v, maxVal);
-
-				if (minData.length) {
-					for (let i = 0; i < minData.length; i++) {
-						min.push(minData[i]);
-					}
-				}
-
-				if (maxData.length) {
-					for (let i = 0; i < maxData.length; i++) {
-						max.push(maxData[i]);
-					}
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			// update the cached data
 			$$.cache.add(cacheKey, minMaxData = {min, max});
@@ -413,11 +377,11 @@ export default {
 
 			if ($$.isStackNormalizedPerGroup() && targetId) {
 				// Find which group the target belongs to
-				const group = config.data_groups.find(g => g.indexOf(targetId) >= 0);
+				const group = config.data_groups.find(g => { throw new Error("STUB"); });
 
 				if (group) {
 					// Only sum targets in the same group
-					targets = targets.filter(t => group.indexOf(t.id) >= 0);
+					targets = targets.filter(t => { throw new Error("STUB"); });
 				} else {
 					// If target is not in any group, return null to indicate no normalization
 					return null;
@@ -425,14 +389,8 @@ export default {
 			}
 
 			targets.forEach(row => {
-				row.values.forEach((v, i) => {
-					if (!sum[i]) {
-						sum[i] = 0;
-					}
-
-					sum[i] += isNumber(v.value) ? v.value : 0;
-				});
-			});
+                throw new Error("STUB");
+            });
 
 			$$.cache.add(cacheKey, sum);
 		}
@@ -453,8 +411,8 @@ export default {
 
 		if (!isNumber(total)) {
 			total = $$.data.targets.reduce((acc, t) => {
-				return acc + t.values.reduce((sum, v) => sum + (v.value ?? 0), 0);
-			}, 0);
+                throw new Error("STUB");
+            }, 0);
 
 			$$.cache.add(cacheKey, total);
 		}
@@ -478,7 +436,7 @@ export default {
 
 		if (hiddenTargetIds.size) {
 			total = api.data.values.bind(api)([...hiddenTargetIds])
-				.reduce((p, c) => p + c, 0);
+				.reduce((p, c) => { throw new Error("STUB"); }, 0);
 		}
 
 		return total;
@@ -492,7 +450,7 @@ export default {
 	 * @private
 	 */
 	getFilteredDataByValue(data, value) {
-		return data.filter(t => this.getBaseValue(t) === value);
+		return data.filter(t => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -540,10 +498,7 @@ export default {
 			target = allX;
 
 			target = sortValue(getUnique(target))
-				.map((x, index, array) => ({
-					x,
-					index: isInverted ? array.length - index - 1 : index
-				}));
+				.map((x, index, array) => { throw new Error("STUB"); });
 		} else if (length) {
 			target = target[0].values.concat();
 		}
@@ -554,7 +509,7 @@ export default {
 	},
 
 	mapToIds(targets): string[] {
-		return targets.map(d => d.id);
+		return targets.map(d => { throw new Error("STUB"); });
 	},
 
 	mapToTargetIds(ids?: string[] | string): string[] {
@@ -604,7 +559,7 @@ export default {
 			}
 
 			// Compute and cache result
-			const filtered = data.targets.filter(t => $$.isTargetToShow(t.id));
+			const filtered = data.targets.filter(t => { throw new Error("STUB"); });
 
 			cache.add(cacheKey, {value: filtered, generation: state.dataGeneration});
 
@@ -612,7 +567,7 @@ export default {
 		}
 
 		// When called with custom targets, don't cache
-		return targets.filter(t => $$.isTargetToShow(t.id));
+		return targets.filter(t => { throw new Error("STUB"); });
 	},
 
 	mapTargetsToUniqueXs(targets) {
@@ -622,10 +577,10 @@ export default {
 
 		if (targets?.length) {
 			xs = getUnique(
-				mergeArray(targets.map(t => t.values.map(v => +v.x)))
+				mergeArray(targets.map(t => { throw new Error("STUB"); }))
 			);
 
-			xs = axis?.isTimeSeries() ? xs.map(x => new Date(+x)) : xs.map(Number);
+			xs = axis?.isTimeSeries() ? xs.map(x => { throw new Error("STUB"); }) : xs.map(Number);
 		}
 
 		return sortValue(xs);
@@ -640,7 +595,7 @@ export default {
 	addTargetIds(type: string, targetIds: string[] | string): void {
 		const {state} = this;
 
-		normalizeTargetIds(targetIds).forEach(v => state[type].add(v));
+		normalizeTargetIds(targetIds).forEach(v => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -652,7 +607,7 @@ export default {
 	removeTargetIds(type: string, targetIds: string[] | string): void {
 		const {state} = this;
 
-		normalizeTargetIds(targetIds).forEach(v => state[type].delete(v));
+		normalizeTargetIds(targetIds).forEach(v => { throw new Error("STUB"); });
 	},
 
 	addHiddenTargetIds(targetIds: string[]): void {
@@ -686,9 +641,9 @@ export default {
 				xIndexMap = cached.value;
 			} else {
 				const xs = $$.mapTargetsToUniqueXs($$.data.targets)
-					.map(v => (isString(v) ? v : +v));
+					.map(v => { throw new Error("STUB"); });
 
-				xIndexMap = new Map(xs.map((x, i) => [x, i]));
+				xIndexMap = new Map(xs.map((x, i) => { throw new Error("STUB"); }));
 				$$.cache.add(KEY.valuesXIndexMap, {
 					value: xIndexMap,
 					generation: $$.state.dataGeneration
@@ -697,50 +652,15 @@ export default {
 		}
 
 		targets.forEach(t => {
-			const data: any[] = [];
-
-			t.values
-				.filter(({value}) => isValue(value) || value === null)
-				.forEach(v => {
-					let {value} = v;
-
-					// exclude 'volume' value to correct mis domain calculation
-					if (value !== null && $$.isCandlestickType(v)) {
-						value = isArray(value) ?
-							value.slice(0, 4) :
-							[value.open, value.high, value.low, value.close];
-					}
-
-					if (isArray(value)) {
-						data.push(...value);
-					} else if (isObject(value) && "high" in value) {
-						data.push(...Object.values(value));
-					} else if ($$.isBubbleZType(v)) {
-						data.push(hasAxis && $$.getBubbleZData(value, "y"));
-					} else {
-						if (isMultipleX && xIndexMap) {
-							// Use Map for O(1) lookup instead of getIndexByX which uses indexOf
-							const xKey = isString(v.x) ? v.x : +v.x;
-							const index = xIndexMap.get(xKey);
-
-							if (index !== undefined) {
-								data[index as number] = value;
-							}
-						} else {
-							data.push(value);
-						}
-					}
-				});
-
-			ys[t.id] = data;
-		});
+            throw new Error("STUB");
+        });
 
 		return ys;
 	},
 
 	hasMultiTargets(): boolean {
-		return this.filterTargetsToShow().length > 1;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Sort targets data
@@ -774,19 +694,14 @@ export default {
 		let fn;
 
 		if (orderAsc || orderDesc) {
-			const reducer = (p, c) => p + Math.abs(c.value);
+			const reducer = (p, c) => { throw new Error("STUB"); };
 			const sum = v => (isNumber(v) ? v : (
 				"values" in v ? v.values.reduce(reducer, 0) : v.value
 			));
 
 			fn = (t1: IData | IDataRow, t2: IData | IDataRow) => {
-				const t1Sum = sum(t1);
-				const t2Sum = sum(t2);
-
-				return isReversed ?
-					(orderAsc ? t1Sum - t2Sum : t2Sum - t1Sum) :
-					(orderAsc ? t2Sum - t1Sum : t1Sum - t2Sum);
-			};
+                throw new Error("STUB");
+            };
 		} else if (isFunction(order)) {
 			fn = order.bind($$.api);
 		}
@@ -803,21 +718,17 @@ export default {
 
 		return data ?
 			data.filter(
-				v => "value" in v ? filter(v) : v.values.some(filter)
+				v => { throw new Error("STUB"); }
 			) :
 			data;
 	},
 
 	filterRemoveNull(data) {
-		return data.filter(d => isValue(this.getBaseValue(d)));
+		return data.filter(d => { throw new Error("STUB"); });
 	},
 
 	filterByXDomain(targets, xDomain) {
-		return targets.map(t => ({
-			id: t.id,
-			id_org: t.id_org,
-			values: t.values.filter(v => xDomain[0] <= v.x && v.x <= xDomain[1])
-		}));
+		return targets.map(t => { throw new Error("STUB"); });
 	},
 
 	hasDataLabel() {
@@ -834,7 +745,7 @@ export default {
 	 * @private
 	 */
 	hasNullDataValue(targets: IDataRow[]): boolean {
-		return targets.some(({value}) => value === null);
+		return targets.some(({value}) => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -898,7 +809,7 @@ export default {
 	getDataLabelLength(min: number, max: number, key: "width" | "height"): number[] {
 		const $$ = this;
 		const paddingCoef = 1.3;
-		const values = [min, max].map(v => $$.dataLabelFormat()(v));
+		const values = [min, max].map(v => { throw new Error("STUB"); });
 
 		if ($$.config.render_mode === "canvas" && !$$.$el.svg) {
 			const chart = $$.$el.chart?.node?.();
@@ -907,19 +818,14 @@ export default {
 
 			if (chart && svg) {
 				const texts = values.map(value => {
-					const text = doc.createElementNS("http://www.w3.org/2000/svg", "text");
-
-					text.textContent = value;
-					svg.appendChild(text);
-
-					return text;
-				});
+                    throw new Error("STUB");
+                });
 
 				svg.style.cssText =
 					"position:absolute;visibility:hidden;left:-10000px;top:-10000px;";
 				chart.appendChild(svg);
 
-				const lengths = texts.map(text => text.getBoundingClientRect()[key] * paddingCoef);
+				const lengths = texts.map(text => { throw new Error("STUB"); });
 
 				svg.remove();
 
@@ -929,40 +835,20 @@ export default {
 
 		return $$.getTextRect(
 			values
-		)?.map((rect: DOMRect) => rect[key] * paddingCoef) || [0, 0];
+		)?.map((rect: DOMRect) => { throw new Error("STUB"); }) || [0, 0];
 	},
 
 	isNoneArc(d) {
-		return this.hasTarget(this.data.targets, d.id);
-	},
+        throw new Error("STUB");
+    },
 
 	isArc(d) {
-		return "data" in d && this.hasTarget(this.data.targets, d.data.id);
-	},
+        throw new Error("STUB");
+    },
 
 	findSameXOfValues(values, index) {
-		const targetX = values[index].x;
-		const sames: any[] = [];
-		let i;
-
-		for (i = index - 1; i >= 0; i--) {
-			if (targetX !== values[i].x) {
-				break;
-			}
-
-			sames.push(values[i]);
-		}
-
-		for (i = index; i < values.length; i++) {
-			if (targetX !== values[i].x) {
-				break;
-			}
-
-			sames.push(values[i]);
-		}
-
-		return sames;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get normalized x value cache key.
@@ -984,14 +870,8 @@ export default {
 		const $$ = this;
 		const {cache, state} = $$;
 		const targetKey = targets.map(t => {
-			const {values} = t;
-			const first = values[0];
-			const last = values[values.length - 1];
-
-			return `${t.id}:${values.length}:${first ? $$.getXCacheKey(first.x) : ""}:${
-				last ? $$.getXCacheKey(last.x) : ""
-			}`;
-		}).join("|");
+            throw new Error("STUB");
+        }).join("|");
 		const cached = cache.get(KEY.valuesByX);
 
 		if (
@@ -1236,27 +1116,8 @@ export default {
 	},
 
 	convertValuesToRange(values) {
-		const converted = isArray(values) ? values.concat() : [values];
-		const ranges: {x: string | number, id: string, value: number}[] = [];
-
-		converted.forEach(range => {
-			const {x, id} = range;
-
-			ranges.push({
-				x,
-				id,
-				value: range.value[0]
-			});
-
-			ranges.push({
-				x,
-				id,
-				value: range.value[2]
-			});
-		});
-
-		return ranges;
-	},
+        throw new Error("STUB");
+    },
 
 	updateDataAttributes(name, attrs) {
 		const $$ = this;
@@ -1268,8 +1129,8 @@ export default {
 		}
 
 		Object.keys(attrs).forEach(id => {
-			current[id] = attrs[id];
-		});
+            throw new Error("STUB");
+        });
 
 		$$.redraw({withLegend: true});
 
@@ -1281,7 +1142,7 @@ export default {
 
 		if (isArray(value)) {
 			if (type === "bar") {
-				return value.reduce((a, c) => c - a);
+				return value.reduce((a, c) => { throw new Error("STUB"); });
 			} else {
 				const index = rangedDataKeyIndex[type]?.[key as string] ?? -1;
 
@@ -1300,18 +1161,8 @@ export default {
 	 * @private
 	 */
 	setRatioForGroupedData(data: (IDataRow | IData)[]): void {
-		const $$ = this;
-		const {config} = $$;
-
-		// calculate ratio if grouped data exists
-		if (config.data_groups.length && data.some(d => $$.isGrouped(d.id))) {
-			const setter = (d: IDataRow) => $$.getRatio("index", d, true);
-
-			data.forEach(v => {
-				"values" in v ? v.values.forEach(setter) : setter(v);
-			});
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get ratio value
@@ -1363,10 +1214,10 @@ export default {
 					let hiddenIds: string[] = [...hiddenTargetIds];
 
 					if ($$.isStackNormalizedPerGroup() && d.id) {
-						const group = config.data_groups.find(g => g.indexOf(d.id) >= 0);
+						const group = config.data_groups.find(g => { throw new Error("STUB"); });
 						if (group) {
 							// Only consider hidden IDs in the same group
-							hiddenIds = hiddenIds.filter(id => group.indexOf(id) >= 0);
+							hiddenIds = hiddenIds.filter(id => { throw new Error("STUB"); });
 						}
 					}
 
@@ -1376,10 +1227,10 @@ export default {
 						if (hiddenSum.length) {
 							hiddenSum = hiddenSum
 								.reduce((acc, curr) =>
-									acc.map((v, i) => (isNumber(v) ? v : 0) + curr[i])
+									{ throw new Error("STUB"); }
 								);
 
-							total = total.map((v, i) => v - hiddenSum[i]);
+							total = total.map((v, i) => { throw new Error("STUB"); });
 						}
 					}
 				}
@@ -1395,7 +1246,7 @@ export default {
 				) * config.radar_size_ratio;
 			} else if (type === "bar") {
 				const yScale = $$.getYScaleById.bind($$)(d.id);
-				const max = yScale.domain().reduce((a, c) => c - a);
+				const max = yScale.domain().reduce((a, c) => { throw new Error("STUB"); });
 
 				// when all data are 0, return 0
 				ratio = max === 0 ? 0 : Math.abs(
@@ -1418,20 +1269,12 @@ export default {
 		const $$ = this;
 
 		const tickValueMap = tickValues.reduce((out, tick, index) => {
-			out[Number(tick.x)] = index;
-			return out;
-		}, {});
+            throw new Error("STUB");
+        }, {});
 
 		$$.data.targets.forEach(t => {
-			t.values.forEach((value, valueIndex) => {
-				let index = tickValueMap[Number(value.x)];
-
-				if (index === undefined) {
-					index = valueIndex;
-				}
-				value.index = index;
-			});
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -1472,8 +1315,6 @@ export default {
 	 * @private
 	 */
 	getDataById(id: string) {
-		const d = this.cache.get(id) || this.api.data(id);
-
-		return d?.[0] ?? d;
-	}
+        throw new Error("STUB");
+    }
 };

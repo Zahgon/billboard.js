@@ -18,93 +18,23 @@ import shapeTreemapCommon from "./core/treemap";
  * @private
  */
 function position(group, root): void {
-	const $$ = this;
-
-	group.selectAll("g")
-		.attr("transform", d => {
-			const rect = getTreemapNodeRect($$, d, root);
-
-			return `translate(${rect.x},${rect.y})`;
-		})
-		.select("rect")
-		.attr("width", d => getTreemapNodeRect($$, d, root).w)
-		.attr("height", d => getTreemapNodeRect($$, d, root).h);
+    throw new Error("STUB");
 }
 
 export default {
 	...shapeTreemapCommon,
 
 	initTreemap(): void {
-		const $$ = this;
-		const {
-			$el,
-			state: {
-				current: {width, height},
-				clip,
-				datetimeId
-			}
-		} = $$;
-
-		clip.id = `${datetimeId}-clip`;
-
-		$$.initTreemapLayout();
-
-		$el.defs
-			.append("clipPath")
-			.attr("id", clip.id)
-			.append("rect")
-			.attr("width", width)
-			.attr("height", height);
-
-		$el.treemap = $el.main.select(`.${$COMMON.chart}`)
-			.attr("clip-path", `url(#${clip.id})`)
-			.append("g")
-			.classed($TREEMAP.chartTreemaps, true);
-
-		$$.bindTreemapEvent();
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Bind events
 	 * @private
 	 */
 	bindTreemapEvent(): void {
-		const $$ = this;
-		const {$el, config, state} = $$;
-		const getTarget = event => {
-			const target = event.isTrusted ? event.target : state.eventReceiver.rect?.node();
-			let data;
-
-			if (target && /^rect$/i.test(target.tagName)) {
-				state.event = event;
-				data = d3Select(target).datum();
-			}
-
-			return data?.data;
-		};
-
-		if (config.interaction_enabled) {
-			const isTouch = state.inputType === "touch";
-
-			$el.treemap
-				.on(isTouch ? "touchstart" : "mouseover mousemove", event => {
-					const data = getTarget(event);
-
-					if (data) {
-						$$.showTooltip([data], event.currentTarget);
-						/^(touchstart|mouseover)$/.test(event.type) && $$.setOverOut(true, data);
-					}
-				}, isTouch ? {passive: true} : undefined)
-				.on(isTouch ? "touchend" : "mouseout", event => {
-					const data = getTarget(event);
-
-					if (config.interaction_onout) {
-						$$.hideTooltip();
-						$$.setOverOut(false, data);
-					}
-				});
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Update treemap data
@@ -148,7 +78,7 @@ export default {
 			.attr("class", classChartTreemap)
 			.select("rect")
 			.attr("class", classTreemap)
-			.attr("fill", d => $$.color(d.data.name));
+			.attr("fill", d => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -157,21 +87,8 @@ export default {
 	 * @private
 	 */
 	generateGetTreemapPoints(): (d: IDataRow) => [number, number][] {
-		const $$ = this;
-		const {$el} = $$;
-		const points = {};
-
-		$el.treemap.selectAll("g").each(d => {
-			const rect = getTreemapNodeRect($$, d);
-
-			points[d.data.name] = [
-				[rect.x, rect.y],
-				[rect.x + rect.w, rect.y + rect.h]
-			];
-		});
-
-		return d => points[d.id];
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Redraw treemap
@@ -214,7 +131,7 @@ export default {
 
 		// Get treemap dimensions for the specific data
 		const treemapNode = treemap.selectAll("g")
-			.filter(node => node.data.id === id)
+			.filter(node => { throw new Error("STUB"); })
 			.datum();
 
 		let width = 0;
@@ -227,11 +144,7 @@ export default {
 		}
 
 		return function(node) {
-			node.style("opacity", meetLabelThreshold);
-
-			return isFunction(format) ?
-				format.bind($$.api)(value, ratio, id, {width, height}) :
-				`${id}\n${percentValue}%`;
-		};
+            throw new Error("STUB");
+        };
 	}
 };

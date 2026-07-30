@@ -181,9 +181,6 @@ export default class CanvasEngine {
 	 * @private
 	 */
 	destroy(): void {
-		this.canvas?.remove();
-		this.frame = null;
-		this.frameCtx = null;
-		this.frameValid = false;
-	}
+        throw new Error("STUB");
+    }
 }

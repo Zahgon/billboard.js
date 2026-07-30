@@ -35,7 +35,7 @@ const ARC_TYPES = ["donut", "gauge", "pie", "polar"] as const;
  * @private
  */
 function _getArcType($$: ChartInternalThis): string | undefined {
-	return ["donut", "pie", "polar", "gauge"].find(type => $$.hasType(type));
+	return ["donut", "pie", "polar", "gauge"].find(type => { throw new Error("STUB"); });
 }
 
 /**
@@ -140,7 +140,7 @@ function _calculateStandardArcPosition(
 		outerRadius = $$.getPolarOuterRadius(d, outerRadius);
 	}
 
-	const [x, y] = $$.svgArc.centroid(updated).map((v: number) => (isNaN(v) ? 0 : v));
+	const [x, y] = $$.svgArc.centroid(updated).map((v: number) => { throw new Error("STUB"); });
 	const distance = Math.sqrt(x * x + y * y);
 	const ratio = _calculateLabelRatio($$, d, outerRadius, distance);
 
@@ -159,91 +159,7 @@ function _calculateStandardArcPosition(
  * @private
  */
 function _getRadiusFn(expandRate = 0) {
-	const $$ = this;
-	const {config, state} = $$;
-	const hasMultiArcGauge = $$.hasMultiArcGauge();
-	const singleArcWidth = state.gaugeArcWidth / $$.getTargetsToShow().length;
-	const expandWidth = expandRate ?
-		(
-			Math.min(
-				state.radiusExpanded * expandRate - state.radius,
-				singleArcWidth * 0.8 - (1 - expandRate) * 100
-			)
-		) :
-		0;
-
-	return {
-		/**
-		 * Getter of arc innerRadius value
-		 * @param {IArcData} d Data object
-		 * @returns {number} innerRadius value
-		 * @private
-		 */
-		inner(d: IArcData) {
-			const {innerRadius} = $$.getRadius(d);
-
-			return hasMultiArcGauge ?
-				state.radius - singleArcWidth * (d.index + 1) :
-				(isNumber(innerRadius) ? innerRadius : 0);
-		},
-
-		/**
-		 * Getter of arc outerRadius value
-		 * @param {IArcData} d Data object
-		 * @returns {number} outerRadius value
-		 * @private
-		 */
-		outer(d: IArcData) {
-			const {outerRadius} = $$.getRadius(d);
-			let radius: number;
-
-			if (hasMultiArcGauge) {
-				radius = state.radius - singleArcWidth * d.index + expandWidth;
-			} else if ($$.hasType("polar") && !expandRate) {
-				radius = $$.getPolarOuterRadius(d, outerRadius);
-			} else {
-				radius = outerRadius;
-
-				if (expandRate) {
-					let {radiusExpanded} = state;
-
-					if (state.radius !== outerRadius) {
-						radiusExpanded -= Math.abs(state.radius - outerRadius);
-					}
-
-					radius = radiusExpanded * expandRate;
-				}
-			}
-
-			return radius;
-		},
-
-		/**
-		 * Getter of arc cornerRadius value
-		 * @param {IArcData} d Data object
-		 * @param {number} outerRadius outer radius value
-		 * @returns {number} cornerRadius value
-		 * @private
-		 */
-		corner(d: IArcData, outerRadius): number {
-			const {
-				arc_cornerRadius_ratio: ratio = 0,
-				arc_cornerRadius: cornerRadius = 0
-			} = config;
-			const {data: {id}, value} = d;
-			let corner;
-
-			if (ratio) {
-				corner = ratio * outerRadius;
-			} else {
-				corner = isNumber(cornerRadius) ?
-					cornerRadius :
-					cornerRadius.call($$.api, id, value, outerRadius);
-			}
-
-			return corner;
-		}
-	};
+    throw new Error("STUB");
 }
 
 /**
@@ -254,49 +170,14 @@ function _getRadiusFn(expandRate = 0) {
  */
 function _getAttrTweenFn(fn: (d: IArcData) => string) {
 	return function(d: IArcData): (t: number) => string {
-		const getAngleKeyValue = ({startAngle = 0, endAngle = 0, padAngle = 0}) => ({
-			startAngle,
-			endAngle,
-			padAngle
-		});
-
-		// d3.interpolate interpolates id value, if id is given as color string(ex. gold, silver, etc)
-		// to avoid unexpected behavior, interpolate only angle values
-		// https://github.com/naver/billboard.js/issues/3321
-		const interpolate = d3Interpolate(
-			getAngleKeyValue(this._current),
-			getAngleKeyValue(d)
-		);
-
-		this._current = d;
-
-		return function(t: number): string {
-			const interpolated = interpolate(t) as IArcData;
-			const {data, index, value} = d;
-
-			return fn({...interpolated, data, index, value});
-		};
-	};
+        throw new Error("STUB");
+    };
 }
 
 export default {
 	initPie(): void {
-		const $$ = this;
-		const {config} = $$;
-		const dataType = config.data_type;
-		const padding = config[`${dataType}_padding`];
-		const startingAngle = config[`${dataType}_startingAngle`] || 0;
-		const padAngle = (
-			padding ? padding * 0.01 : config[`${dataType}_padAngle`]
-		) || 0;
-
-		$$.pie = d3Pie()
-			.startAngle(startingAngle)
-			.endAngle(startingAngle + (2 * Math.PI))
-			.padAngle(padAngle)
-			.value((d: IData | any) => d.values?.reduce((a, b) => a + b.value, 0) ?? d)
-			.sort($$.getSortCompareFn.bind($$)(true));
-	},
+        throw new Error("STUB");
+    },
 
 	updateRadius(): void {
 		const $$ = this;
@@ -475,12 +356,8 @@ export default {
 			}
 
 			layout.forEach((t, i) => {
-				if (!found && t.data.id === d.data?.id) {
-					found = true;
-					d = t;
-					d.index = i;
-				}
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		if (isNaN(d.startAngle)) {
@@ -514,20 +391,8 @@ export default {
 			.outerRadius(outer);
 
 		const newArc = function(d: IArcData, withoutUpdate) {
-			let path: string | null = "M 0 0";
-
-			if (d.value || d.data) {
-				const data = withoutUpdate ? d : $$.updateAngle(d) ?? null;
-
-				if (data) {
-					path = arc.cornerRadius(
-						corner(data, outer(data))
-					)(data);
-				}
-			}
-
-			return path;
-		};
+            throw new Error("STUB");
+        };
 
 		// TODO: extends all function
 		newArc.centroid = arc.centroid;
@@ -550,16 +415,8 @@ export default {
 			.outerRadius(outer);
 
 		return (d: IArcData): string => {
-			const updated = $$.updateAngle(d);
-			const outerR = outer(updated);
-			let cornerR = 0;
-
-			if (updated) {
-				cornerR = corner(updated, outerR);
-			}
-
-			return updated ? arc.cornerRadius(cornerR)(updated) || "M 0 0" : "M 0 0";
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	getArc(d, withoutUpdate: boolean, force?: boolean): string {
@@ -582,10 +439,10 @@ export default {
 			const totalSum = $$.getTotalDataSum(state.rendered);
 
 			if (isPercent) {
-				values = values.map(v => totalSum / 100 * v);
+				values = values.map(v => { throw new Error("STUB"); });
 			}
 
-			const pieData = $$.pie(values).map((d, i) => ((d.index = i), d));
+			const pieData = $$.pie(values).map((d, i) => { throw new Error("STUB"); });
 			let rangeText = arcs.selectAll(`.${$ARC.arcRange}`)
 				.data(values);
 
@@ -598,22 +455,18 @@ export default {
 				.style("pointer-events", "none")
 				.style("opacity", "0")
 				.text(v => {
-					const range = isPercent ? (v / totalSum * 100) : v;
-
-					return isFunction(format) ? format(range) : (
-						`${range}${isPercent ? "%" : ""}`
-					);
-				})
+                    throw new Error("STUB");
+                })
 				.merge(rangeText));
 
 			if ((!state.rendered || (state.rendered && !fixed)) && totalSum > 0) {
 				rangeText.attr("transform", function(d, i) {
-					return $$.transformForArcLabel(this, pieData[i], true);
-				});
+                    throw new Error("STUB");
+                });
 			}
 
 			rangeText.style("opacity",
-				d => (!fixed && (d > totalSum || totalSum === 0) ? "0" : null));
+				d => { throw new Error("STUB"); });
 		}
 	},
 
@@ -663,37 +516,8 @@ export default {
 	},
 
 	textForArcLabel(selection: d3Selection): void {
-		const $$ = this;
-		const hasGauge = $$.hasType("gauge");
-		const chartType = ARC_TYPES.filter($$.hasType.bind($$))?.[0];
-
-		if ($$.shouldShowArcLabel()) {
-			selection
-				.style("fill", $$.updateTextColor.bind($$))
-				.attr("filter", d =>
-					$$.updateTextBGColor.bind($$)(d, $$.config.data_labels_backgroundColors))
-				.each(function(d) {
-					const node = d3Select(this);
-					const updated = $$.updateAngle(d);
-					const ratio = $$.getRatio("arc", updated);
-					const meetsThreshold = meetsLabelThreshold.call($$, ratio, chartType);
-
-					// Cache calculated values for reuse in redrawArcLabelLines
-					d._cache = {updated, ratio, meetsThreshold};
-
-					if (meetsThreshold) {
-						const {value} = updated || d;
-						const text = (
-							$$.getArcLabelConfig("format") || $$.defaultArcValueFormat
-						)(value, ratio, d.data.id).toString();
-
-						setTextValue(node, text, [-1, 1], hasGauge);
-					} else {
-						node.text("");
-					}
-				});
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	expandArc(targetIds: string[]): void {
 		const $$ = this;
@@ -702,14 +526,8 @@ export default {
 		// MEMO: avoid to cancel transition
 		if (transiting) {
 			const interval = setInterval(() => {
-				// check the live state value: the destructured one is stale within this closure
-				if (!$$.state.transiting) {
-					clearInterval(interval);
-
-					$el.legend.selectAll(`.${$FOCUS.legendItemFocused}`).size() > 0 &&
-						$$.expandArc(targetIds);
-				}
-			}, 10);
+                throw new Error("STUB");
+            }, 10);
 
 			return;
 		}
@@ -718,24 +536,8 @@ export default {
 
 		$el.svg.selectAll($$.selectorTargets(newTargetIds, `.${$ARC.chartArc}`))
 			.each(function(d) {
-				if (!$$.shouldExpand(d.data.id)) {
-					return;
-				}
-
-				const expandDuration = $$.getExpandConfig(d.data.id, "duration");
-				const svgArcExpandedSub = $$.getSvgArcExpanded(
-					$$.getExpandConfig(d.data.id, "rate")
-				);
-
-				d3Select(this).selectAll("path")
-					// @ts-ignore
-					.transition()
-					.duration(expandDuration)
-					.attrTween("d", _getAttrTweenFn($$.svgArcExpanded.bind($$)))
-					.transition()
-					.duration(expandDuration * 2)
-					.attrTween("d", _getAttrTweenFn(svgArcExpandedSub.bind($$)));
-			});
+                throw new Error("STUB");
+            });
 	},
 
 	unexpandArc(targetIds: string[]): void {
@@ -751,7 +553,7 @@ export default {
 		svg.selectAll($$.selectorTargets(newTargetIds, `.${$ARC.chartArc}`))
 			.selectAll("path")
 			.transition()
-			.duration(d => $$.getExpandConfig(d.data.id, "duration"))
+			.duration(d => { throw new Error("STUB"); })
 			.attrTween("d", _getAttrTweenFn($$.svgArc.bind($$)));
 
 		svg.selectAll(`${$ARC.arc}`)
@@ -800,12 +602,8 @@ export default {
 	},
 
 	shouldShowArcLabel(): boolean {
-		const $$ = this;
-		const {config} = $$;
-
-		return ARC_TYPES
-			.some(v => $$.hasType(v) && config[`${v}_label_show`]);
-	},
+        throw new Error("STUB");
+    },
 
 	getArcLabelConfig(name = "format"): number | string | Function | object {
 		const $$ = this;
@@ -815,8 +613,8 @@ export default {
 		ARC_TYPES
 			.filter($$.hasType.bind($$))
 			.forEach(v => {
-				fn = config[`${v}_label_${name}`];
-			});
+                throw new Error("STUB");
+            });
 
 		if (name === "format") {
 			return isFunction(fn) ? fn.bind($$.api) : fn;
@@ -826,54 +624,12 @@ export default {
 	},
 
 	updateTargetsForArc(targets: IData): void {
-		const $$ = this;
-		const {$el} = $$;
-		const hasGauge = $$.hasType("gauge");
-		const classChartArc = $$.getChartClass("Arc");
-		const classArcs = $$.getClass("arcs", true);
-		const classFocus = $$.classFocus.bind($$);
-		const chartArcs = $el.main.select(`.${$ARC.chartArcs}`);
-
-		const mainPieUpdate = chartArcs
-			.selectAll(`.${$ARC.chartArc}`)
-			.data($$.pie(targets))
-			.attr("class", d => classChartArc(d) + classFocus(d.data));
-
-		const mainPieEnter = mainPieUpdate.enter().append("g")
-			.attr("class", classChartArc)
-			.call(
-				this.setCssRule(false, `.${$ARC.chartArcs} text`, [
-					"pointer-events:none",
-					"text-anchor:middle"
-				])
-			);
-
-		mainPieEnter.append("g")
-			.attr("class", classArcs)
-			.merge(mainPieUpdate);
-
-		mainPieEnter.append("text")
-			.attr("dy", hasGauge && !$$.hasMultiTargets() ? "-.1em" : null)
-			.style("opacity", "0")
-			.style("text-anchor", $$.getStylePropValue("middle"))
-			.style("pointer-events", $$.getStylePropValue("none"));
-
-		$el.text = chartArcs.selectAll(`.${$COMMON.target} text`);
-		// MEMO: can not keep same color..., but not bad to update color in redraw
-		// mainPieUpdate.exit().remove();
-	},
+        throw new Error("STUB");
+    },
 
 	initArc(): void {
-		const $$ = this;
-		const {$el} = $$;
-
-		$el.arcs = $el.main.select(`.${$COMMON.chart}`)
-			.append("g")
-			.attr("class", $ARC.chartArcs)
-			.attr("transform", $$.getTranslate("arc"));
-
-		$$.setArcTitle();
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set arc title text
@@ -957,17 +713,12 @@ export default {
 		mainArc = mainArc.enter()
 			.append("path")
 			.attr("class", $$.getClass("arc", true))
-			.style("fill", d => $$.color(d.data))
-			.style("cursor", d => (isSelectable?.bind?.($$.api)(d) ? "pointer" : null))
+			.style("fill", d => { throw new Error("STUB"); })
+			.style("cursor", d => { throw new Error("STUB"); })
 			.style("opacity", "0")
 			.each(function(d) {
-				if ($$.isGaugeType(d.data)) {
-					d.startAngle = config.gauge_startingAngle;
-					d.endAngle = config.gauge_startingAngle;
-				}
-
-				this._current = d;
-			})
+                throw new Error("STUB");
+            })
 			.merge(mainArc);
 
 		if ($$.hasType("gauge")) {
@@ -976,79 +727,27 @@ export default {
 		}
 
 		mainArc
-			.attr("transform", d => (!$$.isGaugeType(d.data) && withTransform ? "scale(0)" : ""))
+			.attr("transform", d => { throw new Error("STUB"); })
 			.style("opacity", function(d) {
-				return d === this._current ? "0" : null;
-			})
+                throw new Error("STUB");
+            })
 			.each(() => {
-				state.transiting = true;
-			})
+                throw new Error("STUB");
+            })
 			.transition()
 			.duration(duration)
 			.attrTween("d", function(d) {
-				const updated = $$.updateAngle(d);
-
-				if (!updated) {
-					return () => "M 0 0";
-				}
-
-				if (isNaN(this._current.startAngle)) {
-					this._current.startAngle = 0;
-				}
-
-				if (isNaN(this._current.endAngle)) {
-					this._current.endAngle = this._current.startAngle;
-				}
-
-				const interpolate = d3Interpolate(this._current, updated);
-
-				this._current = interpolate(0);
-
-				return function(t) {
-					const interpolated = interpolate(t);
-
-					interpolated.data = d.data; // data.id will be updated by interporator
-
-					return $$.getArc(interpolated, true);
-				};
-			})
+                throw new Error("STUB");
+            })
 			.attr("transform", withTransform ? "scale(1)" : "")
 			.style("fill", d => {
-				let color;
-
-				if ($$.levelColor) {
-					color = $$.levelColor(d.data.values[0].value);
-
-					// update data's color
-					config.data_colors[d.data.id] = color;
-				} else {
-					color = $$.color(d.data);
-				}
-
-				return color;
-			})
+                throw new Error("STUB");
+            })
 			// Where gauge reading color would receive customization.
 			.style("opacity", null)
 			.call(endall, function() {
-				if ($$.levelColor) {
-					const path = d3Select(this);
-					const d: any = path.datum(this._current);
-
-					$$.updateLegendItemColor(d.data.id, path.style("fill"));
-				}
-
-				state.transiting = false;
-
-				// release the redraw snapshot when a no-transition redraw skipped
-				// afterRedraw() because this arc transition was still running
-				if (state.redrawing) {
-					state.redrawing = false;
-					state._targetsToShow = null;
-					state._cachedDrawShape = null;
-				}
-
-				callFn(config.onrendered, $$.api);
-			});
+                throw new Error("STUB");
+            });
 
 		// bind arc events
 		hasInteraction && $$.bindArcEvent(mainArc);
@@ -1106,15 +805,8 @@ export default {
 			 * @private
 			 */
 			$el.needle.updateHelper = (v: number, updateConfig = false): void => {
-				if ($el.needle.style("display") !== "none") {
-					$$.$T($el.needle)
-						.style("transform", `rotate(${$$.getNeedleAngle(v)}deg)`)
-						.call(endall, () => {
-							updateConfig && (config.arc_needle_value = v);
-							updateNeedleValue();
-						});
-				}
-			};
+                throw new Error("STUB");
+            };
 		}
 
 		if (hasDataToShow) {
@@ -1194,35 +886,18 @@ export default {
 			backgroundArc.enter()
 				.append("path")
 				.attr("class", (d, i) =>
-					`${$ARC.chartArcsBackground} ${$ARC.chartArcsBackground}-${i}`)
+					{ throw new Error("STUB"); })
 				.merge(backgroundArc)
 				.style("fill", (config.gauge_background) || null)
 				.attr("d", ({id}) => {
-					if (showEmptyTextLabel || state.hiddenTargetIds.has(id)) {
-						return "M 0 0";
-					}
-
-					const d = {
-						data: [{value: config.gauge_max}],
-						startAngle,
-						endAngle,
-						index: index++
-					};
-
-					return $$.getArc(d, true, true);
-				});
+                    throw new Error("STUB");
+                });
 
 			backgroundArc.exit().remove();
 		} else {
 			backgroundArc.attr("d", showEmptyTextLabel ? "M 0 0" : () => {
-				const d = {
-					data: [{value: config.gauge_max}],
-					startAngle,
-					endAngle
-				};
-
-				return $$.getArc(d, true, true);
-			});
+                throw new Error("STUB");
+            });
 		}
 	},
 
@@ -1257,46 +932,21 @@ export default {
 
 		arc
 			.on("click", function(event, d, i) {
-				const arcData = _getArcData(d);
-
-				if (arcData) {
-					$$.toggleShape?.(this, arcData, i);
-					config.data_onclick.bind($$.api)(arcData, this);
-				}
-			});
+                throw new Error("STUB");
+            });
 
 		// mouse events
 		if (isMouse) {
 			arc
 				.on("mouseover", function(event, d) {
-					if (state.transiting) { // skip while transiting
-						return;
-					}
-
-					state.event = event;
-					const arcData = _getArcData(d);
-					const id = arcData?.id || undefined;
-
-					selectArc(this, arcData, id);
-					$$.setOverOut(true, arcData);
-				})
+                    throw new Error("STUB");
+                })
 				.on("mouseout", (event, d) => {
-					if (state.transiting || !config.interaction_onout) { // skip while transiting
-						return;
-					}
-
-					state.event = event;
-					const arcData = _getArcData(d);
-
-					unselectArc();
-					$$.setOverOut(false, arcData);
-				})
+                    throw new Error("STUB");
+                })
 				.on("mousemove", function(event, d) {
-					const arcData = _getArcData(d);
-
-					state.event = event;
-					$$.showTooltip([arcData], this);
-				});
+                    throw new Error("STUB");
+                });
 		}
 
 		// touch events
@@ -1310,22 +960,8 @@ export default {
 
 			$$.$el.svg
 				.on("touchstart touchmove", function(event) {
-					if (state.transiting) { // skip while transiting
-						return;
-					}
-
-					state.event = event;
-
-					const eventArc = getEventArc(event);
-					const datum: any = eventArc.datum();
-					const updated = (datum?.data && datum.data.id) ? $$.updateAngle(datum) : null;
-					const arcData = updated ? $$.convertToArcData(updated) : null;
-					const id = arcData?.id || undefined;
-
-					$$.callOverOutForTouch(arcData);
-
-					isUndefined(id) ? unselectArc() : selectArc(this, arcData, id);
-				}, {passive: true});
+                    throw new Error("STUB");
+                }, {passive: true});
 		}
 	},
 
@@ -1341,24 +977,20 @@ export default {
 			text = main.selectAll(`.${$ARC.chartArc}`)
 				.select("text")
 				.style("opacity", "0")
-				.attr("class", d => ($$.isGaugeType(d.data) ? $GAUGE.gaugeValue : null))
+				.attr("class", d => { throw new Error("STUB"); })
 				.call($$.textForArcLabel.bind($$))
-				.style("font-size", d => (
-					$$.isGaugeType(d.data) && $$.data.targets.length === 1 && !hasMultiArcGauge ?
-						`${Math.round(state.radius / 5)}px` :
-						null
-				));
+				.style("font-size", d => { throw new Error("STUB"); });
 
 			updateTextImage.call($$);
 
 			text
 				.attr("transform", function(d) {
-					return $$.transformForArcLabel.bind($$)(this, d);
-				})
+                    throw new Error("STUB");
+                })
 				.transition()
 				.duration(duration)
 				.style("opacity",
-					d => ($$.isTargetToShow(d.data.id) && $$.isArcType(d.data) ? null : "0"));
+					d => { throw new Error("STUB"); });
 
 			hasMultiArcGauge && text.attr("dy", "-.1em");
 		}
@@ -1407,7 +1039,7 @@ export default {
 	getArcElementByIdOrIndex(value: string | number): d3Selection {
 		const $$ = this;
 		const {$el: {arcs}} = $$;
-		const filterFn = isNumber(value) ? d => d.index === value : d => d.data.id === value;
+		const filterFn = isNumber(value) ? d => { throw new Error("STUB"); } : d => { throw new Error("STUB"); };
 
 		return arcs?.selectAll(`.${$COMMON.target} path`)
 			.filter(filterFn);

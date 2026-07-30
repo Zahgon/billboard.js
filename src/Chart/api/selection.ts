@@ -24,60 +24,7 @@ function setSelectionForFocusOnly(
 	indices?: number[],
 	resetOther?: boolean
 ): void {
-	const $$ = this;
-	const {config, $el: {main}} = $$;
-	const selectionGrouped = config.data_selection_grouped;
-	const isSelectable = config.data_selection_isselectable.bind($$.api);
-	const targetIds = isDefined(ids) ? ([] as string[]).concat(ids as string | string[]) : null;
-	const singleSelection = isSelection && !config.data_selection_multiple;
-	let resetDone = !singleSelection;
-
-	// Remove the selected-circle synchronously. The shape's selection state is
-	// represented solely by these elements in focus.only mode, so relying on
-	// unselectPoint's transitioned removal would let rapid API calls interrupt
-	// each other's transition and leave orphaned circles behind.
-	const unselect = (circle, d, index) => {
-		$$.unselectPoint(circle, d, index);
-		circle.interrupt().remove();
-	};
-
-	$$.getTargetsToShow().forEach(target => {
-		const {id} = target;
-		const isTargetId = selectionGrouped || !targetIds || targetIds.indexOf(id) >= 0;
-		const selectedCircles = main.select(
-			`.${$SELECT.selectedCircles}${$$.getTargetSelectorSuffix(id)}`
-		);
-
-		target.values.forEach(d => {
-			const {index} = d;
-			const isTargetIndex = !indices || indices.indexOf(index) >= 0;
-			const circle = selectedCircles.selectAll(`.${$SELECT.selectedCircle}-${index}`);
-			const isSelected = !circle.empty();
-
-			if (isSelection) {
-				if (
-					isTargetId && isTargetIndex && isSelectable(d) &&
-					(!isSelected || singleSelection)
-				) {
-					if (!resetDone) {
-						setSelectionForFocusOnly.call($$, false);
-						resetDone = true;
-					}
-
-					$$.selectPoint(null, d, index);
-				} else if (
-					(!singleSelection || resetDone) &&
-					isDefined(resetOther) &&
-					resetOther &&
-					isSelected
-				) {
-					unselect(circle, d, index);
-				}
-			} else if (isTargetId && isTargetIndex && isSelected) {
-				unselect(circle, d, index);
-			}
-		});
-	});
+    throw new Error("STUB");
 }
 
 /**
@@ -94,83 +41,7 @@ function setSelection(
 	indices?: number[],
 	resetOther?: boolean
 ): void {
-	const $$ = this;
-	const {config, $el: {main}} = $$;
-	const selectionGrouped = config.data_selection_grouped;
-	const isSelectable = config.data_selection_isselectable.bind($$.api);
-	const singleSelection = isSelection && !config.data_selection_multiple;
-	let resetDone = !singleSelection;
-
-	if (!config.data_selection_enabled) {
-		return;
-	}
-
-	// When multiple selection is disabled, only one data point (or one x-index
-	// group when 'grouped' is enabled) can hold the selected state at a time.
-	// Clear any current selection only when the narrowed request can select a point.
-	if (singleSelection) {
-		indices = indices?.length ? [indices[0]] : [0];
-
-		// non-grouped single selection targets exactly one point, so narrow to a
-		// single id (the first requested, or the first shown when none given).
-		if (!selectionGrouped) {
-			const targetIds = isDefined(ids) ?
-				([] as string[]).concat(ids as string | string[]) :
-				$$.getTargetsToShow().map(t => t.id);
-
-			ids = targetIds.slice(0, 1);
-		}
-	}
-
-	if ($$.isPointFocusOnly?.()) {
-		setSelectionForFocusOnly.call($$, isSelection, ids, indices, resetOther);
-		return;
-	}
-
-	main.selectAll(`.${$SHAPE.shapes}`)
-		.selectAll(`.${$SHAPE.shape}`)
-		.each(function(d) {
-			const shape = d3Select(this);
-			const {id, index} = d.data ? d.data : d;
-			const isTargetId = selectionGrouped || !ids || ids.indexOf(id) >= 0;
-			const isTargetIndex = !indices || indices.indexOf(index) >= 0;
-
-			// line/area selection not supported yet
-			if (shape.classed($LINE.line) || shape.classed($AREA.area)) {
-				return;
-			}
-
-			const toggle = $$.getToggle(this, d).bind($$);
-			const isSelected = shape.classed($SELECT.SELECTED);
-
-			if (isSelection) {
-				if (
-					isTargetId &&
-					isTargetIndex &&
-					isSelectable(d) &&
-					(!isSelected || singleSelection)
-				) {
-					if (!resetDone) {
-						setSelection.call($$, false);
-						resetDone = true;
-					}
-
-					!shape.classed($SELECT.SELECTED) &&
-						toggle(true, shape.classed($SELECT.SELECTED, true), d, index);
-				} else if (
-					(!singleSelection || resetDone) &&
-					isDefined(resetOther) &&
-					resetOther &&
-					isSelected
-				) {
-					toggle(false, shape.classed($SELECT.SELECTED, false), d, index);
-				}
-			} else {
-				if (isTargetId && isTargetIndex && isSelectable(d) && isSelected) {
-					toggle(false, shape.classed($SELECT.SELECTED, false), d, index);
-				}
-			}
-		});
+    throw new Error("STUB");
 }
 
 export default {
@@ -191,33 +62,8 @@ export default {
 	 *  chart.selected("data1");
 	 */
 	selected(targetId?: string): DataItem[] {
-		const $$ = this.internal;
-		const dataPoint: DataItem[] = [];
-
-		if ($$.state.isCanvasMode) {
-			return $$.getCanvasSelectedData?.(targetId) || dataPoint;
-		}
-
-		// point.focus.only=true renders no per-index shape, so the selected-circle
-		// elements are the source of truth for the selection state.
-		if ($$.isPointFocusOnly?.()) {
-			$$.$el.main
-				.selectAll(`.${$SELECT.selectedCircles + $$.getTargetSelectorSuffix(targetId)}`)
-				.selectAll(`.${$SELECT.selectedCircle}`)
-				.each(d => dataPoint.push(d));
-
-			return dataPoint;
-		}
-
-		$$.$el.main.selectAll(`.${$SHAPE.shapes + $$.getTargetSelectorSuffix(targetId)}`)
-			.selectAll(`.${$SHAPE.shape}`)
-			.filter(function() {
-				return d3Select(this).classed($SELECT.SELECTED);
-			})
-			.each(d => dataPoint.push(d));
-
-		return dataPoint;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set data points to be selected. ([`data.selection.enabled`](Options.html#.data%25E2%2580%25A4selection%25E2%2580%25A4enabled) option should be set true to use this method)
@@ -272,13 +118,6 @@ export default {
 	 *  chart.unselect("data1", [2]);
 	 */
 	unselect(ids?: string | string[], indices?: number[]): void {
-		const $$ = this.internal;
-
-		if ($$.state.isCanvasMode) {
-			$$.setCanvasSelection?.(false, ids, indices);
-			return;
-		}
-
-		setSelection.bind($$)(false, ids, indices);
-	}
+        throw new Error("STUB");
+    }
 };

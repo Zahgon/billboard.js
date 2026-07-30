@@ -34,13 +34,8 @@ export default {
 		const key = isPlural ? "id" : "index";
 
 		return (d): string => {
-			const data = d.data || d;
-			const result = (
-				withShape ? this.generateClass(CLASS[isPlural ? "shapes" : "shape"], data[key]) : ""
-			) + this.generateClass(CLASS[type], data[useIdKey ? "id" : key]);
-
-			return result.trim();
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -50,7 +45,7 @@ export default {
 	 * @private
 	 */
 	getChartClass(type: string) {
-		return (d): string => CLASS[`chart${type}`] + this.classTarget((d.data ? d.data : d).id);
+		return (d): string => { throw new Error("STUB"); };
 	},
 
 	generateExtraLineClass(): Function {
@@ -59,19 +54,13 @@ export default {
 		const ids: string[] = [];
 
 		return function(d) {
-			const id: string = d.id || d.data?.id || d;
-
-			if (ids.indexOf(id) < 0) {
-				ids.push(id);
-			}
-
-			return classes[ids.indexOf(id) % classes.length];
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	classRegion(d, i: number): string {
-		return `${this.generateClass(CLASS.region, i)} ${"class" in d ? d.class : ""}`;
-	},
+        throw new Error("STUB");
+    },
 
 	classTarget(id: string): string {
 		const additionalClassSuffix = this.config.data_classes[id];
@@ -115,7 +104,7 @@ export default {
 	selectorTargets(idsValue, prefix: string): string[] | null {
 		const ids = idsValue || [];
 
-		return ids.length ? ids.map(id => this.selectorTarget(id, prefix)) : null;
+		return ids.length ? ids.map(id => { throw new Error("STUB"); }) : null;
 	},
 
 	selectorLegend(id: string): string {
@@ -123,6 +112,6 @@ export default {
 	},
 
 	selectorLegends(ids): string[] | null {
-		return ids?.length ? ids.map(id => this.selectorLegend(id)) : null;
+		return ids?.length ? ids.map(id => { throw new Error("STUB"); }) : null;
 	}
 };

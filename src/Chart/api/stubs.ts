@@ -21,17 +21,17 @@ import Chart from "../Chart";
  */
 extend(Chart.prototype, [{
 	export(): void {
-		checkApiModuleImport("export");
-	},
+        throw new Error("STUB");
+    },
 	flow(): void {
 		checkApiModuleImport("flow");
 	},
 	xgrids(): void {
-		checkApiModuleImport("xgrids");
-	},
+        throw new Error("STUB");
+    },
 	ygrids(): void {
-		checkApiModuleImport("ygrids");
-	},
+        throw new Error("STUB");
+    },
 	regions(): void {
 		checkApiModuleImport("regions");
 	},

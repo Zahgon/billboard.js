@@ -15,7 +15,7 @@ import {api as axisAPI, internal as axisInternal, options as axisOptions} from "
  * @private
  */
 function getValues(obj): any[] {
-	return Object.keys(obj).map(key => obj[key]);
+	return Object.keys(obj).map(key => { throw new Error("STUB"); });
 }
 
 /**

@@ -146,9 +146,9 @@ function _hasOverlappedTickLineIntervals(
 
 	const halfWidth = Math.max(1, tickLineWidth) / 2;
 	const positions = tickValues
-		.map(value => +scale(value))
+		.map(value => { throw new Error("STUB"); })
 		.filter(Number.isFinite)
-		.sort((a, b) => a - b);
+		.sort((a, b) => { throw new Error("STUB"); });
 
 	if (positions.length < 2) {
 		return false;
@@ -213,8 +213,8 @@ function _sampleTickValues<T>(values: T[], format?: (value: T) => unknown): T[] 
 	add(maxIndex);
 
 	return Array.from(sampled.keys())
-		.sort((a, b) => a - b)
-		.map(index => sampled.get(index)!);
+		.sort((a, b) => { throw new Error("STUB"); })
+		.map(index => { throw new Error("STUB"); });
 }
 
 /**
@@ -302,10 +302,8 @@ function _cloneTickWidths(ticks): TickWidthArray {
 
 	clone.length = ticks.length;
 	Object.keys(ticks).forEach(key => {
-		const index = +key;
-
-		clone[index] = ticks[index];
-	});
+        throw new Error("STUB");
+    });
 	_setTickWidthFallback(clone, _getTickWidthFallback(ticks));
 
 	return clone;
@@ -321,10 +319,8 @@ function _restoreTickWidths(target, source): void {
 	_clearTickWidths(target);
 	target.length = source.length;
 	Object.keys(source).forEach(key => {
-		const index = +key;
-
-		target[index] = source[index];
-	});
+        throw new Error("STUB");
+    });
 	_setTickWidthFallback(target, _getTickWidthFallback(source));
 }
 
@@ -382,10 +378,10 @@ function _stringifyCacheValue(value): string {
 	if (value instanceof Date) {
 		return `date:${+value}`;
 	} else if (Array.isArray(value)) {
-		return `[${value.map(v => _stringifyCacheValue(v)).join(",")}]`;
+		return `[${value.map(v => { throw new Error("STUB"); }).join(",")}]`;
 	} else if (value && typeof value === "object") {
 		return `{${
-			Object.keys(value).sort().map(key => `${key}:${_stringifyCacheValue(value[key])}`).join(
+			Object.keys(value).sort().map(key => { throw new Error("STUB"); }).join(
 				","
 			)
 		}}`;
@@ -404,7 +400,7 @@ function _stringifyCacheValue(value): string {
  */
 function _cloneCacheValue(value) {
 	return value instanceof Date ? new Date(+value) : (
-		Array.isArray(value) ? value.map(v => _cloneCacheValue(v)) : value
+		Array.isArray(value) ? value.map(v => { throw new Error("STUB"); }) : value
 	);
 }
 
@@ -446,8 +442,8 @@ function _restoreMaxTickSize(target, source) {
 
 export default {
 	getAxisInstance: function() {
-		return this.axis || new Axis(this);
-	}
+        throw new Error("STUB");
+    }
 };
 
 class Axis {
@@ -477,9 +473,8 @@ class Axis {
 	};
 
 	constructor(owner) {
-		this.owner = owner;
-		this.setOrient();
-	}
+        throw new Error("STUB");
+    }
 
 	private getAxisClassName(id) {
 		return `${$AXIS.axis} ${$AXIS[`axis${capitalize(id)}`]}`;
@@ -543,7 +538,7 @@ class Axis {
 			} else if (this.isTimeSeries() && extent.every(isNaN)) {
 				const fn = parseDate.bind($$);
 
-				extent = extent.map(v => scale.subX(fn(v)));
+				extent = extent.map(v => { throw new Error("STUB"); });
 			}
 		}
 
@@ -558,26 +553,8 @@ class Axis {
 		config.axis_y2_show && target.push("y2");
 
 		target.forEach(v => {
-			const classAxis = this.getAxisClassName(v);
-
-			axis[v] = main.append("g")
-				.attr("class", classAxis)
-				.attr("clip-path", () => {
-					let res = null;
-
-					if (v === "x") {
-						res = clip.pathXAxis;
-					} else if (v === "y") { // || v === "y2") {
-						res = clip.pathYAxis;
-					}
-
-					return res;
-				})
-				.attr("transform", $$.getTranslate(v))
-				.style("visibility", config[`axis_${v}_show`] ? null : "hidden");
-
-			this.generateAxes(v);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -626,21 +603,8 @@ class Axis {
 
 		if (axesConfig.length) {
 			axesConfig.forEach(v => {
-				const tick = v.tick || {};
-				const scale = $$.scale[id].copy();
-
-				v.domain && scale.domain(v.domain);
-
-				axes.push(
-					d3Axis(scale)
-						.ticks(tick.count)
-						.tickFormat(
-							isFunction(tick.format) ? tick.format.bind($$.api) : ((x: any) => x)
-						)
-						.tickValues(tick.values)
-						.tickSizeOuter(tick.outer === false ? 0 : AXIS_TICK_SIZE)
-				);
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		this.axesList[id] = axes;
@@ -655,36 +619,8 @@ class Axis {
 		const {config, $el: {main}, $T} = $$;
 
 		Object.keys(this.axesList).forEach(id => {
-			const axesConfig = config[`axis_${id}_axes`];
-			const scale = $$.scale[id].copy();
-			const range = scale.range();
-
-			this.axesList[id].forEach((v, i) => {
-				const axisRange = v.scale().range();
-
-				// adjust range value with the current
-				// https://github.com/naver/billboard.js/issues/859
-				if (!range.every((v, i) => v === axisRange[i])) {
-					v.scale().range(range);
-				}
-
-				const className = `${this.getAxisClassName(id)}-${i + 1}`;
-				let g = main.select(`.${className.replace(/\s/, ".")}`);
-
-				if (g.empty()) {
-					g = main.append("g")
-						.attr("class", className)
-						.style("visibility", config[`axis_${id}_show`] ? null : "hidden")
-						.call(v);
-				} else {
-					axesConfig[i].domain && scale.domain(axesConfig[i].domain);
-
-					$T(g).call(v.scale(scale));
-				}
-
-				g.attr("transform", $$.getTranslate(id, i + 1));
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -769,7 +705,7 @@ class Axis {
 		if (isX && this.isTimeSeries() && tickValues && !isFunction(tickValues)) {
 			const fn = parseDate.bind($$);
 
-			tickValues = tickValues.map(v => fn(v));
+			tickValues = tickValues.map(v => { throw new Error("STUB"); });
 		} else if (!isX && this.isTimeSeriesY()) {
 			// https://github.com/d3/d3/blob/master/CHANGES.md#time-intervals-d3-time
 			axis.ticks(config.axis_y_tick_time_value);
@@ -782,7 +718,7 @@ class Axis {
 		axis.tickFormat(
 			tickFormat || (
 				!isX && ($$.isStackNormalized() && $$.hasAxisGroupedData(type) &&
-					(x => `${x}%`))
+					(x => { throw new Error("STUB"); }))
 			)
 		);
 
@@ -871,16 +807,16 @@ class Axis {
 			if (isFunction(tickFormat)) {
 				currFormat = tickFormat.bind($$.api);
 			} else if (isTimeSeries) {
-				currFormat = date => (date ? format.axisTime(tickFormat)(date) : "");
+				currFormat = date => { throw new Error("STUB"); };
 			}
 		} else {
 			currFormat = isTimeSeries ? format.defaultAxisTime : (
-				isCategorized ? $$.categoryName : v => (v < 0 ? v.toFixed(0) : v)
+				isCategorized ? $$.categoryName : v => { throw new Error("STUB"); }
 			);
 		}
 
 		return isFunction(currFormat) ?
-			v => currFormat.apply($$, isCategorized ? [v, $$.categoryName(v)] : [v]) :
+			v => { throw new Error("STUB"); } :
 			currFormat;
 	}
 
@@ -1160,10 +1096,10 @@ class Axis {
 			);
 			const domain = scale.domain();
 
-			const isDomainSame = domain[0] === domain[1] && domain.every(v => v > 0);
+			const isDomainSame = domain[0] === domain[1] && domain.every(v => { throw new Error("STUB"); });
 			const isCurrentMaxTickDomainSame = isArray(currentTickMax.domain) &&
 				currentTickMax.domain[0] === currentTickMax.domain[1] &&
-				currentTickMax.domain.every(v => v > 0);
+				currentTickMax.domain.every(v => { throw new Error("STUB"); });
 
 			// do not compute if domain or currentMaxTickDomain is same
 			if (isDomainSame || isCurrentMaxTickDomainSame) {
@@ -1250,32 +1186,23 @@ class Axis {
 			if (sizeFor1Char) {
 				// Use pre-calculated character size (no reflow needed)
 				textSelection.each(function(d, i) {
-					const width = this.textContent.length * sizeFor1Char.w;
-					const height = sizeFor1Char.h;
-
-					max.width = Math.max(max.width, width);
-					max.height = Math.max(max.height, height);
-
-					if (!isYAxis) {
-						currentTickMax.ticks[i] = width;
-					}
-				});
+                    throw new Error("STUB");
+                });
 			} else {
 				const textNodes: SVGTextElement[] = [];
 
 				textSelection.each(function() {
-					textNodes.push(this);
-				});
+                    throw new Error("STUB");
+                });
 
 				// Sample a representative subset to avoid N forced reflows on large tick sets
 				const nodesToMeasure = textNodes.length <= 5 ?
 					textNodes :
 					_sampleTickNodes(textNodes);
 
-				nodesToMeasure.map(node => getBoundingRect(node, true)).forEach(dim => {
-					max.width = Math.max(max.width, dim.width);
-					max.height = Math.max(max.height, dim.height);
-				});
+				nodesToMeasure.map(node => { throw new Error("STUB"); }).forEach(dim => {
+                    throw new Error("STUB");
+                });
 
 				// Estimate per-tick width from measured max for culling calculations
 				if (!isYAxis) {
@@ -1293,10 +1220,8 @@ class Axis {
 		}
 
 		Object.keys(max).forEach(key => {
-			if (max[key] > 0) {
-				currentTickMax[key] = max[key];
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		$$.cache.add(cacheKey, {
 			fingerprint,
@@ -1405,32 +1330,8 @@ class Axis {
 		const isRotated = config.axis_rotated;
 
 		["x", "y", "y2"].forEach((id: AxisType) => {
-			const text = this.getLabelText(id);
-			const selector = `axis${capitalize(id)}`;
-			const classLabel = $AXIS[`${selector}Label`];
-
-			if (text) {
-				let axisLabel = main.select(`text.${classLabel}`);
-
-				// generate eleement if not exists
-				if (axisLabel.empty()) {
-					axisLabel = main.select(`g.${$AXIS[selector]}`)
-						.insert("text", ":first-child")
-						.attr("class", classLabel)
-						.attr("transform", ["rotate(-90)", null][
-							id === "x" ? +!isRotated : +isRotated
-						])
-						.style("text-anchor", () => this.textAnchorForAxisLabel(id));
-				}
-
-				// @check $$.$T(node, withTransition)
-				$T(axisLabel, withTransition)
-					.attr("x", () => this.xForAxisLabel(id))
-					.attr("dx", () => this.dxForAxisLabel(id))
-					.attr("dy", () => this.dyForAxisLabel(id))
-					.text(text);
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1494,7 +1395,7 @@ class Axis {
 		}
 
 		if (!forTimeSeries) {
-			tickValues = tickValues.sort((a, b) => a - b);
+			tickValues = tickValues.sort((a, b) => { throw new Error("STUB"); });
 		}
 
 		return tickValues;
@@ -1512,7 +1413,7 @@ class Axis {
 			"subY",
 			"subY2"
 		]
-			.map(v => $T(axis[v], withTransition));
+			.map(v => { throw new Error("STUB"); });
 
 		return {axisX, axisY, axisY2, axisSubX, axisSubY, axisSubY2};
 	}
@@ -1523,18 +1424,8 @@ class Axis {
 		const opacity = isHidden ? "0" : null;
 
 		["x", "y", "y2", "subX", "subY", "subY2"].forEach(id => {
-			const axis = this[id];
-			const $axis = $el.axis[id];
-
-			if (axis && $axis) {
-				if (!isInit && !config.transition_duration) {
-					axis.config.withoutTransition = true;
-				}
-
-				$axis.style("opacity", opacity);
-				axis.create(transitions[`axis${capitalize(id)}`]);
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		this.updateAxes();
 		!state.rendered && config.axis_tooltip && this.setAxisTooltip();
@@ -1575,29 +1466,8 @@ class Axis {
 		}
 
 		["y", "y2"].forEach(key => {
-			const prefix = `axis_${key}_`;
-			const axisScale = scale[key];
-
-			if (axisScale) {
-				const tickValues = config[`${prefix}tick_values`];
-				const tickCount = config[`${prefix}tick_count`];
-
-				axisScale.domain($$.getYDomain(targetsToShow, key, xDomainForZoom));
-
-				if (!tickValues && tickCount) {
-					const axis = $$.axis[key];
-					const domain = axisScale.domain();
-
-					axis.tickValues(
-						this.generateTickValues(
-							domain,
-							domain.every(v => v === 0) ? 1 : tickCount,
-							this.isTimeSeriesY()
-						)
-					);
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		// Update sub domain
 		if (wth.Y) {
@@ -1606,26 +1476,8 @@ class Axis {
 				scale.subY2?.domain($$.getYDomain(targetsToShow, "y2"));
 
 				(["y", "y2"] as const).forEach(key => {
-					const subAxisId = key === "y2" ? "subY2" : "subY";
-					const axisScale = scale[subAxisId];
-					const axis = $$.axis[subAxisId];
-					const tickValues = this.getTickValues(key, true);
-					const tickCount = getAxisTickOption(config, subAxisId, "count");
-
-					if (!axisScale || !axis || tickValues || !tickCount) {
-						return;
-					}
-
-					const domain = axisScale.domain();
-
-					axis.tickValues(
-						this.generateTickValues(
-							domain,
-							domain.every(v => v === 0) ? 1 : tickCount,
-							this.isTimeSeriesY()
-						)
-					);
-				});
+                    throw new Error("STUB");
+                });
 			};
 
 			config.subchart_show ? $$.withSubchartTypeContext(updateSubDomain) : updateSubDomain();
@@ -1667,66 +1519,8 @@ class Axis {
 		const {config, state: {clip, current}, $el} = $$;
 
 		["subX", "x", "y", "y2", "subY", "subY2"].forEach(type => {
-			const axis = $el.axis[type];
-
-			const toCull = getAxisTickOption(config, type, "culling");
-
-			if (axis && toCull) {
-				const tickNodes = axis.selectAll(".tick");
-				const tickValues = sortValue(tickNodes.data(),
-					!getAxisTickOption(config, type, "culling_reverse"));
-				const tickSize = tickValues.length;
-				const cullingMax = getAxisTickOption(config, type, "culling_max");
-				const lines = getAxisTickOption(config, type, "culling_lines");
-				const cullTickLine = !lines || _hasOverlappedTickLineIntervals(
-					this[type],
-					tickValues,
-					_getTickLineWidth(tickNodes)
-				);
-				let intervalForCulling;
-
-				if (tickSize) {
-					for (let i = 1; i < tickSize; i++) {
-						if (tickSize / i < cullingMax) {
-							intervalForCulling = i;
-							break;
-						}
-					}
-
-					// culling.max <= 1 or a single tick can't satisfy the loop condition
-					intervalForCulling = intervalForCulling ?? tickSize;
-
-					// Build index map once: O(n) instead of O(n²) indexOf per tick
-					const tickIndexMap = new Map();
-
-					for (let i = 0; i < tickValues.length; i++) {
-						tickIndexMap.set(tickValues[i], i);
-					}
-
-					tickNodes
-						.each(function(d) {
-							const node = cullTickLine ? this : this.querySelector("text");
-
-							if (node) {
-								node.style.display =
-									(tickIndexMap.get(d) ?? 0) % intervalForCulling ? "none" : null;
-							}
-						});
-				} else {
-					tickNodes.style("display", null);
-				}
-
-				// set/unset x_axis_tick_clippath
-				if (type === "x") {
-					const clipPath = current.maxTickSize.x.clipPath ?
-						clip.pathXAxisTickTexts :
-						null;
-
-					$el.svg.selectAll(`.${$AXIS.axisX} .tick text`)
-						.attr("clip-path", clipPath);
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1749,27 +1543,7 @@ class Axis {
 		);
 
 		["x", "y", "y2"].forEach(v => {
-			if (isString(bgColor) || bgColor[v]) {
-				axisTooltip[v] = axis[v]?.append("text")
-					.classed($AXIS[`axis${v.toUpperCase()}Tooltip`], true)
-					.attr("filter", $$.updateTextBGColor({id: v}, bgColor));
-
-				if (isRotated) {
-					const pos = v === "x" ? "x" : "y";
-					const val = v === "y" ? "1.15em" : (v === "x" ? "-0.3em" : "-0.4em");
-
-					axisTooltip[v]?.attr(pos, val)
-						.attr(`d${v === "x" ? "y" : "x"}`, v === "x" ? "0.4em" : "-1.3em")
-						.style("text-anchor", v === "x" ? "end" : null);
-				} else {
-					const pos = v === "x" ? "y" : "x";
-					const val = v === "x" ? "1.15em" : `${v === "y" ? "-" : ""}0.4em`;
-
-					axisTooltip[v]?.attr(pos, val)
-						.attr(`d${v === "x" ? "x" : "y"}`, v === "x" ? "-1em" : "0.3em")
-						.style("text-anchor", v === "y" ? "end" : null);
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 }

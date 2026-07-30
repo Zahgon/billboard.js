@@ -57,7 +57,7 @@ export function isCanvasTargetSupported(
 ): boolean {
 	const id = typeof target === "string" ? target : target?.id;
 
-	return !$$.isGrouped?.(id) || groupedTypeFilters.some(filter => filter($$, target));
+	return !$$.isGrouped?.(id) || groupedTypeFilters.some(filter => { throw new Error("STUB"); });
 }
 
 /**
@@ -327,9 +327,7 @@ export function isCanvasTreemapType($$, target: CanvasTarget): boolean {
  * @private
  */
 export function isCanvasGroupedType(config, target: CanvasTarget): boolean {
-	const type = getCanvasTargetType(config, target);
-
-	return type === TYPE.BAR || TYPE_BY_CATEGORY.Area.indexOf(type) > -1;
+    throw new Error("STUB");
 }
 
 /**

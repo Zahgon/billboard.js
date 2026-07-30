@@ -9,9 +9,4 @@ import optPoint from "../../Options/common/point";
 import optScatter from "../../Options/shape/scatter";
 import {extendAxis} from "./axis.helpers";
 
-export let scatter = (): string => (
-	extendAxis(
-		[shapePointCommon, shapePoint],
-		[optPoint, optScatter]
-	), (scatter = () => TYPE.SCATTER)()
-);
+export let scatter = (): string => { throw new Error("STUB"); };

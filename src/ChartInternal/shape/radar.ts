@@ -44,36 +44,8 @@ const cacheKeyTextWidth = KEY.radarTextWidth;
 
 export default {
 	initRadar(): void {
-		const $$ = this;
-		const {config, state: {current}, $el} = $$;
-
-		if ($$.hasType("radar")) {
-			$el.radar = $el.main.select(`.${$COMMON.chart}`).append("g")
-				.attr("class", $RADAR.chartRadars);
-
-			// level
-			$el.radar.levels = $el.radar.append("g")
-				.attr("class", $LEVEL.levels);
-
-			// axis
-			$el.radar.axes = $el.radar.append("g")
-				.attr("class", $AXIS.axis);
-
-			// shapes
-			$el.radar.shapes = $el.radar.append("g")
-				.attr("class", $SHAPE.shapes);
-
-			current.dataMax = config.radar_axis_max || $$.getMinMaxData().max[0].value;
-
-			if (config.radar_axis_text_show) {
-				config.interaction_enabled && $$.bindRadarEvent();
-
-				// it needs to calculate dimension at the initialization
-				$$.updateRadarLevel();
-				$$.updateRadarAxes();
-			}
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	getRadarSize(): [number, number] {
 		const $$ = this;
@@ -85,17 +57,8 @@ export default {
 	},
 
 	updateTargetsForRadar(targets): void {
-		const $$ = this;
-		const {config} = $$;
-
-		if (isEmpty(config.axis_x_categories)) {
-			config.axis_x_categories = getRange(0, getMinMax("max", targets.map(v =>
-				v.values.length
-			)));
-		}
-
-		$$.generateRadarPoints();
-	},
+        throw new Error("STUB");
+    },
 
 	getRadarPosition(type, index: number, range, ratio: number): number {
 		const $$ = this;
@@ -105,14 +68,7 @@ export default {
 		const isClockwise = config.radar_direction_clockwise;
 
 		const pos = toArray(type).map(v =>
-			_getPosition(
-				isClockwise,
-				v,
-				edge,
-				index,
-				isDefined(range) ? range : (type === "x" ? width : height),
-				isNumber(ratio) ? ratio : config.radar_size_ratio
-			)
+			{ throw new Error("STUB"); }
 		);
 
 		return pos.length === 1 ? pos[0] : pos;
@@ -133,10 +89,8 @@ export default {
 		// recalculate position only when the previous dimension has been changed
 		if (!size || (size.width !== width && size.height !== height)) {
 			targets.forEach(d => {
-				points[d.id] = d.values.map((v, i) => (
-					$$.getRadarPosition(["x", "y"], i, undefined, $$.getRatio("radar", v))
-				));
-			});
+                throw new Error("STUB");
+            });
 
 			points._size = {width, height};
 			$$.cache.add(cacheKeyPoints, points);
@@ -161,19 +115,8 @@ export default {
 	},
 
 	generateGetRadarPoints(): Function {
-		const points = this.cache.get(cacheKeyPoints);
-
-		return (d, i) => {
-			const point = points[d.id][i];
-
-			return [
-				point,
-				point,
-				point,
-				point
-			];
-		};
-	},
+        throw new Error("STUB");
+    },
 
 	updateRadarLevel(): void {
 		const $$ = this;
@@ -187,20 +130,15 @@ export default {
 		const levelData = getRange(0, depth);
 
 		const radius = config.radar_size_ratio * Math.min(width, height);
-		const levelRatio = levelData.map(l => radius * ((l + 1) / depth));
-		const levelTextFormat = (config.radar_level_text_format || function() {}).bind($$.api);
+		const levelRatio = levelData.map(l => { throw new Error("STUB"); });
+		const levelTextFormat = (config.radar_level_text_format || function() {
+            throw new Error("STUB");
+        }).bind($$.api);
 
 		// Generate points
 		const points = levelData.map(v => {
-			const range = levelRatio[v];
-			const pos = getRange(0, edge).map(i =>
-				(
-					$$.getRadarPosition(["x", "y"], i, range, 1)
-				).join(",")
-			);
-
-			return pos.join(" ");
-		});
+            throw new Error("STUB");
+        });
 
 		const level = radarLevels
 			.selectAll(`.${$LEVEL.level}`)
@@ -209,7 +147,7 @@ export default {
 		level.exit().remove();
 
 		const levelEnter = level.enter().append("g")
-			.attr("class", (d, i) => `${$LEVEL.level} ${$LEVEL.level}-${i}`);
+			.attr("class", (d, i) => { throw new Error("STUB"); });
 
 		levelEnter.append("polygon")
 			.style("visibility", config.radar_level_show ? null : "hidden");
@@ -221,31 +159,29 @@ export default {
 					.attr("dx", "-.5em")
 					.attr("dy", "-.7em")
 					.style("text-anchor", "end")
-					.text(() => levelTextFormat(0));
+					.text(() => { throw new Error("STUB"); });
 			}
 
 			levelEnter.append("text")
 				.attr("dx", "-.5em")
 				.style("text-anchor", "end")
 				.text(d =>
-					levelTextFormat(
-						state.current.dataMax / levelData.length * (d + 1)
-					)
+					{ throw new Error("STUB"); }
 				);
 		}
 
 		levelEnter
 			.merge(level)
 			.attr("transform",
-				d => `translate(${width - levelRatio[d]}, ${height - levelRatio[d]})`)
+				d => { throw new Error("STUB"); })
 			.selectAll("polygon")
-			.attr("points", d => points[d]);
+			.attr("points", d => { throw new Error("STUB"); });
 
 		// update level text position
 		if (showText) {
 			radarLevels.selectAll("text")
-				.attr("x", d => (isUndefined(d) ? width : points[d].split(",")[0]))
-				.attr("y", d => (isUndefined(d) ? height : 0));
+				.attr("x", d => { throw new Error("STUB"); })
+				.attr("y", d => { throw new Error("STUB"); });
 		}
 	},
 
@@ -261,7 +197,7 @@ export default {
 		axis.exit().remove();
 
 		const axisEnter = axis.enter().append("g")
-			.attr("class", (d, i) => `${$AXIS.axis}-${i}`);
+			.attr("class", (d, i) => { throw new Error("STUB"); });
 
 		config.radar_axis_line_show && axisEnter.append("line");
 		config.radar_axis_text_show && axisEnter.append("text");
@@ -273,8 +209,8 @@ export default {
 			axis.select("line")
 				.attr("x1", width)
 				.attr("y1", height)
-				.attr("x2", (d, i) => $$.getRadarPosition("x", i))
-				.attr("y2", (d, i) => $$.getRadarPosition("y", i));
+				.attr("x2", (d, i) => { throw new Error("STUB"); })
+				.attr("y2", (d, i) => { throw new Error("STUB"); });
 		}
 
 		// axis text
@@ -286,44 +222,17 @@ export default {
 				.style("text-anchor", "middle")
 				.attr("dy", ".5em")
 				.call(selection => {
-					selection.each(function(d) {
-						setTextValue(d3Select(this), String(d), [-0.6, 1.2]);
-					});
-				})
-				.datum((d, i) => ({index: i}))
+                    throw new Error("STUB");
+                })
+				.datum((d, i) => { throw new Error("STUB"); })
 				.attr("transform", function(d) {
-					if (isUndefined(this.width)) {
-						// cache evaluated axis text width
-						this.width = getBoundingRect(this, true).width / 2;
-					}
-
-					let posX = $$.getRadarPosition("x", d.index, undefined, 1);
-					let posY = Math.round($$.getRadarPosition("y", d.index, undefined, 1));
-
-					if (posX > width) {
-						posX += this.width + x;
-					} else if (Math.round(posX) < width) {
-						posX -= this.width + x;
-					}
-
-					if (posY > height) {
-						// update vertical centered edge axis text dy position
-						if (posY / 2 === height && this.firstChild.tagName === "tspan") {
-							this.firstChild.setAttribute("dy", "0em");
-						}
-
-						posY += y;
-					} else if (posY < height) {
-						posY -= y;
-					}
-
-					return `translate(${posX} ${posY})`;
-				});
+                    throw new Error("STUB");
+                });
 
 			if (!textWidth) {
-				const widths = [radar.axes, radar.levels].map(v => getPathBox(v.node()).width);
+				const widths = [radar.axes, radar.levels].map(v => { throw new Error("STUB"); });
 
-				if (widths.every(v => v > 0)) {
+				if (widths.every(v => { throw new Error("STUB"); })) {
 					$$.cache.add(cacheKeyTextWidth, widths[0] - widths[1]);
 				}
 			}
@@ -331,59 +240,12 @@ export default {
 	},
 
 	bindRadarEvent(): void {
-		const $$ = this;
-		const {config, state, $el: {radar, svg}} = $$;
-		const focusOnly = $$.isPointFocusOnly();
-		const {inputType, transiting} = state;
-		const isMouse = inputType === "mouse";
-
-		const hide = event => {
-			state.event = event;
-
-			if (!config.interaction_onout) {
-				return;
-			}
-
-			// const index = getIndex(event);
-
-			const index = $$.getDataIndexFromEvent(event);
-			const noIndex = isUndefined(index);
-
-			if (isMouse || noIndex) {
-				$$.hideTooltip();
-
-				focusOnly ? $$.hideCircleFocus() : $$.unexpandCircles();
-
-				if (isMouse) {
-					$$.setOverOut(false, index);
-				} else if (noIndex) {
-					$$.callOverOutForTouch();
-				}
-			}
-		};
-
-		radar.axes
-			.on(isMouse ? "mouseover " : "touchstart", event => {
-				if (transiting) { // skip while transiting
-					return;
-				}
-
-				state.event = event;
-				const index = $$.getDataIndexFromEvent(event);
-
-				$$.selectRectForSingle(svg.node(), index);
-				isMouse ? $$.setOverOut(true, index) : $$.callOverOutForTouch(index);
-			}, isMouse ? undefined : {passive: true})
-			.on("mouseout", isMouse ? hide : null);
-
-		if (!isMouse) {
-			svg.on("touchstart", hide, {passive: true});
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	updateRadarShape(): void {
 		const $$ = this;
-		const targets = $$.data.targets.filter(d => $$.isRadarType(d));
+		const targets = $$.data.targets.filter(d => { throw new Error("STUB"); });
 		const points = $$.cache.get(cacheKeyPoints);
 
 		const areas = $$.$el.radar.shapes
@@ -401,7 +263,7 @@ export default {
 			.merge(areas)
 			.style("fill", $$.color)
 			.style("stroke", $$.color)
-			.attr("points", d => points[d.id].join(" "));
+			.attr("points", d => { throw new Error("STUB"); });
 
 		$$.updateTargetForCircle(targets, areasEnter);
 	},
@@ -413,8 +275,8 @@ export default {
 	 * @private
 	 */
 	radarCircleX(d): number {
-		return this.cache.get(cacheKeyPoints)[d.id][d.index][0];
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get data point y coordinate
@@ -423,6 +285,6 @@ export default {
 	 * @private
 	 */
 	radarCircleY(d): number {
-		return this.cache.get(cacheKeyPoints)[d.id][d.index][1];
-	}
+        throw new Error("STUB");
+    }
 };

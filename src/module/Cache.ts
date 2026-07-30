@@ -107,8 +107,8 @@ export default class Cache {
 	 * @private
 	 */
 	getKeys(): string[] {
-		return Array.from(this.cache.keys());
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Reset cached data
@@ -121,12 +121,8 @@ export default class Cache {
 			this.cache.clear();
 		} else {
 			this.cache.forEach((_, x) => {
-				if (/^\$/.test(x)) {
-					if (!excludePrefixes?.some(prefix => x.startsWith(prefix))) {
-						this.cache.delete(x);
-					}
-				}
-			});
+                throw new Error("STUB");
+            });
 		}
 	}
 
@@ -140,7 +136,7 @@ export default class Cache {
 		return {
 			id: target.id,
 			id_org: target.id_org,
-			values: target.values.map(d => ({x: d.x, value: d.value, id: d.id}))
+			values: target.values.map(d => { throw new Error("STUB"); })
 		};
 	}
 }

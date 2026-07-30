@@ -18,27 +18,8 @@ export default {
 	 * @private
 	 */
 	selectPoint(target, d, i: number): void {
-		const $$ = this;
-		const {config, $el: {main}, $T} = $$;
-		const isRotated = config.axis_rotated;
-		const cx = (isRotated ? $$.circleY : $$.circleX).bind($$);
-		const cy = (isRotated ? $$.circleX : $$.circleY).bind($$);
-		const r = $$.pointSelectR.bind($$);
-
-		callFn(config.data_onselected, $$.api, d, target?.node());
-
-		// add selected-circle on low layer g
-		$T(main.select(`.${$SELECT.selectedCircles}${$$.getTargetSelectorSuffix(d.id)}`)
-			.selectAll(`.${$SELECT.selectedCircle}-${i}`)
-			.data([d])
-			.enter()
-			.append("circle")
-			.attr("class", () => $$.generateClass($SELECT.selectedCircle, i))
-			.attr("cx", cx)
-			.attr("cy", cy)
-			.attr("stroke", $$.color)
-			.attr("r", d2 => $$.pointSelectR(d2) * 1.4)).attr("r", r);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Unelect a point
@@ -48,17 +29,8 @@ export default {
 	 * @private
 	 */
 	unselectPoint(target, d, i: number): void {
-		const $$ = this;
-		const {config, $el: {main}, $T} = $$;
-
-		callFn(config.data_onunselected, $$.api, d, target?.node());
-
-		// remove selected-circle from low layer g
-		$T(main.select(`.${$SELECT.selectedCircles}${$$.getTargetSelectorSuffix(d.id)}`)
-			.selectAll(`.${$SELECT.selectedCircle}-${i}`))
-			.attr("r", 0)
-			.remove();
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Toggles the selection of points
@@ -69,10 +41,8 @@ export default {
 	 * @private
 	 */
 	togglePoint(selected, target, d, i: number): void {
-		const method = `${selected ? "" : "un"}selectPoint`;
-
-		this[method](target, d, i);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Select a path
@@ -81,15 +51,8 @@ export default {
 	 * @private
 	 */
 	selectPath(target, d): void {
-		const $$ = this;
-		const {config} = $$;
-
-		callFn(config.data_onselected, $$.api, d, target.node());
-
-		if (config.interaction_brighten) {
-			target.style("filter", "brightness(1.25)");
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Unelect a path
@@ -98,15 +61,8 @@ export default {
 	 * @param {object} d Data object
 	 */
 	unselectPath(target, d): void {
-		const $$ = this;
-		const {config} = $$;
-
-		callFn(config.data_onunselected, $$.api, d, target.node());
-
-		if (config.interaction_brighten) {
-			target.style("filter", null);
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Toggles the selection of lines
@@ -117,10 +73,8 @@ export default {
 	 * @private
 	 */
 	togglePath(selected, target, d, i: number): void {
-		this[
-			`${selected ? "" : "un"}selectPath`
-		](target, d, i);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Returns the toggle method of the target
@@ -134,7 +88,9 @@ export default {
 
 		return that.nodeName === "path" ? $$.togglePath : (
 			$$.isStepType(d) ?
-				() => {} : // circle is hidden in step chart, so treat as within the click area
+				() => {
+                    throw new Error("STUB");
+                } : // circle is hidden in step chart, so treat as within the click area
 				$$.togglePoint
 		);
 	},
@@ -172,11 +128,8 @@ export default {
 					)
 					.classed($SELECT.SELECTED, false)
 					.each(function(d) {
-						const shape = d3Select(this);
-
-						toggledShape = shape;
-						toggle(false, shape, d, d.index);
-					});
+                        throw new Error("STUB");
+                    });
 			}
 
 			if (!toggledShape || toggledShape.node() !== shape.node()) {

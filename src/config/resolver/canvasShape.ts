@@ -28,7 +28,9 @@ const canvasLineModule = {
 	 * Canvas mode creates drawing surfaces through canvas().
 	 * @private
 	 */
-	initLine(): void {}
+	initLine(): void {
+        throw new Error("STUB");
+    }
 };
 
 /**
@@ -42,7 +44,9 @@ const canvasAreaModule = {
 	 * Canvas mode creates drawing surfaces through canvas().
 	 * @private
 	 */
-	initArea(): void {}
+	initArea(): void {
+        throw new Error("STUB");
+    }
 };
 
 /**
@@ -56,7 +60,9 @@ const canvasBarModule = {
 	 * Canvas mode creates drawing surfaces through canvas().
 	 * @private
 	 */
-	initBar(): void {}
+	initBar(): void {
+        throw new Error("STUB");
+    }
 };
 
 /**
@@ -84,7 +90,9 @@ const canvasCandlestickModule = {
 	 * Canvas mode draws candlesticks through CanvasRenderer.
 	 * @private
 	 */
-	initCandlestick(): void {}
+	initCandlestick(): void {
+        throw new Error("STUB");
+    }
 };
 
 /**
@@ -98,8 +106,8 @@ const canvasTreemapModule = {
 	 * @private
 	 */
 	initTreemap(): void {
-		this.initTreemapLayout?.();
-	}
+        throw new Error("STUB");
+    }
 };
 
 /**
@@ -116,135 +124,79 @@ function extendCanvasAxisShape(module: any[] = [], option: any[] = []): void {
  * Register modules and options required for canvas line charts.
  * @returns {string} Line chart type
  */
-export let line = (): string => (
-	extendCanvasAxisShape([canvasLineModule], [optPoint, optLine]), (line = () => TYPE.LINE)()
-);
+export let line = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas spline charts.
  * @returns {string} Spline chart type
  */
-export let spline = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule],
-		[optPoint, optLine, optSpline]
-	), (spline = () => TYPE.SPLINE)()
-);
+export let spline = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas step charts.
  * @returns {string} Step chart type
  */
-export let step = (): string => (
-	extendCanvasAxisShape([canvasLineModule], [optPoint, optLine]), (step = () => TYPE.STEP)()
-);
+export let step = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas area charts.
  * @returns {string} Area chart type
  */
-export let area = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule, canvasAreaModule],
-		[optPoint, optLine, optArea]
-	), (area = () => TYPE.AREA)()
-);
+export let area = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas area-line-range charts.
  * @returns {string} Area line range chart type
  */
-export let areaLineRange = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule, canvasAreaModule],
-		[optPoint, optLine, optArea]
-	), (areaLineRange = () => TYPE.AREA_LINE_RANGE)()
-);
+export let areaLineRange = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas area-spline charts.
  * @returns {string} Area spline chart type
  */
-export let areaSpline = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule, canvasAreaModule],
-		[optPoint, optLine, optArea, optSpline]
-	), (areaSpline = () => TYPE.AREA_SPLINE)()
-);
+export let areaSpline = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas area-spline-range charts.
  * @returns {string} Area spline range chart type
  */
-export let areaSplineRange = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule, canvasAreaModule],
-		[optPoint, optLine, optArea, optSpline]
-	), (areaSplineRange = () => TYPE.AREA_SPLINE_RANGE)()
-);
+export let areaSplineRange = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas area-step charts.
  * @returns {string} Area step chart type
  */
-export let areaStep = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule, canvasAreaModule],
-		[optPoint, optLine, optArea]
-	), (areaStep = () => TYPE.AREA_STEP)()
-);
+export let areaStep = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas area-step-range charts.
  * @returns {string} Area step range chart type
  */
-export let areaStepRange = (): string => (
-	extendCanvasAxisShape(
-		[canvasLineModule, canvasAreaModule],
-		[optPoint, optLine, optArea]
-	), (areaStepRange = () => TYPE.AREA_STEP_RANGE)()
-);
+export let areaStepRange = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas bar charts.
  * @returns {string} Bar chart type
  */
-export let bar = (): string => (
-	extendCanvasAxisShape([canvasBarModule], [optBar]), (bar = () => TYPE.BAR)()
-);
+export let bar = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas scatter charts.
  * @returns {string} Scatter chart type
  */
-export let scatter = (): string => (
-	extendCanvasAxisShape(
-		[canvasPointModule],
-		[optPoint, optScatter]
-	), (scatter = () => TYPE.SCATTER)()
-);
+export let scatter = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas bubble charts.
  * @returns {string} Bubble chart type
  */
-export let bubble = (): string => (
-	extendCanvasAxisShape(
-		[canvasPointModule, shapeBubbleCommon],
-		[optPoint, optBubble]
-	), (bubble = () => TYPE.BUBBLE)()
-);
+export let bubble = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas candlestick charts.
  * @returns {string} Candlestick chart type
  */
-export let candlestick = (): string => (
-	extendCanvasAxisShape(
-		[canvasCandlestickModule, shapeCandlestickCommon],
-		[optPoint, optCandlestick]
-	), (candlestick = () => TYPE.CANDLESTICK)()
-);
+export let candlestick = (): string => { throw new Error("STUB"); };
 
 /**
  * Register modules and options required for canvas treemap charts.
@@ -254,5 +206,5 @@ export let treemap = (): string => (
 	extendCanvasAxisShape(
 		[canvasTreemapModule, shapeTreemapCommon],
 		[optTreemap]
-	), (treemap = () => TYPE.TREEMAP)()
+	), (treemap = () => { throw new Error("STUB"); })()
 );

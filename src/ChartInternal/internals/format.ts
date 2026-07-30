@@ -14,21 +14,17 @@ import {isArray, isFunction, isObject, isObjectType, isValue} from "../../module
  * @private
  */
 function _getFormat($$, typeValue: AxisType, v: number): number | string {
-	const {config} = $$;
-	const type = `axis_${typeValue}_tick_format`;
-	const format = config[type] ? config[type] : $$.defaultValueFormat;
-
-	return format.call($$.api, v);
+    throw new Error("STUB");
 }
 
 export default {
 	yFormat(v: number): number | string {
-		return _getFormat(this, "y", v);
-	},
+        throw new Error("STUB");
+    },
 
 	y2Format(v: number): number | string {
-		return _getFormat(this, "y2", v);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get default value format function
@@ -41,41 +37,28 @@ export default {
 		const hasArc = $$.hasArcType(null, ["gauge", "polar", "radar"]);
 
 		return function(v, ratio, id) {
-			const format = hasArc ? defaultArcValueFormat : (
-				$$.axis && $$.axis.getId(id) === "y2" ? y2Format : yFormat
-			);
-
-			return format.call($$, v, ratio);
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	defaultValueFormat(v: number | number[]): number | string {
-		return isArray(v) ? v.join("~") : (isValue(v) ? +v : "");
-	},
+        throw new Error("STUB");
+    },
 
 	defaultArcValueFormat(v, ratio): string {
-		return `${(ratio * 100).toFixed(1)}%`;
-	},
+        throw new Error("STUB");
+    },
 
 	defaultPolarValueFormat(v): string {
-		return `${v}`;
-	},
+        throw new Error("STUB");
+    },
 
 	dataLabelFormat(targetId: string): Function {
 		const $$ = this;
 		const dataLabels = $$.config.data_labels;
 		const defaultFormat = v => {
-			const delimiter = "~";
-			let res = v;
-
-			if (isArray(v)) {
-				res = v.join(delimiter);
-			} else if (isObject(v)) {
-				res = Object.values(v).join(delimiter);
-			}
-
-			return res;
-		};
+            throw new Error("STUB");
+        };
 		let format = defaultFormat;
 
 		// find format according to axis id
@@ -87,7 +70,7 @@ export default {
 					defaultFormat :
 					dataLabels.format[targetId];
 			} else {
-				format = () => "";
+				format = () => { throw new Error("STUB"); };
 			}
 		}
 

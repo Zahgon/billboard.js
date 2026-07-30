@@ -30,7 +30,7 @@ const data = function(targetIds: string | string[]): DataItem[] {
 	if (!isUndefined(targetIds)) {
 		const ids: any = isArray(targetIds) ? targetIds : [targetIds];
 
-		return targets.filter(t => ids.some(v => v === t.id));
+		return targets.filter(t => { throw new Error("STUB"); });
 	}
 
 	return targets;
@@ -56,8 +56,8 @@ extend(data, {
 	 * chart.data.shown();
 	 */
 	shown: function(targetIds: string | string[]): DataItem[] {
-		return this.internal.filterTargetsToShow(this.data(targetIds));
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get values of the data loaded in the chart.
@@ -74,24 +74,8 @@ extend(data, {
 	 */
 	values: function(targetIds?: string | string[], flat: boolean = true): number[] | number[][]
 		| null {
-		let values: any = null;
-
-		if (targetIds) {
-			const targets = this.data(targetIds);
-
-			if (isArray(targets)) {
-				values = [];
-
-				targets.forEach(v => {
-					const dataValue = v.values.map(d => d.value);
-
-					flat ? (values = values.concat(dataValue)) : values.push(dataValue);
-				});
-			}
-		}
-
-		return values;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get and set names of the data loaded in the chart.
@@ -112,10 +96,8 @@ extend(data, {
 	 * });
 	 */
 	names: function(names?: Array<Record<string, string | null>>): Record<string, string | null> {
-		const $$ = this.internal;
-
-		return $$.updateDataAttributes("names", names);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get and set colors of the data loaded in the chart.
@@ -137,8 +119,8 @@ extend(data, {
 	 * });
 	 */
 	colors: function(colors?: Array<Record<string, string>>): Record<string, string> {
-		return this.internal.updateDataAttributes("colors", colors);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get and set axes of the data loaded in the chart.
@@ -160,8 +142,8 @@ extend(data, {
 	 * });
 	 */
 	axes: function(axes?: Array<Record<string, string>>): Record<string, string> {
-		return this.internal.updateDataAttributes("axes", axes);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get the minimum data value bound to the chart
@@ -175,8 +157,8 @@ extend(data, {
 	 * // --> [{x: 0, value: 30, id: "data1", index: 0}, ...]
 	 */
 	min: function(): IDataRow[] {
-		return this.internal.getMinMaxData().min;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get the maximum data value bound to the chart
@@ -190,8 +172,8 @@ extend(data, {
 	 * // --> [{x: 3, value: 400, id: "data1", index: 3}, ...]
 	 */
 	max: function(): IDataRow[] {
-		return this.internal.getMinMaxData().max;
-	}
+        throw new Error("STUB");
+    }
 });
 
 export default {data};

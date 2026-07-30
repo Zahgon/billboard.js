@@ -120,67 +120,8 @@ export default {
 	 * chart.destroy();
 	 */
 	destroy(): null {
-		const $$ = this.internal;
-		const {state, $el: {chart, style, svg}} = $$;
-
-		if (notEmpty($$)) {
-			$$.callPluginHook("$willDestroy");
-
-			// clear interaction caches that hold DOM references
-			$$.cache?.remove(["setOverOut", "callOverOutForTouch"]);
-
-			$$.charts.splice($$.charts.indexOf(this), 1);
-
-			// release cached web workers/Object URLs when no chart instance remains
-			$$.charts.length === 0 && cleanupWorkers();
-
-			// detach events
-			$$.unbindAllEvents();
-
-			// clear timers && pending transition
-			svg?.select("*").interrupt();
-			state.canvasFlowFrame !== null &&
-				window.cancelAnimationFrame?.(state.canvasFlowFrame);
-			state.canvasFlowFrame = null;
-			state.canvasFlowFinish = null;
-			state.pendingRaf !== null && window.cancelAnimationFrame?.(state.pendingRaf);
-			state.pendingRaf = null;
-			$$.canvasRenderer?.destroy();
-			$$.canvasEngine?.destroy();
-			$$.resizeFunction?.clear();
-
-			$$.resizeFunction?.resizeObserver?.disconnect();
-			$$.resizeFunction && window.removeEventListener("resize", $$.resizeFunction);
-			chart.classed("bb", false)
-				.style("position", null);
-
-			if (state.isCanvasMode) {
-				chart.style("min-height", state.canvasInlineStyle.minHeight || null);
-			}
-
-			chart.selectChildren().remove();
-
-			// remove <style> element added by boost.useCssRule option
-			style && style.parentNode.removeChild(style);
-
-			// releasing own references
-			Object.keys(this).forEach(key => {
-				key === "internal" && Object.keys($$).forEach(k => {
-					$$[k] = null;
-				});
-
-				this[key] = null;
-				delete this[key];
-			});
-
-			// release prototype chains
-			for (const key in this) {
-				this[key] = () => {};
-			}
-		}
-
-		return null;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get or set config option value.
@@ -218,24 +159,6 @@ export default {
 	 * chart.config("gauge.max", 100, true);
 	 */
 	config(name: string, value?: any, redraw?: boolean): any {
-		const $$ = this.internal;
-		const {config, state} = $$;
-		const key = name?.replace(/\./g, "_");
-		let res;
-
-		if (name && key in config) {
-			if (isDefined(value)) {
-				config[key] = value;
-				res = value;
-
-				redraw && this.flush();
-			} else {
-				res = config[key];
-			}
-		} else if (arguments.length === 0 || isEmpty(name)) {
-			res = state.orgConfig;
-		}
-
-		return res;
-	}
+        throw new Error("STUB");
+    }
 };

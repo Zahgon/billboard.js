@@ -12,36 +12,5 @@ import Options from "./Options/Options";
  * @private
  */
 export function loadConfig(config: ChartOptions): void {
-	const thisConfig: Options = this.config;
-	let target;
-	let keys;
-	let read;
-
-	const find = () => {
-		const key = keys.shift();
-
-		if (key && target && isObjectType(target) && key in target) {
-			target = target[key];
-			return find();
-		} else if (!key) {
-			return target;
-		}
-
-		return undefined;
-	};
-
-	Object.keys(thisConfig).forEach(key => {
-		target = config;
-		keys = key.split("_");
-		read = find();
-
-		if (isDefined(read)) {
-			thisConfig[key] = read;
-		}
-	});
-
-	// only should run in the ChartInternal context
-	if (this.api) {
-		this.state.orgConfig = config;
-	}
+    throw new Error("STUB");
 }

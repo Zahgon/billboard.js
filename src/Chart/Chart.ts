@@ -108,46 +108,8 @@ export default class Chart {
 	public internal: ChartInternal;
 
 	constructor(options) {
-		const $$ = new ChartInternal(this);
-		// let hook = () => {};
-
-		this.internal = $$;
-
-		// bind to namespaced APIs
-		(function bindThis(fn, target, argThis) {
-			Object.keys(fn).forEach(key => {
-				const isFunc = isFunction(fn[key]);
-				const isChild = target !== argThis;
-				const isNotNil = notEmpty(fn[key]);
-				const hasChild = isNotNil && Object.keys(fn[key]).length > 0;
-				// const hookFn = function(...params) {
-				// 	hook();
-				// 	return fn[key].bind(argThis)(...params);
-				// }
-
-				if (isFunc && ((!isChild && hasChild) || isChild)) {
-					target[key] = fn[key].bind(argThis);
-				} else if (isNotNil && !isFunc) {
-					target[key] = {};
-				} else {
-					target[key] = fn[key];
-				}
-
-				hasChild && bindThis(fn[key], target[key], argThis);
-			});
-		})(Chart.prototype, this, this);
-
-		loadConfig.call($$, options);
-
-		$$.beforeInit();
-		$$.init();
-
-		// if ($$.config.render.lazy !== false && hasStyle($$.$el.chart, {"display": "none", "visibility": "hidden"})) {
-		// 	hook = () => {
-		// 		logError(`The call of APIs won't work. Please, make sure if chart element is %cvisible.`);
-		// 	};
-		// }
-	}
+        throw new Error("STUB");
+    }
 }
 
 // extend common APIs as part of Chart class

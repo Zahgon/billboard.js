@@ -12,13 +12,8 @@ import {getShapeColorWithGradient} from "./shape";
 
 export default {
 	initArea(mainLine: d3Selection): void {
-		const $$ = this;
-		const {config} = $$;
-
-		mainLine
-			.insert("g", `.${config.area_front ? $CIRCLE.circles : $LINE.lines}`)
-			.attr("class", $$.getClass("areas", true));
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Update area color
@@ -27,10 +22,8 @@ export default {
 	 * @private
 	 */
 	updateAreaColor(d: IDataRow): string {
-		const $$ = this;
-
-		return getShapeColorWithGradient.call($$, d, "area_linearGradient", $$.color) as string;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Generate/Update elements
@@ -39,39 +32,8 @@ export default {
 	 * @private
 	 */
 	updateArea(withTransition: boolean, isSub = false): void {
-		const $$ = this;
-
-		if ($$.state.isCanvasMode) {
-			return;
-		}
-
-		const {config, state, $el, $T} = $$;
-		const $root = isSub ? $el.subchart : $el;
-
-		config.area_linearGradient && $$.updateLinearGradient();
-
-		const area = $root.main.selectAll(`.${$AREA.areas}`)
-			.selectAll(`.${$AREA.area}`)
-			.data($$.lineData.bind($$));
-
-		$T(area.exit(), withTransition)
-			.style("opacity", "0")
-			.remove();
-
-		$root.area = area.enter().append("path")
-			.attr("class", $$.getClass("area", true))
-			.style("fill", $$.updateAreaColor.bind($$))
-			.style("opacity", function() {
-				state.orgAreaOpacity = d3Select(this).style("opacity");
-				return "0";
-			})
-			.merge(area);
-
-		area.style("opacity", state.orgAreaOpacity);
-
-		// calculate ratio if grouped data exists
-		$$.setRatioForGroupedData($root.area.data());
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Redraw function
@@ -81,23 +43,8 @@ export default {
 	 * @returns {Array}
 	 */
 	redrawArea(drawFn: Function, withTransition?: boolean, isSub = false): d3Selection[] {
-		const $$ = this;
-
-		if ($$.state.isCanvasMode) {
-			return [];
-		}
-
-		const {area} = isSub ? this.$el.subchart : this.$el;
-		const {orgAreaOpacity} = $$.state;
-
-		return [
-			$$.$T(area, withTransition, getRandom())
-				.attr("d", drawFn)
-				.style("fill", $$.updateAreaColor.bind($$))
-				.style("opacity",
-					d => String($$.isAreaRangeType(d) ? orgAreaOpacity / 1.75 : orgAreaOpacity))
-		];
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Generate area path data
@@ -107,8 +54,6 @@ export default {
 	 * @private
 	 */
 	generateDrawArea(areaIndices, isSub?: boolean): (d) => string {
-		const $$ = this;
-
-		return generateDrawAreaPath($$, areaIndices, isSub) as (d) => string;
-	}
+        throw new Error("STUB");
+    }
 };

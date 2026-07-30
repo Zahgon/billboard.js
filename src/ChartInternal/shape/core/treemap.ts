@@ -21,19 +21,7 @@ import type {IData, ITreemapData} from "../../data/IData";
  * @private
  */
 function convertDataToTreemapData(data: IData[]): ITreemapData[] {
-	const $$ = this;
-
-	return data.map(d => {
-		const {id, values} = d;
-		const {value} = values[0];
-
-		return {
-			name: id,
-			id, // needed to keep compatibility on whole code logic
-			value,
-			ratio: $$.getRatio("treemap", values[0])
-		} as ITreemapData;
-	});
+    throw new Error("STUB");
 }
 
 export default {
@@ -64,15 +52,8 @@ export default {
 		}[config.treemap_tile ?? "binary"] ?? d3TreemapBinary;
 
 		return (node, x0, y0, x1, y1) => {
-			tile(node, 0, 0, width, height);
-
-			for (const child of node.children) {
-				child.x0 = x0 + child.x0 / width * (x1 - x0);
-				child.x1 = x0 + child.x1 / width * (x1 - x0);
-				child.y0 = y0 + child.y0 / height * (y1 - y0);
-				child.y1 = y0 + child.y1 / height * (y1 - y0);
-			}
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -101,7 +82,7 @@ export default {
 	getTreemapRoot(targets?: IData[]) {
 		const $$ = this;
 		const data = $$.getTreemapData(targets ?? $$.data.targets);
-		const hierarchyData = d3Hierarchy(data).sum(d => d.value);
+		const hierarchyData = d3Hierarchy(data).sum(d => { throw new Error("STUB"); });
 		const sortFn = $$.getSortCompareFn(true);
 
 		if (!$$.treemap) {

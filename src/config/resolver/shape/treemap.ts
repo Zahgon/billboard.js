@@ -8,5 +8,5 @@ import optTreemap from "../../Options/shape/treemap";
 import {extendAxis} from "./axis.helpers";
 
 export let treemap = (): string => (
-	extendAxis([shapeTreemap], [optTreemap]), (treemap = () => TYPE.TREEMAP)()
+	extendAxis([shapeTreemap], [optTreemap]), (treemap = () => { throw new Error("STUB"); })()
 );

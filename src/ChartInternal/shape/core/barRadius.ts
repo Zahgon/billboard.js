@@ -33,34 +33,7 @@ const RE_PATH_TOKEN = /([aAcChHlLmMqQsStTvVzZ])|([-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE
  * @private
  */
 function getArcFlagTokenIndexes(path: string): Set<number> {
-	const flags = new Set<number>();
-	let numIndex = -1;
-	let argIndex = 0;
-	let inArc = false;
-	let token;
-
-	RE_PATH_TOKEN.lastIndex = 0;
-
-	while ((token = RE_PATH_TOKEN.exec(path))) {
-		if (token[1]) {
-			inArc = token[1] === "a" || token[1] === "A";
-			argIndex = 0;
-		} else {
-			numIndex++;
-
-			if (inArc) {
-				const pos = argIndex % 7;
-
-				if (pos === 2 || pos === 3 || pos === 4) {
-					flags.add(numIndex);
-				}
-
-				argIndex++;
-			}
-		}
-	}
-
-	return flags;
+    throw new Error("STUB");
 }
 
 /**
@@ -73,76 +46,7 @@ function getArcFlagTokenIndexes(path: string): Set<number> {
  * @private
  */
 export function getBarPathInterpolator(a: string, b: string): (t: number) => string {
-	const flagSet = getArcFlagTokenIndexes(b);
-	const segments: (string | null)[] = [];
-	const interpolators: {index: number, fn: (t: number) => number}[] = [];
-	let bIndex = 0;
-	let segIndex = -1;
-	let numIndex = -1;
-	let am;
-	let bm;
-
-	// append a literal chunk, merging with the previous literal segment
-	const append = (text: string): void => {
-		if (segments[segIndex]) {
-			segments[segIndex] += text;
-		} else {
-			segments[++segIndex] = text;
-		}
-	};
-
-	RE_PATH_NUMBER.lastIndex = 0;
-	const reA = RE_PATH_NUMBER;
-	const reB = new RegExp(RE_PATH_NUMBER.source, "g");
-
-	a += "";
-	b += "";
-
-	while ((am = reA.exec(a)) && (bm = reB.exec(b))) {
-		numIndex++;
-
-		// literal (non-numeric) part of target preceding this number
-		if (bm.index > bIndex) {
-			append(b.slice(bIndex, bm.index));
-		}
-
-		if (am[0] === bm[0]) {
-			append(bm[0]);
-		} else {
-			const from = +am[0];
-			const to = +bm[0];
-			const isFlag = flagSet.has(numIndex);
-
-			segments[++segIndex] = null;
-			interpolators.push({
-				index: segIndex,
-				fn: isFlag ? t => Math.round(from + (to - from) * t) : t => from + (to - from) * t
-			});
-		}
-
-		bIndex = reB.lastIndex;
-	}
-
-	// remaining target literal/numbers stay as-is (already valid)
-	if (bIndex < b.length) {
-		append(b.slice(bIndex));
-	}
-
-	if (!interpolators.length) {
-		const result = segments.join("");
-
-		return () => result;
-	}
-
-	return (t: number) => {
-		for (let i = 0, len = interpolators.length; i < len; i++) {
-			const {index, fn} = interpolators[i];
-
-			segments[index] = String(fn(t));
-		}
-
-		return segments.join("");
-	};
+    throw new Error("STUB");
 }
 
 /**
@@ -154,8 +58,8 @@ export function getBarPathInterpolator(a: string, b: string): (t: number) => str
 export function getBarRadiusResolver($$): ((width: number) => number) | null {
 	const {bar_radius: radius, bar_radius_ratio: ratio} = $$.config;
 
-	return isNumber(radius) && radius > 0 ? () => radius : (
-		isNumber(ratio) ? width => width * ratio : null
+	return isNumber(radius) && radius > 0 ? () => { throw new Error("STUB"); } : (
+		isNumber(ratio) ? width => { throw new Error("STUB"); } : null
 	);
 }
 

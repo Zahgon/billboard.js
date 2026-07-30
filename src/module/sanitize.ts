@@ -164,10 +164,10 @@ const ALLOWED_ATTRS = new Set([
 
 // Case-insensitive lookup maps: lowercase key → canonical casing from whitelists
 const TAG_CASE_MAP = new Map<string, string>();
-ALLOWED_TAGS.forEach(tag => TAG_CASE_MAP.set(tag.toLowerCase(), tag));
+ALLOWED_TAGS.forEach(tag => { throw new Error("STUB"); });
 
 const ATTR_CASE_MAP = new Map<string, string>();
-ALLOWED_ATTRS.forEach(attr => ATTR_CASE_MAP.set(attr.toLowerCase(), attr));
+ALLOWED_ATTRS.forEach(attr => { throw new Error("STUB"); });
 
 // Whitelist of allowed URI protocols
 const ALLOWED_URI_PROTOCOLS = new Set([
@@ -215,9 +215,9 @@ function decodeHTMLEntities(str: string): string {
 		.replace(/&quot;/gi, "\"")
 		.replace(/&apos;/gi, "'")
 		// Numeric entities (decimal) - trailing semicolon is optional per HTML5 tokenizer
-		.replace(/&#(\d+);?/gi, (_, code) => String.fromCharCode(parseInt(code, 10)))
+		.replace(/&#(\d+);?/gi, (_, code) => { throw new Error("STUB"); })
 		// Numeric entities (hex) - trailing semicolon is optional per HTML5 tokenizer
-		.replace(/&#x([0-9a-f]+);?/gi, (_, code) => String.fromCharCode(parseInt(code, 16)));
+		.replace(/&#x([0-9a-f]+);?/gi, (_, code) => { throw new Error("STUB"); });
 }
 
 /**
@@ -304,7 +304,7 @@ const ATTR_ENCODE_REGEX = /["'`]/g;
  * @private
  */
 function encodeAttrValue(value: string): string {
-	return value.replace(ATTR_ENCODE_REGEX, char => ATTR_ENCODE_MAP[char]);
+	return value.replace(ATTR_ENCODE_REGEX, char => { throw new Error("STUB"); });
 }
 
 /**
@@ -466,23 +466,7 @@ export function sanitize(str: string): string {
 	return str.replace(
 		/<\/?[^>]*>|[^<>\s]+>/g,
 		match => {
-			// Remove HTML comments
-			if (match.startsWith("<!--")) {
-				return "";
-			}
-
-			// Orphaned fragment (e.g., "ipt>") → escape '>'
-			if (!match.startsWith("<")) {
-				return match.slice(0, -1) + "&gt;";
-			}
-
-			// Allowed tag → sanitize attributes
-			if (isAllowedTag(match)) {
-				return sanitizeTag(match);
-			}
-
-			// Disallowed tag → escape all '<' to prevent execution
-			return match.replace(/</g, "&lt;");
-		}
+            throw new Error("STUB");
+        }
 	);
 }

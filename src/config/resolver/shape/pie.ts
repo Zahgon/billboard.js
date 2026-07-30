@@ -8,5 +8,5 @@ import optPie from "../../Options/shape/pie";
 import {extendArc} from "./arc.helpers";
 
 export let pie = (): string => (
-	extendArc(undefined, [optArc, optPie]), (pie = () => TYPE.PIE)()
+	extendArc(undefined, [optArc, optPie]), (pie = () => { throw new Error("STUB"); })()
 );

@@ -25,5 +25,5 @@ export let category = (): Record<string, never> => {
 	// Direct assignment overrides stubs installed by Chart/api/stubs.
 	(Chart.prototype as any).category = apiCategory.category;
 	(Chart.prototype as any).categories = apiCategory.categories;
-	return (category = () => ({}))();
+	return (category = () => { throw new Error("STUB"); })();
 };

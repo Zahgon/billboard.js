@@ -38,8 +38,8 @@ export default class CanvasPainter {
 	 * @private
 	 */
 	get context(): CanvasRenderingContext2D {
-		return this.ctx;
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Run a draw operation on another canvas context.
@@ -83,9 +83,8 @@ export default class CanvasPainter {
 	 */
 	withTranslation(x: number, y: number, draw: DrawCallback): void {
 		this.withState(ctx => {
-			ctx.translate(x, y);
-			draw(ctx);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -96,11 +95,8 @@ export default class CanvasPainter {
 	 */
 	clipRect(rect: CanvasRect, draw: DrawCallback): void {
 		this.withState(ctx => {
-			ctx.beginPath();
-			ctx.rect(rect.x, rect.y, rect.w, rect.h);
-			ctx.clip();
-			draw(ctx);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -166,10 +162,8 @@ export default class CanvasPainter {
 	 */
 	strokePath(draw: DrawCallback, style?: CanvasStyle): void {
 		this.withStyle(style, ctx => {
-			ctx.beginPath();
-			draw(ctx);
-			ctx.stroke();
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -180,10 +174,8 @@ export default class CanvasPainter {
 	 */
 	fillPath(draw: DrawCallback, style?: CanvasStyle): void {
 		this.withStyle(style, ctx => {
-			ctx.beginPath();
-			draw(ctx);
-			ctx.fill();
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -194,8 +186,8 @@ export default class CanvasPainter {
 	 */
 	fillRect(rect: CanvasRect, style?: CanvasStyle): void {
 		this.withStyle(style, ctx => {
-			ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -215,8 +207,8 @@ export default class CanvasPainter {
 		}
 
 		this.fillPath(ctx => {
-			this.traceRoundRect(ctx, normalized, corners);
-		}, style);
+            throw new Error("STUB");
+        }, style);
 	}
 
 	/**
@@ -236,8 +228,8 @@ export default class CanvasPainter {
 		}
 
 		this.strokePath(ctx => {
-			this.traceRoundRect(ctx, normalized, corners);
-		}, style);
+            throw new Error("STUB");
+        }, style);
 	}
 
 	/**
@@ -248,8 +240,8 @@ export default class CanvasPainter {
 	 */
 	strokeRect(rect: CanvasRect, style?: CanvasStyle): void {
 		this.withStyle(style, ctx => {
-			ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -279,9 +271,8 @@ export default class CanvasPainter {
 
 		if (style?.angle) {
 			this.withState(ctx => {
-				this.applyStyle(style);
-				draw(ctx);
-			});
+                throw new Error("STUB");
+            });
 		} else {
 			this.withStyle(style, draw);
 		}
@@ -298,22 +289,8 @@ export default class CanvasPainter {
 	textLines(text: string, x: number, y: number,
 		style?: CanvasStyle & {angle?: number, maxWidth?: number}): void {
 		this.withState(ctx => {
-			const lines = text.split("\n");
-			const lineHeight = getFontSize(style?.font || ctx.font);
-			const firstLineY = lines.length > 1 ? -((lines.length - 1) * lineHeight) : 0;
-
-			this.applyStyle(style);
-			ctx.translate(x, y);
-			style?.angle && ctx.rotate(style.angle * Math.PI / 180);
-
-			lines.forEach((line, i) => {
-				const lineY = firstLineY + (i * lineHeight);
-
-				style?.maxWidth === undefined ?
-					ctx.fillText(line, 0, lineY) :
-					ctx.fillText(line, 0, lineY, style.maxWidth);
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -327,22 +304,8 @@ export default class CanvasPainter {
 	 */
 	point(type: CanvasPointType, x: number, y: number, r: number, style?: CanvasStyle): void {
 		this.withStyle(style, ctx => {
-			const shouldFill = !style?.stroke || style.fill !== undefined;
-			const shouldStroke = style?.stroke !== undefined;
-
-			if (type === "rectangle") {
-				const size = r * 2;
-				const rect = {x: x - r, y: y - r, w: size, h: size};
-
-				shouldFill && ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-				shouldStroke && ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-			} else {
-				ctx.beginPath();
-				ctx.arc(x, y, r, 0, Math.PI * 2);
-				shouldFill && ctx.fill();
-				shouldStroke && ctx.stroke();
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -455,9 +418,8 @@ export default class CanvasPainter {
 	private withStyle(style: CanvasStyle | undefined, draw: DrawCallback): void {
 		if (style) {
 			this.withState(ctx => {
-				this.applyStyle(style);
-				draw(ctx);
-			});
+                throw new Error("STUB");
+            });
 		} else {
 			draw(this.ctx);
 		}

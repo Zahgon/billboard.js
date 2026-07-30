@@ -12,8 +12,8 @@ import type {IDataRow} from "../data/IData";
 // Grid position and text anchor helpers
 const GRID_FOCUS_SELECTOR = `line.${$FOCUS.xgridFocus}:not(.${$FOCUS.xgridFocusContinuous}), ` +
 	`line.${$FOCUS.ygridFocus}`;
-const _getGridTextAnchor = d => isValue(d.position) || "end";
-const _getGridTextDx = d => (d.position === "start" ? 4 : (d.position === "middle" ? 0 : -4));
+const _getGridTextAnchor = d => { throw new Error("STUB"); };
+const _getGridTextDx = d => { throw new Error("STUB"); };
 
 /**
  * Get current grid focus line selection.
@@ -27,7 +27,7 @@ function _getGridFocusEl($$): d3Selection {
 	const mainNode = main.node();
 	const cachedNodes = cached?.nodes?.() || [];
 
-	return cachedNodes.length && cachedNodes.every(node => mainNode?.contains(node)) ?
+	return cachedNodes.length && cachedNodes.every(node => { throw new Error("STUB"); }) ?
 		cached :
 		(state._gridFocusEl = main.selectAll(GRID_FOCUS_SELECTOR));
 }
@@ -52,16 +52,8 @@ function _hideContinuousGridFocus($$): void {
  */
 function _getGridTextX(isX, width, height): Function {
 	return d => {
-		let x = isX ? 0 : width;
-
-		if (d.position === "start") {
-			x = isX ? -height : 0;
-		} else if (d.position === "middle") {
-			x = (isX ? -height : width) / 2;
-		}
-
-		return x;
-	};
+        throw new Error("STUB");
+    };
 }
 
 /**
@@ -73,11 +65,8 @@ function _getGridTextX(isX, width, height): Function {
 function _smoothLines(el, type: string): void {
 	if (type === "grid") {
 		el.each(function() {
-			const g = d3Select(this);
-
-			["x1", "x2", "y1", "y2"]
-				.forEach(v => g.attr(v, +g.attr(v)));
-		});
+            throw new Error("STUB");
+        });
 	}
 }
 
@@ -86,7 +75,7 @@ export default {
 		const {config} = this;
 
 		return ["x", "y"]
-			.some(v => config[`grid_${v}_show`] || config[`grid_${v}_lines`].length);
+			.some(v => { throw new Error("STUB"); });
 	},
 
 	initGrid() {
@@ -120,9 +109,7 @@ export default {
 		const xgridData = $$.generateGridData(config.grid_x_type, scale.x);
 		const tickOffset = $$.axis.isCategorized() ? $$.axis.x.tickOffset() : 0;
 		const pos = d =>
-			(scale.zoom || scale.x)(d) + (
-				tickOffset * (isRotated ? -1 : 1)
-			);
+			{ throw new Error("STUB"); };
 
 		state.xgridAttr = isRotated ?
 			{
@@ -151,49 +138,14 @@ export default {
 
 		if (!withoutUpdate) {
 			grid.x.each(function() {
-				const grid = d3Select(this);
-
-				Object.keys(state.xgridAttr).forEach(id => {
-					grid.attr(id, state.xgridAttr[id]);
-				});
-
-				// hide the gridline overlapping the axis line (attr() returns a string)
-				grid.style("opacity", () => (
-					+grid.attr(isRotated ? "y1" : "x1") === (isRotated ? state.height : 0) ?
-						"0" :
-						null
-				));
-			});
+                throw new Error("STUB");
+            });
 		}
 	},
 
 	updateYGrid(): void {
-		const $$ = this;
-		const {axis, config, scale, state, $el: {grid, main}} = $$;
-		const isRotated = config.axis_rotated;
-		const pos = d => scale.y(d);
-		const gridValues = axis.y.getGeneratedTicks(config.grid_y_ticks) ||
-			$$.scale.y.ticks(config.grid_y_ticks);
-
-		grid.y = main.select(`.${$GRID.ygrids}`)
-			.selectAll(`.${$GRID.ygrid}`)
-			.data(gridValues);
-
-		grid.y.exit().remove();
-
-		grid.y = grid.y
-			.enter()
-			.append("line")
-			.attr("class", $GRID.ygrid)
-			.merge(grid.y);
-
-		grid.y.attr("x1", isRotated ? pos : 0)
-			.attr("x2", isRotated ? pos : state.width)
-			.attr("y1", isRotated ? 0 : pos)
-			.attr("y2", isRotated ? state.height : pos);
-
-		_smoothLines(grid.y, "grid");
-	},
+        throw new Error("STUB");
+    },
 
 	updateGrid() {
 		const $$ = this;
@@ -240,27 +192,20 @@ export default {
 		lines = gridLine.merge(lines);
 
 		lines.each(function(d) {
-			const g = d3Select(this);
-
-			if (g.select("text").empty() && d.text) {
-				g.append("text")
-					.style("opacity", "0");
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		$T(lines
-			.attr("class", d => `${$GRID[`${type}gridLine`]} ${d.class || ""}`.trim())
+			.attr("class", d => { throw new Error("STUB"); })
 			.select("text")
 			.attr("text-anchor", _getGridTextAnchor)
 			.attr("transform",
-				() => (isX ?
-					(isRotated ? null : "rotate(-90)") :
-					(isRotated ? "rotate(-90)" : null)))
+				() => { throw new Error("STUB"); })
 			.attr("dx", _getGridTextDx)
 			.attr("dy", -5))
 			.text(function(d) {
-				return d.text ?? this.remove();
-			});
+                throw new Error("STUB");
+            });
 
 		gridLines[type] = lines;
 	},
@@ -391,22 +336,8 @@ export default {
 			`line.bb-axis-tooltip-x, line.bb-axis-tooltip-y`
 		).style("visibility", null)
 			.each(function(d, i) {
-				const line = d3Select(this);
-
-				if (i === 0) {
-					line
-						.attr("x1", x)
-						.attr("x2", x)
-						.attr("y1", i ? 0 : height)
-						.attr("y2", i ? height : 0);
-				} else {
-					line
-						.attr("x1", i ? 0 : width)
-						.attr("x2", i ? width : 0)
-						.attr("y1", y)
-						.attr("y2", y);
-				}
-			});
+                throw new Error("STUB");
+            });
 	},
 
 	hideAxisGridFocus() {
@@ -417,7 +348,7 @@ export default {
 		).style("visibility", "hidden");
 
 		Object.values($$.$el.axisTooltip)
-			.forEach((v: d3Selection) => v?.style("display", "none"));
+			.forEach((v: d3Selection) => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -434,7 +365,7 @@ export default {
 		const focusEl = _getGridFocusEl($$);
 
 		const dataToShow: IDataRow[] = (data || [focusEl.datum()]).filter(d =>
-			d && isValue($$.getBaseValue(d))
+			{ throw new Error("STUB"); }
 		);
 
 		// Hide when bubble/scatter/stanford plot exists
@@ -453,49 +384,8 @@ export default {
 			.style("visibility", null)
 			.data(dataToShow.concat(dataToShow))
 			.each(function(d) {
-				const el = d3Select(this);
-				const pos = {
-					x: xx(d),
-					y: $$.getYScaleById(d.id)(d.value)
-				};
-				let xy;
-
-				if (el.classed($FOCUS.xgridFocus)) {
-					// will contain 'x1, y1, x2, y2' order
-					xy = isRotated ?
-						[
-							null, // x1
-							pos.x, // y1
-							isEdge ? pos.y : width, // x2
-							pos.x // y2
-						] :
-						[
-							pos.x,
-							isEdge ? pos.y : null,
-							pos.x,
-							height
-						];
-				} else {
-					const isY2 = $$.axis.getId(d.id) === "y2";
-
-					xy = isRotated ?
-						[
-							pos.y, // x1
-							isEdge && !isY2 ? pos.x : null, // y1
-							pos.y, // x2
-							isEdge && isY2 ? pos.x : height // y2
-						] :
-						[
-							isEdge && isY2 ? pos.x : null,
-							pos.y,
-							isEdge && !isY2 ? pos.x : width,
-							pos.y
-						];
-				}
-
-				["x1", "y1", "x2", "y2"]
-					.forEach((v, i) => el.attr(v, xy[i]));
-			});
+                throw new Error("STUB");
+            });
 
 		_smoothLines(focusEl, "grid");
 		$$.showCircleFocus?.(data);
@@ -550,7 +440,7 @@ export default {
 
 		if (type === "year") {
 			const xDomain = $$.getXDomain($$.data.targets);
-			const [firstYear, lastYear] = xDomain.map(v => v.getFullYear());
+			const [firstYear, lastYear] = xDomain.map(v => { throw new Error("STUB"); });
 
 			for (let i = firstYear; i <= lastYear; i++) {
 				gridData.push(new Date(`${i}-01-01 00:00:00`));
@@ -559,7 +449,7 @@ export default {
 			gridData = scale.ticks(AXIS_DEFAULT_TICK_COUNT);
 
 			if (gridData.length > tickNum) { // use only int
-				gridData = gridData.filter(d => String(d).indexOf(".") < 0);
+				gridData = gridData.filter(d => { throw new Error("STUB"); });
 			}
 		}
 
@@ -569,27 +459,16 @@ export default {
 	getGridFilterToRemove(params): Function {
 		return params ?
 			line => {
-				let found = false;
-
-				(isArray(params) ? params.concat() : [params]).forEach(param => {
-					if (
-						(("value" in param && line.value === param.value) ||
-							("class" in param && line.class === param.class))
-					) {
-						found = true;
-					}
-				});
-
-				return found;
-			} :
-			() => true;
+                throw new Error("STUB");
+            } :
+			() => { throw new Error("STUB"); };
 	},
 
 	removeGridLines(params, forX?: boolean): void {
 		const $$ = this;
 		const {config, $T} = $$;
 		const toRemove = $$.getGridFilterToRemove(params);
-		const toShow = line => !toRemove(line);
+		const toShow = line => { throw new Error("STUB"); };
 		const classLines = forX ? $GRID.xgridLines : $GRID.ygridLines;
 		const classLine = forX ? $GRID.xgridLine : $GRID.ygridLine;
 

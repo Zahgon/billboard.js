@@ -14,20 +14,8 @@ export default class AxisRendererHelper {
 	private charSize = {};
 
 	constructor(owner) {
-		const scale = getScale();
-		const {config, params} = owner;
-
-		this.owner = owner;
-		this.config = config;
-		this.scale = scale;
-
-		if (config.noTransition || !params.config.transition_duration) {
-			config.withoutTransition = true;
-		}
-
-		// set range
-		config.range = this.scaleExtent((params.orgXScale || scale).range());
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Compute a character dimension
@@ -52,17 +40,8 @@ export default class AxisRendererHelper {
 		!text.empty() && text
 			.text("0")
 			.call((el: d3Selection) => {
-				try {
-					const {width, height} = getBBox(el.node(), true);
-
-					if (width && height) {
-						size.w = width;
-						size.h = height;
-					}
-				} finally {
-					el.text("");
-				}
-			});
+                throw new Error("STUB");
+            });
 
 		this.charSize[orient] = size;
 
@@ -78,16 +57,12 @@ export default class AxisRendererHelper {
 	getTickTransformSetter(id: string): (selection: d3Selection, scale) => void {
 		const {config} = this;
 		const fn = id === "x" ?
-			value => `translate(${value + config.tickOffset},0)` :
-			value => `translate(0,${value})`;
+			value => { throw new Error("STUB"); } :
+			value => { throw new Error("STUB"); };
 
 		return (selection, scale) => {
-			selection.attr("transform", d => {
-				const x = scale(d);
-
-				return isValue(d) ? fn(x) : null;
-			});
-		};
+            throw new Error("STUB");
+        };
 	}
 
 	scaleExtent(domain: [number, number]): [number, number] {

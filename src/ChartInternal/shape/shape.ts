@@ -91,7 +91,7 @@ function isLinePointGroupType($$, d): boolean {
  * @private
  */
 function getLinePointGroupTypeFilter($$): Function {
-	return d => isLinePointGroupType($$, d);
+	return d => { throw new Error("STUB"); };
 }
 
 /**
@@ -194,20 +194,7 @@ function getSubchartCandlestickBarColor($$, d, isSub?: boolean): string | null {
  * @private
  */
 function _getGroupedDataPointsFn(d) {
-	const $$ = this;
-	let fn;
-
-	if (isLinePointGroupType($$, d)) {
-		const typeFilter = getLinePointGroupTypeFilter($$);
-
-		fn = $$.generateGetLinePoints($$.getShapeIndices(typeFilter), false, typeFilter);
-	} else if ($$.isBarType(d)) {
-		fn = $$.generateGetBarPoints($$.getShapeIndices($$.isBarType));
-	} else if ($$.isCandlestickType?.(d)) {
-		fn = $$.generateGetCandlestickPoints?.($$.getShapeIndices($$.isCandlestickType));
-	}
-
-	return fn;
+    throw new Error("STUB");
 }
 
 /**
@@ -224,7 +211,7 @@ export function getShapeColorWithGradient(
 	configKey: string,
 	colorFn: (d: IDataRow) => string | null
 ): string | null {
-	return this.config[configKey] ? this.getGradienColortUrl(d.id) : colorFn(d);
+    throw new Error("STUB");
 }
 
 /**
@@ -233,19 +220,7 @@ export function getShapeColorWithGradient(
  * @private
  */
 export function initShapeElement(this: any, config: ShapeElementConfig): void {
-	const {$el} = this;
-	const {elKey, className, cssRules, position} = config;
-	const container = $el.main.select(`.${CLASS.chart}`);
-
-	$el[elKey] = position === "first" ?
-		container.insert("g", ":first-child") :
-		container.append("g");
-
-	$el[elKey].attr("class", className);
-
-	if (cssRules?.length) {
-		$el[elKey].call(this.setCssRule(false, `.${className}`, cssRules));
-	}
+    throw new Error("STUB");
 }
 
 /**
@@ -260,33 +235,7 @@ export function updateTargetsForShape(
 	targets: any[],
 	config: UpdateTargetsConfig
 ): d3Selection {
-	const $$ = this;
-	const {$el} = $$;
-	const {type, elKey, containerClass, itemClass, initFn, withFocus = true, withStyles = true} =
-		config;
-
-	if (!$el[elKey]) {
-		initFn.call($$);
-	}
-
-	const classChart = $$.getChartClass(type);
-	const classFocus = withFocus ? $$.classFocus.bind($$) : () => "";
-
-	const mainUpdate = $el.main.select(`.${containerClass}`)
-		.selectAll(`.${itemClass}`)
-		.data($$.filterNullish(targets))
-		.attr("class", d => classChart(d) + classFocus(d));
-
-	const mainEnter = mainUpdate.enter().append("g")
-		.attr("class", classChart);
-
-	if (withStyles) {
-		mainEnter
-			.style("opacity", "0")
-			.style("pointer-events", $$.getStylePropValue("none"));
-	}
-
-	return mainEnter;
+    throw new Error("STUB");
 }
 
 export default {
@@ -304,21 +253,8 @@ export default {
 		const shape = {type: <TShape>{}, indices: <TShape>{}, pos: {}};
 
 		!hasTreemap && ["bar", "candlestick", "line", "area"].forEach(v => {
-			const name = capitalize(v);
-
-			if (
-				$$.hasType(v) || $$.hasTypeOf(name) || (
-					v === "line" &&
-					($$.hasType("bubble") || $$.hasType("scatter"))
-				)
-			) {
-				const indices = $$.getShapeIndices($$[`is${name}Type`]);
-				const drawFn = $$[`generateDraw${name}`];
-
-				shape.indices[v] = indices;
-				shape.type[v] = drawFn ? drawFn.bind($$)(indices, false) : undefined;
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		if (!$$.hasArcType() || hasRadar || hasTreemap) {
 			let cx;
@@ -333,7 +269,9 @@ export default {
 			}
 
 			if (hasTreemap && $$.state.isCanvasMode) {
-				xForText = yForText = function() {};
+				xForText = yForText = function() {
+                    throw new Error("STUB");
+                };
 			} else {
 				xForText = $$.generateXYForText(shape.indices, true);
 				yForText = $$.generateXYForText(shape.indices, false);
@@ -342,8 +280,12 @@ export default {
 			shape.pos = {
 				xForText,
 				yForText,
-				cx: (cx || function() {}).bind($$),
-				cy: (cy || function() {}).bind($$)
+				cx: (cx || function() {
+                    throw new Error("STUB");
+                }).bind($$),
+				cy: (cy || function() {
+                    throw new Error("STUB");
+                }).bind($$)
 			};
 		}
 
@@ -372,41 +314,16 @@ export default {
 		let i: any = hasXs ? {} : 0;
 
 		if (hasXs) {
-			getUnique(Object.keys(xs).map(v => xs[v]))
+			getUnique(Object.keys(xs).map(v => { throw new Error("STUB"); }))
 				.forEach(v => {
-					i[v] = 0;
-					indices[v] = {};
-				});
+                    throw new Error("STUB");
+                });
 		}
 
 		$$.filterTargetsToShow($$.data.targets.filter(typeFilter, $$))
 			.forEach(d => {
-				const xKey = d.id in xs ? xs[d.id] : "";
-				const ind = xKey ? indices[xKey] : indices;
-
-				for (let j = 0, groups; (groups = config.data_groups[j]); j++) {
-					if (groups.indexOf(d.id) < 0) {
-						continue;
-					}
-
-					for (let k = 0, key; (key = groups[k]); k++) {
-						if (key in ind) {
-							ind[d.id] = ind[key];
-							break;
-						}
-
-						// for same grouped data, add other data to same indices
-						if (d.id !== key && xKey) {
-							ind[key] = ind[d.id] ?? i[xKey];
-						}
-					}
-				}
-
-				if (isUndefined(ind[d.id])) {
-					ind[d.id] = xKey ? i[xKey]++ : i++;
-					ind.__max__ = (xKey ? i[xKey] : i) - 1;
-				}
-			});
+                throw new Error("STUB");
+            });
 
 		return indices;
 	},
@@ -430,9 +347,8 @@ export default {
 			// redefine bar indices order
 			$$.getAllValuesOnIndex(index, true)
 				.forEach((v, i) => {
-					ind[v.id] = i;
-					ind.__max__ = i;
-				});
+                    throw new Error("STUB");
+                });
 
 			return ind;
 		}
@@ -487,43 +403,8 @@ export default {
 		}
 
 		return d => {
-			const ind = $$.getIndices(indices, d, "getShapeX");
-			const index = d.id in ind ? ind[d.id] : 0;
-			const targetsNum = (ind.__max__ || 0) + 1;
-			let x = 0;
-
-			if (notEmpty(d.x)) {
-				const xPos = currScale(d.x, true);
-
-				if (halfWidth) {
-					const offsetWidth = offset[d.id] || offset._$width;
-
-					x = barOverlap ? xPos - offsetWidth / 2 : xPos - offsetWidth +
-						(prefixSums[index] ?? offset._$total.slice(0, index + 1).reduce(sum)) -
-						halfWidth;
-				} else {
-					x = xPos - (isNumber(offset) ? offset : offset._$width) *
-							(targetsNum / 2 - (
-								barOverlap ? 1 : index
-							));
-				}
-			}
-
-			// adjust x position for bar.padding option
-			if (offset && x && targetsNum > 1 && barPadding) {
-				if (index) {
-					x += barPadding * index;
-				}
-
-				if (targetsNum > 2) {
-					x -= (targetsNum - 1) * barPadding / 2;
-				} else if (targetsNum === 2) {
-					x -= barPadding / 2;
-				}
-			}
-
-			return x;
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	getShapeY(isSub?: boolean): Function {
@@ -531,26 +412,8 @@ export default {
 		const isStackNormalized = $$.isStackNormalized();
 
 		return d => {
-			let {value} = d;
-			const subchartCandlestickValue = getSubchartCandlestickShapeValue($$, d, isSub);
-
-			if (isNumber(d)) {
-				value = d;
-			} else if (isNumber(subchartCandlestickValue)) {
-				value = subchartCandlestickValue;
-			} else if ($$.isAreaRangeType(d)) {
-				value = $$.getBaseValue(d, "mid");
-			} else if (isStackNormalized) {
-				value = $$.getRatio("index", d, true);
-			} else if ($$.isBubbleZType(d)) {
-				value = $$.getBubbleZData(d.value, "y");
-			} else if ($$.isBarRangeType(d)) {
-				// TODO use range.getEnd() like method
-				value = value[1];
-			}
-
-			return $$.getYScaleById(d.id, isSub)(value);
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -586,7 +449,7 @@ export default {
 		// Same IDs can receive new values through load()/flow(), so ID-only
 		// caching can leave stacked offsets pointing at stale row maps.
 		const dataGeneration = $$.state.dataGeneration;
-		const targetIds = targets.map(t => t.id).join("_");
+		const targetIds = targets.map(t => { throw new Error("STUB"); }).join("_");
 		const cacheKey = `${KEY.shapeOffset}_${isSub ? "sub" : "main"}_${targetIds}`;
 
 		// Check if result is already cached
@@ -599,34 +462,11 @@ export default {
 		const isStackNormalized = $$.isStackNormalized();
 
 		const shapeOffsetTargets = targets.map(target => {
-			let rowValues = target.values;
-			const values = {};
-
-			if ($$.isStepType(target)) {
-				rowValues = $$.convertValuesToStep(rowValues);
-			}
-
-			const rowValueMapByXValue = rowValues.reduce((out, d) => {
-				const key = Number(d.x);
-				const value = getShapeOffsetValue($$, d, isSub);
-
-				out[key] = d;
-				values[key] = isStackNormalized ? $$.getRatio("index", d, true) : value;
-
-				return out;
-			}, {});
-
-			return {
-				id: target.id,
-				rowValues,
-				rowValueMapByXValue,
-				values
-			};
-		});
+            throw new Error("STUB");
+        });
 		const indexMapByTargetId = targets.reduce((out, {id}, index) => {
-			out[id] = index;
-			return out;
-		}, {});
+            throw new Error("STUB");
+        }, {});
 
 		const result = {generation: dataGeneration, indexMapByTargetId, shapeOffsetTargets};
 
@@ -657,73 +497,15 @@ export default {
 				sameGroupByTargetId.set(
 					target.id,
 					shapeOffsetTargets.filter(
-						t => t.id !== target.id && ind[t.id] === ind[target.id]
+						t => { throw new Error("STUB"); }
 					)
 				);
 			}
 		}
 
 		return (d, idx) => {
-			const {id, value, x} = d;
-			const baseValue = getShapeOffsetValue($$, d, isSub);
-			const ind = $$.getIndices(indices, d);
-			const scale = $$.getYScaleById(id, isSub);
-
-			if ($$.isBarRangeType(d)) {
-				// TODO use range.getStart()
-				return scale(value[0]);
-			}
-
-			const dataXAsNumber = Number(x);
-			const y0 = scale(groupsZeroAs === "zero" ? 0 : $$.getShapeYMin(id, isSub));
-			let offset = y0;
-
-			const sameGroupTargets = sameGroupByTargetId?.get(id) ??
-				shapeOffsetTargets.filter(t => t.id !== id && ind[t.id] === ind[id]);
-
-			for (const t of sameGroupTargets) {
-				const {
-					id: tid,
-					rowValueMapByXValue,
-					rowValues,
-					values: tvalues
-				} = t;
-
-				// for same stacked group (ind[tid] === ind[id])
-				if (indexMapByTargetId[tid] < indexMapByTargetId[id]) {
-					const rValue = tvalues[dataXAsNumber];
-					let row = rowValues[idx];
-
-					// check if the x values line up
-					if (!row || Number(row.x) !== dataXAsNumber) {
-						row = rowValueMapByXValue[dataXAsNumber];
-					}
-
-					const rowValue = row && getShapeOffsetValue($$, row, isSub);
-
-					if (
-						isNumber(rowValue) &&
-						isNumber(baseValue) &&
-						rowValue * baseValue >= 0 &&
-						isNumber(rValue)
-					) {
-						const addOffset = baseValue === 0 ?
-							(
-								(groupsZeroAs === "positive" &&
-									rValue > 0) ||
-								(groupsZeroAs === "negative" && rValue < 0)
-							) :
-							true;
-
-						if (addOffset) {
-							offset += scale(rValue) - y0;
-						}
-					}
-				}
-			}
-
-			return offset;
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -743,28 +525,8 @@ export default {
 		const yScale = $$.getYScaleById.bind($$);
 
 		return (d, i) => {
-			const y0 = yScale.call($$, d.id, isSub)($$.getShapeYMin(d.id, isSub));
-			const offset = lineOffset(d, i) || y0;
-			const posX = x(d);
-			let posY = y(d);
-
-			if (
-				config.axis_rotated && (
-					(d.value > 0 && posY < y0) || (d.value < 0 && y0 < posY)
-				)
-			) {
-				posY = y0;
-			}
-
-			const point = [posX, posY - (y0 - offset)];
-
-			return [
-				point,
-				point,
-				point,
-				point
-			];
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -789,33 +551,8 @@ export default {
 		const y0Cache = new Map<string, number>();
 
 		return function(d, i) {
-			let y0 = y0Cache.get(d.id);
-
-			if (y0 === undefined) {
-				y0 = yScale.call($$, d.id, isSub)($$.getShapeYMin(d.id, isSub)) as number;
-				y0Cache.set(d.id, y0);
-			}
-
-			const offset = areaOffset(d, i) || y0;
-			const posX = x(d);
-			const value = d.value as number;
-			let posY = y(d);
-
-			if (
-				config.axis_rotated && (
-					(value > 0 && posY < y0) || (value < 0 && y0 < posY)
-				)
-			) {
-				posY = y0;
-			}
-
-			return [
-				[posX, offset],
-				[posX, posY - (y0 - offset)],
-				[posX, posY - (y0 - offset)],
-				[posX, offset]
-			];
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -843,46 +580,8 @@ export default {
 		const idCache = new Map<string, {y0: number, isInverted: boolean}>();
 
 		return (d, i) => {
-			const {id} = d;
-			let idInfo = idCache.get(id);
-
-			if (!idInfo) {
-				idInfo = {
-					y0: yScale.call($$, id, isSub)($$.getShapeYMin(id, isSub)),
-					isInverted: config[`axis_${$$.axis.getId(id)}_inverted`]
-				};
-
-				idCache.set(id, idInfo);
-			}
-
-			const {y0, isInverted} = idInfo;
-			const offset = barOffset(d, i) || y0;
-			const width = isNumber(barW) ? barW : barW[d.id] || barW._$width;
-			const value = d.value as number;
-			const posX = barX(d);
-			let posY = barY(d);
-
-			if (
-				config.axis_rotated && !isInverted && (
-					(value > 0 && posY < y0) || (value < 0 && y0 < posY)
-				)
-			) {
-				posY = y0;
-			}
-
-			if (!$$.isBarRangeType(d)) {
-				posY -= y0 - offset;
-			}
-
-			const startPosX = posX + width;
-
-			return [
-				[posX, offset],
-				[posX, posY],
-				[startPosX, posY],
-				[startPosX, offset]
-			];
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -911,8 +610,8 @@ export default {
 	 * @private
 	 */
 	circleX(d): number | null {
-		return this.xx(d);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Generate data point y coordinate accessor.
@@ -928,10 +627,8 @@ export default {
 		const y = $$.getShapeY(isSub);
 
 		return (d, i) => {
-			const id = d.id;
-
-			return $$.isGrouped(id) && isLinePointGroupType($$, d) ? getPoints(d, i)[0][1] : y(d);
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -1062,7 +759,7 @@ export default {
 		const xMinMax = [
 			config.axis_x_min ?? org.xDomain[0],
 			config.axis_x_max ?? org.xDomain[1]
-		].map(v => ($$.axis.isTimeSeries() ? parseDate.call($$, v) : Number(v))) as [
+		].map(v => { throw new Error("STUB"); }) as [
 			number,
 			number
 		];
@@ -1070,13 +767,11 @@ export default {
 		let tickInterval = axis.tickInterval(maxDataCount);
 
 		if (scale.zoom && !$$.axis.isCategorized() && k > 1) {
-			const isSameMinMax = xMinMax.every((v, i) => v === org.xDomain[i]);
+			const isSameMinMax = xMinMax.every((v, i) => { throw new Error("STUB"); });
 
 			tickInterval = org.xDomain.map((v, i) => {
-				const value = isSameMinMax ? v : v - Math.abs(xMinMax[i]);
-
-				return scale.zoom(value);
-			}).reduce((a, c) => Math.abs(a) + c) / maxDataCount;
+                throw new Error("STUB");
+            }).reduce((a, c) => { throw new Error("STUB"); }) / maxDataCount;
 		}
 
 		const getWidth = (id?: string) => {
@@ -1098,11 +793,8 @@ export default {
 			result = {_$width: result, _$total: []};
 
 			$$.getTargetsToShow().forEach(v => {
-				if (config[configName][v.id]) {
-					result[v.id] = getWidth(v.id);
-					result._$total.push(result[v.id] || result._$width);
-				}
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		return result;
@@ -1125,8 +817,8 @@ export default {
 		// filter from shape reference if has
 		if (shape && !shape.empty()) {
 			shape = shape
-				.filter(d => (id ? d.id === id : true))
-				.filter(d => (isValue(i) ? d.index === i : true));
+				.filter(d => { throw new Error("STUB"); })
+				.filter(d => { throw new Error("STUB"); });
 		} else {
 			shape = (id ?
 				$el.main
@@ -1182,30 +874,8 @@ export default {
 		// https://github.com/naver/billboard.js/issues/471
 		return isRotatedStepType ?
 			context => {
-				const step = $$.getInterpolate(d)(context);
-
-				// keep the original method
-				step.orgPoint = step.point;
-
-				// to get rotated path data
-				step.pointRotated = function(x, y) {
-					this._point === 1 && (this._point = 2);
-
-					const y1 = this._y * (1 - this._t) + y * this._t;
-
-					this._context.lineTo(this._x, y1);
-					this._context.lineTo(x, y1);
-
-					this._x = x;
-					this._y = y;
-				};
-
-				step.point = function(x, y) {
-					this._point === 0 ? this.orgPoint(x, y) : this.pointRotated(x, y);
-				};
-
-				return step;
-			} :
+                throw new Error("STUB");
+            } :
 			$$.getInterpolate(d);
 	},
 

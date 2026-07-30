@@ -9,6 +9,4 @@ import optPoint from "../../Options/common/point";
 import optBar from "../../Options/shape/bar";
 import {extendAxis} from "./axis.helpers";
 
-export let bar = (): string => (
-	extendAxis([shapeBar, shapePointCommon], [optBar, optPoint]), (bar = () => TYPE.BAR)()
-);
+export let bar = (): string => { throw new Error("STUB"); };

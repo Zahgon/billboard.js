@@ -59,18 +59,6 @@ export default {
 	 *  });
 	 */
 	xs(xs?: Record<string, number[]>): Record<string, number[]> {
-		const $$ = this.internal;
-
-		if (isObject(xs)) {
-			$$.updateTargetXs($$.data.targets, xs);
-			$$.state.dirty.data = true;
-
-			$$.redraw({
-				withUpdateOrgXDomain: true,
-				withUpdateXDomain: true
-			});
-		}
-
-		return $$.data.xs;
-	}
+        throw new Error("STUB");
+    }
 };

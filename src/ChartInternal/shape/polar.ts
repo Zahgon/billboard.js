@@ -30,20 +30,8 @@ export default {
 	 * @private
 	 */
 	initPolar(): void {
-		const $$ = this;
-		const {$el: {arcs}, config} = $$;
-		const levelTextShow: boolean = config.polar_level_text_show;
-		const levelTextBgColor: string = config.polar_level_text_backgroundColor;
-
-		// append <g> for level
-		arcs.levels = arcs.append("g")
-			.attr("class", $LEVEL.levels);
-
-		// set level text background color
-		if (levelTextShow && levelTextBgColor) {
-			$$.generateTextBGColorFilter(levelTextBgColor);
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get polar outer radius according to the data value
@@ -64,9 +52,8 @@ export default {
 	 * @private
 	 */
 	updateTargetsForPolar(targets: IData[]): void {
-		// borrow from Arc
-		this.updateTargetsForArc(targets);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Called whenever redraw happens
@@ -91,8 +78,10 @@ export default {
 		const dataMax = getDataMax($$);
 		const levelData = getRange(0, depth);
 		const outerRadius = state.radius;
-		const levelRatio = levelData.map(l => outerRadius * ((l + 1) / depth));
-		const levelTextFormat = (config.polar_level_text_format || function() {}).bind($$.api);
+		const levelRatio = levelData.map(l => { throw new Error("STUB"); });
+		const levelTextFormat = (config.polar_level_text_format || function() {
+            throw new Error("STUB");
+        }).bind($$.api);
 
 		const level = levels
 			.selectAll(`.${$LEVEL.level}`)
@@ -101,7 +90,7 @@ export default {
 		level.exit().remove();
 
 		const levelEnter = level.enter().append("g")
-			.attr("class", (d, i) => `${$LEVEL.level} ${$LEVEL.level}-${i}`);
+			.attr("class", (d, i) => { throw new Error("STUB"); });
 
 		// cx, cy, translate: Set center as origin (0,0) so that it can share same center with arcs
 		levelEnter.append("circle");
@@ -112,7 +101,7 @@ export default {
 			.style("visibility", config.polar_level_show ? null : "hidden")
 			.attr("cx", 0)
 			.attr("cy", 0)
-			.attr("r", d => levelRatio[d]);
+			.attr("r", d => { throw new Error("STUB"); });
 
 		if (config.polar_level_text_show) {
 			const levelTextBackgroundColor = config.polar_level_text_backgroundColor;
@@ -126,9 +115,9 @@ export default {
 			levelEnter
 				.merge(level)
 				.selectAll("text")
-				.attr("dy", d => -levelRatio[d] + 5)
+				.attr("dy", d => { throw new Error("STUB"); })
 				.attr("filter", levelTextBackgroundColor ? `url(${defsId})` : null)
-				.text(d => levelTextFormat(dataMax / levelData.length * (d + 1)));
+				.text(d => { throw new Error("STUB"); });
 		}
 	}
 };

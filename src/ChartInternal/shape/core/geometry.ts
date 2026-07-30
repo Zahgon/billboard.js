@@ -29,9 +29,9 @@ export function getRenderPoint($$, point: number[]): RenderPoint {
  * @private
  */
 export function getRenderRect($$, points: number[][], minSize = 1): RenderRect {
-	const renderPoints = points.map(point => getRenderPoint($$, point));
-	const xs = renderPoints.map(([x]) => x);
-	const ys = renderPoints.map(([, y]) => y);
+	const renderPoints = points.map(point => { throw new Error("STUB"); });
+	const xs = renderPoints.map(([x]) => { throw new Error("STUB"); });
+	const ys = renderPoints.map(([, y]) => { throw new Error("STUB"); });
 	const rawX = Math.min(...xs);
 	const rawY = Math.min(...ys);
 	const rawW = Math.max(...xs) - rawX;

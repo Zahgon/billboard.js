@@ -28,26 +28,7 @@ function redrawCanvasRegions($$): void {
  * @private
  */
 function regionsFn(regions: RegionsParam | RegionsAddParam, isAdd = false): RegionsParam {
-	const $$ = this.internal;
-	const {config} = $$;
-	const withTransition = config.transition_duration && isTabVisible();
-
-	if (!regions) {
-		return config.regions;
-	}
-
-	config.regions = isAdd ? config.regions.concat(regions) : regions as RegionsParam;
-
-	if ($$.state.isCanvasMode) {
-		redrawCanvasRegions($$);
-
-		return config.regions;
-	}
-
-	$$.updateRegion();
-	$$.redrawRegion(withTransition);
-
-	return config.regions;
+    throw new Error("STUB");
 }
 
 /**
@@ -114,8 +95,8 @@ extend(regions, {
 	 * ]);
 	 */
 	add: function(regions: RegionsAddParam): RegionsParam {
-		return regionsFn.bind(this)(regions, true);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Remove regions.<br><br>
@@ -137,72 +118,8 @@ extend(regions, {
 	 * chart.regions.remove();
 	 */
 	remove: function(optionsValue: RegionsRemoveParam): RegionsParam {
-		const $$ = this.internal;
-		const {config, $T} = $$;
-
-		const options = optionsValue || {};
-		const classes = getOption(options, "classes", [$REGION.region]);
-		let regions = config.regions;
-
-		if ($$.state.isCanvasMode) {
-			if (Object.keys(options).length) {
-				regions = regions.filter(region => {
-					let found = false;
-
-					if (!region.class) {
-						return true;
-					}
-
-					region.class.split(" ").forEach(c => {
-						if (classes.indexOf(c) >= 0) {
-							found = true;
-						}
-					});
-
-					return !found;
-				});
-
-				config.regions = regions;
-			} else {
-				config.regions = [];
-			}
-
-			redrawCanvasRegions($$);
-
-			return config.regions;
-		}
-
-		const regionNodes = $$.$el.main.select(`.${$REGION.regions}`)
-			.selectAll(classes.map(c => `.${c}`));
-
-		$T(regionNodes)
-			.style("opacity", "0")
-			.remove();
-
-		if (Object.keys(options).length) {
-			regions = regions.filter(region => {
-				let found = false;
-
-				if (!region.class) {
-					return true;
-				}
-
-				region.class.split(" ").forEach(c => {
-					if (classes.indexOf(c) >= 0) {
-						found = true;
-					}
-				});
-
-				return !found;
-			});
-
-			config.regions = regions;
-		} else {
-			config.regions = [];
-		}
-
-		return regions;
-	}
+        throw new Error("STUB");
+    }
 });
 
 export default {regions};

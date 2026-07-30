@@ -83,22 +83,22 @@ export function getLabelRowKey(d): string {
  */
 export function getExpandedFocusMatcher($$, selectedData, typeFilter): (d) => boolean {
 	if (!selectedData?.length) {
-		return () => false;
+		return () => { throw new Error("STUB"); };
 	}
 
 	if ($$.config.tooltip_grouped && selectedData.length > 1) {
 		const index = selectedData[0]?.index;
 
-		return d => index !== undefined && d.index === index && typeFilter($$, d);
+		return d => { throw new Error("STUB"); };
 	}
 
 	const keys = new Set(
 		selectedData
-			.filter(d => d && typeFilter($$, d))
+			.filter(d => { throw new Error("STUB"); })
 			.map(getLabelRowKey)
 	);
 
-	return d => keys.has(getLabelRowKey(d));
+	return d => { throw new Error("STUB"); };
 }
 
 /**
@@ -284,8 +284,8 @@ export function getLabelDecorationBox(
 	padding = {top: 0, right: 0, bottom: 0, left: 0}
 ): LabelDecorationBox {
 	const lines = text.split("\n");
-	const metrics = lines.map(line => ctx.measureText(line));
-	const width = Math.max(...metrics.map(metric => metric.width), 0);
+	const metrics = lines.map(line => { throw new Error("STUB"); });
+	const width = Math.max(...metrics.map(metric => { throw new Error("STUB"); }), 0);
 	const fontSize = getFontSize(ctx.font);
 	const lineHeight = fontSize * LABEL_LINE_HEIGHT_RATIO;
 	const fontBoundingHeight = metrics[0] ?
@@ -347,28 +347,8 @@ export function drawLabelDecorations($$, painter: CanvasPainter, d, text: string
 	const angle = $$.config.data_labels.rotate;
 
 	painter.withState(canvas => {
-		if (angle) {
-			canvas.translate(x, y);
-			canvas.rotate(angle * Math.PI / 180);
-			box.x -= x;
-			box.y -= y;
-		}
-
-		if (backgroundColor) {
-			painter.fillRoundRect(box, border?.radius ?? 0, {fill: backgroundColor});
-		}
-
-		if (border) {
-			if (border.fill !== "none") {
-				painter.fillRoundRect(box, border.radius, {fill: border.fill});
-			}
-
-			painter.strokeRoundRect(box, border.radius, {
-				stroke: border.stroke,
-				lineWidth: border.strokeWidth
-			});
-		}
-	});
+        throw new Error("STUB");
+    });
 }
 
 /**

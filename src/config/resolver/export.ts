@@ -24,5 +24,5 @@ export let exportApi = (): Record<string, never> => {
 	// Direct assignment overrides the stub installed by Chart/api/stubs.
 	// (extend() skips existing keys; direct assignment makes the override explicit.)
 	(Chart.prototype as any).export = apiExport.export;
-	return (exportApi = () => ({}))();
+	return (exportApi = () => { throw new Error("STUB"); })();
 };

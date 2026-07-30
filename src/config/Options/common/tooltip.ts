@@ -248,9 +248,17 @@ export default {
 	tooltip_init_position: undefined,
 	tooltip_linked: false,
 	tooltip_linked_name: "",
-	tooltip_onshow: () => {},
-	tooltip_onhide: () => {},
-	tooltip_onshown: () => {},
-	tooltip_onhidden: () => {},
+	tooltip_onshow: () => {
+        throw new Error("STUB");
+    },
+	tooltip_onhide: () => {
+        throw new Error("STUB");
+    },
+	tooltip_onshown: () => {
+        throw new Error("STUB");
+    },
+	tooltip_onhidden: () => {
+        throw new Error("STUB");
+    },
 	tooltip_order: <string | Function | null>null
 };

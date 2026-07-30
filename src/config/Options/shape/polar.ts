@@ -171,7 +171,7 @@ export default {
 	polar_level_max: <number | undefined>undefined,
 	polar_level_show: true,
 	polar_level_text_backgroundColor: "#fff",
-	polar_level_text_format: (x: number) => (x % 1 === 0 ? x : x.toFixed(2)),
+	polar_level_text_format: (x: number) => { throw new Error("STUB"); },
 	polar_level_text_show: true,
 	polar_padAngle: 0,
 	polar_padding: 0,

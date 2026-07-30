@@ -25,55 +25,7 @@ import {extend, parseDate} from "../../module/util";
  */
 // NOTE: declared function assigning to variable to prevent duplicated method generation in JSDoc.
 const subchart = function<T = TDomain[]>(domainValue?: T): T | undefined {
-	const $$ = this.internal;
-	const {axis, brush, config, scale: {x, subX}, state} = $$;
-	let domain;
-
-	if (state.isCanvasMode) {
-		if (config.subchart_show) {
-			domain = domainValue;
-
-			if (Array.isArray(domain)) {
-				domain = axis.isTimeSeries() ? domain.map(x => parseDate.bind($$)(x)) : domain;
-				domain = $$.setCanvasSubchartDomain(domain) || state.domain;
-			} else {
-				domain = state.domain ?? x.orgDomain();
-			}
-		}
-
-		return domain as T;
-	}
-
-	if (config.subchart_show) {
-		domain = domainValue;
-
-		if (Array.isArray(domain)) {
-			if (axis.isTimeSeries()) {
-				domain = domain.map(x => parseDate.bind($$)(x));
-			}
-
-			const isWithinRange = $$.withinRange(
-				domain,
-				$$.getZoomDomain("subX", true),
-				$$.getZoomDomain("subX")
-			);
-
-			if (isWithinRange) {
-				// store a copy: brush events mutate state.domain in place,
-				// which would corrupt the caller-passed array
-				state.domain = domain.slice();
-
-				brush.move(
-					brush.getSelection(),
-					domain.map(subX)
-				);
-			}
-		} else {
-			domain = state.domain ?? x.orgDomain();
-		}
-	}
-
-	return domain as T;
+    throw new Error("STUB");
 };
 
 extend(subchart, {

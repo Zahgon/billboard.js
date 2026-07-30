@@ -28,11 +28,8 @@ const legend = {
 	 * chart.legend.show();
 	 */
 	show: function(targetIds?: string | string[]): void {
-		const $$ = this.internal;
-
-		$$.showLegend($$.mapToTargetIds(targetIds));
-		$$.updateAndRedraw({withLegend: true});
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Hide legend for each target.
@@ -54,11 +51,8 @@ const legend = {
 	 * chart.legend.hide();
 	 */
 	hide: function(targetIds?: string | string[]): void {
-		const $$ = this.internal;
-
-		$$.hideLegend($$.mapToTargetIds(targetIds));
-		$$.updateAndRedraw({withLegend: true});
-	}
+        throw new Error("STUB");
+    }
 };
 
 export default {legend};

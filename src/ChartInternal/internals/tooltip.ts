@@ -122,7 +122,7 @@ export default {
 
 		// determine formatter function
 		const titleFormat = isFunction(titleFn) ? titleFn.bind(api) : defaultTitleFormat;
-		const nameFormat = isFunction(nameFn) ? nameFn.bind(api) : (name => name);
+		const nameFormat = isFunction(nameFn) ? nameFn.bind(api) : (name => { throw new Error("STUB"); });
 		const boundValueFn = isFunction(valueFn) ? valueFn.bind(api) : null;
 		const valueFormat = (v, ratio, id, index) => {
 			let fn = boundValueFn;
@@ -134,7 +134,7 @@ export default {
 					($$.isStackNormalized() &&
 						(!$$.isStackNormalizedPerGroup() || $$.isGrouped(id)))
 				) {
-					fn = (v, ratio) => `${(ratio * 100).toFixed(2)}%`;
+					fn = (v, ratio) => { throw new Error("STUB"); };
 				} else {
 					fn = defaultValueFormat;
 				}
@@ -148,7 +148,7 @@ export default {
 			row => ($$.axis && $$.isBubbleZType(row) ?
 				$$.getBubbleZData(row.value, "z") :
 				$$.getBaseValue(row));
-		const getBgColor = $$.levelColor ? row => $$.levelColor(row.value) : row => color(row);
+		const getBgColor = $$.levelColor ? row => { throw new Error("STUB"); } : row => { throw new Error("STUB"); };
 		const contents = config.tooltip_contents;
 		const tplStr = contents.template;
 		const targetIds = $$.mapToTargetIds();
@@ -156,29 +156,18 @@ export default {
 		if (order === null && config.data_groups.length) {
 			// for stacked data, order should aligned with the visually displayed data
 			const ids = $$.orderTargets($$.data.targets)
-				.map(i2 => i2.id)
+				.map(i2 => { throw new Error("STUB"); })
 				.reverse();
 
 			d.sort((a, b) => {
-				let v1 = a ? a.value : null;
-				let v2 = b ? b.value : null;
-
-				if (v1 > 0 && v2 > 0) {
-					v1 = a.id ? ids.indexOf(a.id) : null;
-					v2 = b.id ? ids.indexOf(b.id) : null;
-				}
-
-				return v1 - v2;
-			});
+                throw new Error("STUB");
+            });
 		} else if (/^(asc|desc)$/.test(order)) {
 			const isAscending = order === "asc";
 
 			d.sort((a, b) => {
-				const v1 = a ? getRowValue(a) : null;
-				const v2 = b ? getRowValue(b) : null;
-
-				return isAscending ? v1 - v2 : v2 - v1;
-			});
+                throw new Error("STUB");
+            });
 		} else if (isFunction(order)) {
 			d.sort(order.bind(api));
 		}
@@ -223,7 +212,7 @@ export default {
 
 			if ($$.isAreaRangeType(row)) {
 				const [high, low] = ["high", "low"].map(v =>
-					valueFormat($$.getRangedData(row, v), ...param as [number, string, number])
+					{ throw new Error("STUB"); }
 				);
 				const mid = valueFormat(getRowValue(row), ...param as [number, string, number]);
 
@@ -231,15 +220,8 @@ export default {
 			} else if ($$.isCandlestickType(row)) {
 				const [open, high, low, close, volume] = ["open", "high", "low", "close", "volume"]
 					.map(v => {
-						const value = $$.getRangedData(row, v, "candlestick");
-
-						return value ?
-							valueFormat(
-								$$.getRangedData(row, v, "candlestick"),
-								...param as [number, string, number]
-							) :
-							undefined;
-					});
+                        throw new Error("STUB");
+                    });
 
 				value =
 					`<b>Open:</b> ${open} <b>High:</b> ${high} <b>Low:</b> ${low} <b>Close:</b> ${close}${
@@ -274,8 +256,8 @@ export default {
 					const index = targetIds.indexOf(row.id);
 
 					Object.keys(contents.text).forEach(key => {
-						contentValue[key] = contents.text[key][index];
-					});
+                        throw new Error("STUB");
+                    });
 				}
 
 				text += tplProcess(tpl[1], contentValue);
@@ -367,15 +349,8 @@ export default {
 			);
 
 			["top", "left"].forEach(v => {
-				const value = pos[v];
-
-				tooltip.style(v, `${value}px`);
-
-				// Remember left pos in percentage to be used on resize call
-				if (v === "left" && !datum.xPosInPercent) {
-					datum.xPosInPercent = value / state.current.width * 100;
-				}
-			});
+                throw new Error("STUB");
+            });
 		}
 	},
 
@@ -388,51 +363,8 @@ export default {
 	 */
 	getTooltipPositionViewBox(tWidth: number, tHeight: number,
 		currPos: Record<string, number>): {top: number, left: number} {
-		const $$ = this;
-		const {$el: {eventRect, svg}, config, state} = $$;
-
-		const isRotated = config.axis_rotated;
-		const hasArcType = $$.hasArcType() || state.hasFunnel || state.hasTreemap;
-		const target = (hasArcType ? svg : eventRect)?.node() ?? state.event.target;
-
-		let {x, y} = currPos;
-
-		if (state.hasAxis) {
-			x = isRotated ? x : currPos.xAxis;
-			y = isRotated ? currPos.xAxis : y;
-		}
-
-		// currPos value based on SVG coordinate
-		const ctm = getTransformCTM(target, x, y, false);
-		const rect = getBoundingRect(target);
-		const size = getTransformCTM(target, 20, 0, false).x;
-
-		let top = ctm.y;
-		let left = ctm.x + (tWidth / 2) + size;
-
-		if (hasArcType) {
-			if (state.hasFunnel || state.hasTreemap || state.hasRadar) {
-				left -= (tWidth / 2) + size;
-				top += tHeight;
-			} else {
-				top += rect.height / 2;
-				left += (rect.width / 2) - (tWidth - size);
-			}
-		}
-
-		if (left + tWidth > rect.width) {
-			left = rect.width - tWidth - size;
-		}
-
-		if (top + tHeight > rect.height) {
-			top -= tHeight * 2;
-		}
-
-		return {
-			top,
-			left
-		};
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Returns the position of the tooltip
@@ -444,73 +376,8 @@ export default {
 	 */
 	getTooltipPosition(tWidth: number, tHeight: number,
 		currPos: Record<string, number>): {top: number, left: number} {
-		const $$ = this;
-		const {config, scale, state} = $$;
-		const {width, height, current, hasFunnel, hasRadar, hasTreemap, isLegendRight, inputType} =
-			state;
-		const hasGauge = $$.hasType("gauge") && !config.gauge_fullCircle;
-		const isRotated = config.axis_rotated;
-		const hasArcType = $$.hasArcType();
-		const svgLeft = state.isCanvasMode ? 0 : $$.getSvgLeft(true);
-		let chartRight = svgLeft + current.width - $$.getCurrentPaddingByDirection("right");
-
-		const size = 20;
-		let {x, y} = currPos;
-
-		// Determine tooltip position
-		if (hasRadar) {
-			x += x >= (width / 2) ? 15 : -(tWidth + 15);
-			y += 15;
-		} else if (hasArcType) {
-			const notTouch = inputType !== "touch";
-
-			if (notTouch) {
-				let titlePadding = $$.getTitlePadding?.() ?? 0;
-
-				if (titlePadding && hasGauge && config.arc_rangeText_values?.length) {
-					titlePadding += 10;
-				}
-
-				x += (width - (isLegendRight ? $$.getLegendWidth() : 0)) / 2;
-				y += (hasGauge ? height : (height / 2) + tHeight) + titlePadding;
-			}
-		} else if (hasFunnel || hasTreemap) {
-			y += tHeight;
-		} else {
-			const padding = {
-				top: $$.getCurrentPaddingByDirection("top", true),
-				left: $$.getCurrentPaddingByDirection("left", true)
-			};
-
-			if (isRotated) {
-				x += svgLeft + padding.left + size;
-				y = padding.top + currPos.xAxis + size;
-				chartRight -= svgLeft;
-			} else {
-				x = svgLeft + padding.left + size + (scale.zoom ? x : currPos.xAxis);
-				y += padding.top - 5;
-			}
-		}
-
-		// when tooltip left + tWidth > chart's width
-		if ((x + tWidth + 15) > chartRight) {
-			x -= tWidth + (hasFunnel || hasTreemap || hasArcType ? 0 : (isRotated ? size * 2 : 38));
-		}
-
-		if (y + tHeight > current.height) {
-			const gap = hasTreemap ? tHeight + 10 : 30;
-
-			y -= hasGauge ? tHeight * 1.5 : tHeight + gap;
-		}
-
-		const pos = {top: y, left: x};
-
-		// make sure to not be positioned out of viewport
-		if (pos.top < 0) pos.top = 0;
-		if (pos.left < 0) pos.left = 0;
-
-		return pos;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Show the tooltip
@@ -600,20 +467,8 @@ export default {
 		const {resizeFunction, state, $el: {tooltip}} = $$;
 
 		resizeFunction.add(() => {
-			if (tooltip.style("display") === "block") {
-				const {current} = state;
-				const {width, xPosInPercent} = tooltip.datum();
-				let value = current.width / 100 * xPosInPercent;
-				const diff = current.width - (value + width);
-
-				// if tooltip size overs current viewport size
-				if (diff < 0) {
-					value += diff;
-				}
-
-				tooltip.style("left", `${value}px`);
-			}
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -657,28 +512,10 @@ export default {
 			const linkedName = config.tooltip_linked_name;
 
 			charts
-				.filter(c => c !== $$.api)
+				.filter(c => { throw new Error("STUB"); })
 				.forEach(c => {
-					const {config, $el, state} = c.internal;
-					const isLinked = config.tooltip_linked;
-					const name = config.tooltip_linked_name;
-					const isInDom = document.body.contains($el.chart.node());
-
-					if (isLinked && linkedName === name && isInDom) {
-						const data = $el.tooltip.data()[0];
-						const isNotSameIndex = index !== data?.index;
-
-						try {
-							if (show && isNotSameIndex && state.isCanvasMode) {
-								c.internal.showCanvasLinkedTooltip?.(index);
-							} else {
-								c.tooltip[
-									show && isNotSameIndex ? "show" : "hide"
-								]({index});
-							}
-						} catch {}
-					}
-				});
+                    throw new Error("STUB");
+                });
 		}
 	},
 
@@ -723,21 +560,8 @@ export default {
 				const {clientX, clientY} = event;
 
 				setTimeout(() => {
-					let target = [clientX, clientY].every(Number.isFinite) &&
-						document.elementFromPoint(clientX, clientY);
-					const data = target && d3Select(target).datum() as IArcData;
-
-					if (data) {
-						const d = $$.hasArcType() ?
-							$$.convertToArcData($$.updateAngle(data)) :
-							data?.data;
-
-						hasTreemap && (target = svg.node());
-						d && $$.showTooltip([d], target);
-					} else {
-						$$.api.tooltip.hide();
-					}
-				}, config.transition_duration);
+                    throw new Error("STUB");
+                }, config.transition_duration);
 			}
 		}
 	}

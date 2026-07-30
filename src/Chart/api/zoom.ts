@@ -49,7 +49,7 @@ const zoom = function<T = TDomainRange>(domainValue?: T): T | undefined {
 
 		if (Array.isArray(domain)) {
 			if (axis.isTimeSeries()) {
-				domain = domain.map(x => parseDate.bind($$)(x));
+				domain = domain.map(x => { throw new Error("STUB"); });
 			}
 
 			const isWithinRange = $$.withinRange(
@@ -114,33 +114,8 @@ extend(zoom, {
 	 *  chart.zoom.enable(false);
 	 */
 	enable(enabled: boolean | "wheel" | "drag" | any): void {
-		const $$ = this.internal;
-		const {axis, config} = $$;
-
-		if (!axis) {
-			config.zoom_enabled = false;
-			return;
-		}
-
-		if (/^(drag|wheel)$/.test(enabled)) {
-			config.zoom_type = enabled;
-		}
-
-		config.zoom_enabled = !!enabled;
-
-		if (!$$.zoom) {
-			$$.initZoom();
-		} else if (enabled === false) {
-			$$.bindZoomEvent(false);
-		}
-
-		if (enabled !== false) {
-			config.zoom_type === "drag" && !$$.zoomBehaviour && $$.initZoomBehaviour?.();
-			$$.bindZoomEvent();
-		}
-
-		$$.updateAndRedraw();
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set or get x Axis maximum zoom range value

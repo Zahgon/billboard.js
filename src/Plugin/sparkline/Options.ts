@@ -12,18 +12,6 @@
  */
 export default class Options {
 	constructor() {
-		return {
-			/**
-			 * Specify sparkline charts holder selector.
-			 * - **NOTE:** The amount of holder should match with the amount of data. If has less, will append necessaray amount nodes as sibling of main chart.
-			 * @name selector
-			 * @memberof plugin-sparkline
-			 * @type {string}
-			 * @default undefined
-			 * @example
-			 *   selector: ".sparkline"
-			 */
-			selector: undefined
-		};
-	}
+        throw new Error("STUB");
+    }
 }

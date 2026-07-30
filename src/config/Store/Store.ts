@@ -19,12 +19,10 @@ const classes = {
  */
 export default class Store {
 	constructor() {
-		Object.keys(classes).forEach(v => {
-			this[v] = new classes[v]();
-		});
-	}
+        throw new Error("STUB");
+    }
 
 	getStore(name: string): Element | State {
-		return this[name];
-	}
+        throw new Error("STUB");
+    }
 }

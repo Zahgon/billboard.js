@@ -86,7 +86,7 @@ function getSubYTickFormat($$, id: YAxisId): AxisTickFormat {
 		return axisFormat;
 	}
 
-	return typeof configFormat === "function" ? configFormat.bind($$.api) : (v => v);
+	return typeof configFormat === "function" ? configFormat.bind($$.api) : (v => { throw new Error("STUB"); });
 }
 
 /**
@@ -441,7 +441,7 @@ function getXTickTextLines($$, painter: CanvasPainter, format: AxisTickFormat, t
 	}
 
 	if (Array.isArray(value)) {
-		return value.map(v => String(v));
+		return value.map(v => { throw new Error("STUB"); });
 	}
 
 	const text = String(value);
@@ -743,8 +743,8 @@ export default class CanvasAxisRenderer {
 	 * @private
 	 */
 	get ctx(): CanvasRenderingContext2D {
-		return this.painter.context;
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Run axis renderer draw calls on another canvas context.
@@ -837,116 +837,8 @@ export default class CanvasAxisRenderer {
 				y: margin2.top
 			},
 			() => {
-				ctx.globalAlpha = 1;
-				ctx.strokeStyle = axis.lineColor;
-				ctx.lineWidth = axis.lineWidth;
-				ctx.setLineDash([]);
-
-				painter.strokePath(() => {
-					if (isRotated) {
-						painter.traceLine(x, y1, x, y2);
-					} else {
-						painter.traceLine(x1, y, x2, y);
-					}
-
-					if (outerTick) {
-						if (isRotated) {
-							painter.traceLine(x, y1, x + (AXIS_TICK_SIZE * outerTickDirection), y1);
-							painter.traceLine(x, y2, x + (AXIS_TICK_SIZE * outerTickDirection), y2);
-						} else {
-							painter.traceLine(x1, y, x1, y + (AXIS_TICK_SIZE * outerTickDirection));
-							painter.traceLine(x2, y, x2, y + (AXIS_TICK_SIZE * outerTickDirection));
-						}
-					}
-				});
-
-				const tickFont = getAxisTickFont(axis, "x");
-
-				ctx.font = tickFont;
-				ctx.fillStyle = axis.labelColor;
-				ctx.textAlign = isRotated ? (tickTextDirection > 0 ? "left" : "right") : "center";
-				ctx.textBaseline = isRotated ?
-					"middle" :
-					(tickTextDirection > 0 ? "top" : "bottom");
-				ctx.strokeStyle = axis.tickColor;
-				ctx.lineWidth = axis.tickWidth;
-
-				// invariant across ticks: measure/resolve once per draw pass
-				const lineHeight = getXTickTextLineHeight(painter, getFontSize(tickFont));
-				const tickTextWidth = getXTickTextWidth($$, ticks, isRotated, scale.subX);
-
-				if (config.subchart_axis_x_tick_show) {
-					for (const tick of lineTicks) {
-						const tickPos = scale.subX(normalizeXValue($$, tick));
-						const tx = margin2.left + tickPos;
-						const ty = margin2.top + tickPos;
-						const pos = isRotated ? ty : tx;
-
-						if (!isInAxisRange(pos, rangeStart, rangeEnd)) {
-							continue;
-						}
-
-						painter.strokePath(() => {
-							if (isRotated) {
-								painter.traceLine(x, ty, x + (AXIS_TICK_SIZE * tickDirection), ty);
-							} else {
-								painter.traceLine(tx, y, tx, y + (AXIS_TICK_SIZE * tickDirection));
-							}
-						});
-					}
-				}
-
-				for (const tick of ticks) {
-					const tickPos = scale.subX(normalizeXValue($$, tick));
-					const tx = margin2.left + tickPos;
-					const ty = margin2.top + tickPos;
-					const pos = isRotated ? ty : tx;
-
-					if (!isInAxisRange(pos, rangeStart, rangeEnd)) {
-						continue;
-					}
-
-					if (!config.subchart_axis_x_tick_text_show) {
-						continue;
-					}
-
-					const lines = getXTickTextLines(
-						$$,
-						painter,
-						tickFormat,
-						tick,
-						ticks,
-						isRotated,
-						scale.subX,
-						tickTextWidth
-					);
-					let textX;
-					let textY;
-
-					if (isRotated) {
-						textX = x + ((AXIS_TICK_SIZE + AXIS_TICK_PADDING) * tickTextDirection) +
-							(tickTextPosition.x || 0);
-						textY = ty + (tickTextPosition.y || 0);
-						ctx.textAlign = tickTextDirection > 0 ? "left" : "right";
-						ctx.textBaseline = "middle";
-					} else {
-						textX = tx + (tickTextPosition.x || 0);
-						textY = y + ((AXIS_TICK_SIZE + AXIS_TICK_PADDING) * tickTextDirection) +
-							(tickTextPosition.y || 0);
-						ctx.textAlign = tickRotate ? (tickRotate > 0 ? "left" : "right") : "center";
-						ctx.textBaseline = tickTextDirection > 0 ? "top" : "bottom";
-					}
-
-					painter.withState(textCtx => {
-						textCtx.translate(textX, textY);
-						tickRotate && textCtx.rotate(tickRotate * Math.PI / 180);
-
-						lines.forEach((line, i) => {
-							textCtx.fillText(line, 0, i * lineHeight);
-						});
-					});
-				}
-			}
+                throw new Error("STUB");
+            }
 		);
 	}
 
@@ -967,28 +859,8 @@ export default class CanvasAxisRenderer {
 		}
 
 		(["y", "y2"] as YAxisId[]).forEach(id => {
-			const subScale = id === "y2" ? scale.subY2 : scale.subY;
-
-			if (!config[`subchart_axis_${id}_show`] || !subScale) {
-				return;
-			}
-
-			this.drawYAxis($$, id, {
-				scale: subScale,
-				ticks: getYTickValues($$, id, undefined, true, subScale, `subchart_axis_${id}`),
-				format: getSubYTickFormat($$, id),
-				index: 0,
-				outerTick: config[`subchart_axis_${id}_tick_outer`] ??
-					config[`axis_${id}_tick_outer`],
-				margin: margin2,
-				width: width2,
-				height: height2,
-				prefix: `subchart_axis_${id}`,
-				tickShow: config[`subchart_axis_${id}_tick_show`],
-				tickTextShow: config[`subchart_axis_${id}_tick_text_show`],
-				tickTextPosition: config[`axis_${id}_tick_text_position`]
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1012,15 +884,8 @@ export default class CanvasAxisRenderer {
 		const y = (config.title_padding.top || 0) + titleHeight;
 
 		painter.withState(() => {
-			ctx.font = title.font;
-			ctx.fillStyle = title.color;
-			ctx.textAlign = align;
-			ctx.textBaseline = "alphabetic";
-
-			lines.forEach((line, i) => {
-				ctx.fillText(line, x, y + (i ? fontSize + ((i - 1) * lineHeight) : 0));
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1049,41 +914,8 @@ export default class CanvasAxisRenderer {
 		}
 
 		painter.withState(() => {
-			ctx.font = style.labelFont;
-			ctx.textBaseline = "alphabetic";
-
-			ids.forEach(id => {
-				const text = axis.getLabelText(id);
-
-				if (
-					!text ||
-					!config[`axis_${id}_show`] ||
-					(id === "y2" && !$$.scale.y2)
-				) {
-					return;
-				}
-
-				const isRotatedLabel = (id === "x" && config.axis_rotated) ||
-					(id !== "x" && !config.axis_rotated);
-				const base = getAxisLabelBasePosition($$, id);
-				const localX = axis.xForAxisLabel(id) +
-					resolveTextOffset(axis.dxForAxisLabel(id), fontSize);
-				const localY = resolveTextOffset(axis.dyForAxisLabel(id), fontSize);
-				const {x, y} = getAxisLabelCanvasPosition(
-					base,
-					localX,
-					localY,
-					isRotatedLabel
-				);
-				const anchor = axis.textAnchorForAxisLabel(id);
-
-				ctx.fillStyle = labelColorById[id] || style.labelColor;
-				ctx.textAlign = alignMap[anchor] || "center";
-				painter.text(String(text), x, y, {
-					angle: isRotatedLabel ? -90 : 0
-				});
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1106,73 +938,8 @@ export default class CanvasAxisRenderer {
 		const y2 = margin.top + height;
 
 		painter.withState(() => {
-			ctx.strokeStyle = grid.lineColor;
-			ctx.lineWidth = grid.lineWidth;
-			grid.dashArray.length && ctx.setLineDash(grid.dashArray);
-
-			if (config.grid_x_show && scale.x) {
-				painter.strokePath(() => {
-					for (const tick of getXTickValues($$)) {
-						const pos = getXPosition($$, tick);
-
-						if (!isDrawable(pos)) {
-							continue;
-						}
-
-						if (isRotated) {
-							painter.traceCrispLine(
-								x1,
-								margin.top + pos,
-								x2,
-								margin.top + pos,
-								grid.lineWidth
-							);
-						} else {
-							painter.traceCrispLine(
-								margin.left + pos,
-								y1,
-								margin.left + pos,
-								y2,
-								grid.lineWidth
-							);
-						}
-					}
-				});
-			}
-
-			if (config.grid_y_show && scale.y) {
-				painter.strokePath(() => {
-					for (const tick of getYGridTickValues($$)) {
-						const value = normalizeYValue($$, tick);
-						const pos = scale.y(value);
-
-						if (!isDrawable(pos)) {
-							continue;
-						}
-
-						if (isRotated) {
-							painter.traceCrispLine(
-								margin.left + pos,
-								y1,
-								margin.left + pos,
-								y2,
-								grid.lineWidth
-							);
-						} else {
-							painter.traceCrispLine(
-								x1,
-								margin.top + pos,
-								x2,
-								margin.top + pos,
-								grid.lineWidth
-							);
-						}
-					}
-				});
-			}
-
-			!config.grid_lines_front && this.drawGridLines($$);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1190,50 +957,8 @@ export default class CanvasAxisRenderer {
 		}
 
 		painter.clipRect({x: margin.left, y: margin.top, w: width, h: height}, () => {
-			ctx.fillStyle = style.fill;
-			ctx.font = style.labelFont;
-			ctx.textBaseline = "top";
-
-			for (const region of regions) {
-				const rect = getRegionRect($$, region);
-
-				if (!rect || !isDrawable(rect.x) || !isDrawable(rect.y) || !rect.w || !rect.h) {
-					continue;
-				}
-
-				const x = margin.left + rect.x;
-				const y = margin.top + rect.y;
-				const w = rect.w;
-				const h = rect.h;
-
-				ctx.globalAlpha = Number.isFinite(region.opacity) ? region.opacity! : style.opacity;
-				painter.fillRect({x, y, w, h});
-
-				if (region.label?.text) {
-					const label = region.label;
-					const center = label.center || "";
-					const text = String(label.text);
-					const textWidth = painter.measureText(text).width;
-					const lineHeight = parseFloat(ctx.font) || 12;
-					let tx = x + (label.x || 0);
-					let ty = y + (label.y || 0);
-
-					if (center.indexOf("x") > -1) {
-						tx += (w - textWidth) / 2;
-					}
-
-					if (center.indexOf("y") > -1) {
-						ty += (h - lineHeight) / 2;
-					}
-
-					painter.text(text, tx, ty, {
-						angle: label.rotated ? -90 : 0,
-						alpha: 1,
-						fill: label.color || style.labelColor
-					});
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1255,143 +980,8 @@ export default class CanvasAxisRenderer {
 		}
 
 		painter.withState(() => {
-			ctx.strokeStyle = grid.lineColor;
-			ctx.lineWidth = grid.lineWidth;
-			ctx.font = grid.labelFont || axis.labelFont;
-			ctx.fillStyle = grid.labelColor;
-			ctx.textBaseline = "middle";
-			ctx.setLineDash([]);
-
-			const drawLabel = (
-				text: string | undefined,
-				x: number,
-				y: number,
-				rotated = false,
-				style?: CanvasStyle
-			): void => {
-				if (!text) {
-					return;
-				}
-
-				painter.text(text, x, y, {
-					...style,
-					angle: rotated ? -90 : 0
-				});
-			};
-
-			const drawLine = (
-				line: GridLine,
-				axisId: GridAxis,
-				draw: () => void
-			): void => {
-				const style = getGridLineCanvasStyle(
-					this.theme.getGridLineStyle(axisId, line, "line")
-				);
-
-				painter.strokePath(draw, style);
-			};
-			const getTextStyle = (axisId: GridAxis, line: GridLine): CanvasStyle | undefined =>
-				getGridTextCanvasStyle(this.theme.getGridLineStyle(axisId, line, "text"));
-
-			const drawXLine = (line: GridLine): void => {
-				if (line.value === undefined || !scale.x) {
-					return;
-				}
-
-				const pos = getXPosition($$, line.value);
-
-				if (!isDrawable(pos)) {
-					return;
-				}
-
-				if (isRotated) {
-					const y = margin.top + pos;
-
-					drawLine(line, "x", () => {
-						painter.traceLine(x1, y, x2, y);
-					});
-					ctx.textAlign = line.position === "start" ?
-						"left" :
-						(line.position === "middle" ? "center" : "right");
-					drawLabel(
-						line.text,
-						getLineTextPosition(line.position, x1, x2),
-						y - 5,
-						false,
-						getTextStyle("x", line)
-					);
-				} else {
-					const x = margin.left + pos;
-
-					drawLine(line, "x", () => {
-						painter.traceLine(x, y1, x, y2);
-					});
-					ctx.textAlign = line.position === "start" ?
-						"left" :
-						(line.position === "middle" ? "center" : "right");
-					drawLabel(
-						line.text,
-						x - 5,
-						getRotatedLineTextPosition(line.position, y1, y2),
-						true,
-						getTextStyle("x", line)
-					);
-				}
-			};
-
-			const drawYLine = (line: GridLine): void => {
-				const targetScale = line.axis === "y2" ? scale.y2 : scale.y;
-				const axisId = line.axis === "y2" ? "y2" : "y";
-
-				if (line.value === undefined || !targetScale) {
-					return;
-				}
-
-				const value = normalizeYValue($$, line.value, axisId);
-				const pos = targetScale(value);
-
-				if (!isDrawable(pos)) {
-					return;
-				}
-
-				if (isRotated) {
-					const x = margin.left + pos;
-
-					drawLine(line, "y", () => {
-						painter.traceLine(x, y1, x, y2);
-					});
-					ctx.textAlign = line.position === "start" ?
-						"left" :
-						(line.position === "middle" ? "center" : "right");
-					drawLabel(
-						line.text,
-						x - 5,
-						getRotatedLineTextPosition(line.position, y1, y2),
-						true,
-						getTextStyle("y", line)
-					);
-				} else {
-					const y = margin.top + pos;
-
-					drawLine(line, "y", () => {
-						painter.traceLine(x1, y, x2, y);
-					});
-					ctx.textAlign = line.position === "start" ?
-						"left" :
-						(line.position === "middle" ? "center" : "right");
-					drawLabel(
-						line.text,
-						getLineTextPosition(line.position, x1, x2),
-						y - 5,
-						false,
-						getTextStyle("y", line)
-					);
-				}
-			};
-
-			(config.grid_x_lines || []).forEach(drawXLine);
-			(config.grid_y_lines || []).forEach(drawYLine);
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1401,32 +991,8 @@ export default class CanvasAxisRenderer {
 	 */
 	private drawAdditionalAxes($$): void {
 		(["x", "y", "y2"] as AxisType[]).forEach(id => {
-			const axesConfig = $$.config[`axis_${id}_axes`] || [];
-
-			if (!axesConfig.length || !$$.scale[id] || !$$.config[`axis_${id}_show`]) {
-				return;
-			}
-
-			axesConfig.forEach((axisConfig, index) => {
-				const scale = getAdditionalAxisScale($$, id, axisConfig);
-
-				if (!scale) {
-					return;
-				}
-
-				const options = {
-					scale,
-					ticks: getAdditionalAxisTickValues($$, id, scale, axisConfig),
-					format: getAdditionalAxisTickFormat($$, axisConfig),
-					index: index + 1,
-					outerTick: axisConfig.tick?.outer !== false
-				};
-
-				id === "x" ?
-					this.drawXAxis($$, options) :
-					this.drawYAxis($$, id as YAxisId, options);
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1470,86 +1036,8 @@ export default class CanvasAxisRenderer {
 				getRotatedXAxisClipRect(margin, current.width, height) :
 				getHorizontalXAxisClipRect(margin, width, current.height),
 			() => {
-				ctx.strokeStyle = axis.lineColor;
-				ctx.lineWidth = axis.lineWidth;
-
-				painter.strokePath(() => {
-					if (isRotated) {
-						painter.traceLine(x, y1, x, y2);
-					} else {
-						painter.traceLine(x1, y, x2, y);
-					}
-
-					if (outerTick) {
-						if (isRotated) {
-							painter.traceLine(x, y1, x + (AXIS_TICK_SIZE * outerTickDirection), y1);
-							painter.traceLine(x, y2, x + (AXIS_TICK_SIZE * outerTickDirection), y2);
-						} else {
-							painter.traceLine(x1, y, x1, y + (AXIS_TICK_SIZE * outerTickDirection));
-							painter.traceLine(x2, y, x2, y + (AXIS_TICK_SIZE * outerTickDirection));
-						}
-					}
-				});
-
-				ctx.font = getAxisTickFont(axis, "x");
-				ctx.fillStyle = axis.labelColor;
-				ctx.textAlign = isRotated ? (tickTextDirection > 0 ? "left" : "right") : "center";
-				ctx.textBaseline = isRotated ?
-					"middle" :
-					(tickTextDirection > 0 ? "top" : "bottom");
-				ctx.strokeStyle = axis.tickColor;
-				ctx.lineWidth = axis.tickWidth;
-
-				if (config.axis_x_tick_show) {
-					painter.strokePath(() => {
-						for (const tick of lineTicks) {
-							const tickPos = getXTickLinePosition($$, tick, targetScale);
-							const tx = margin.left + tickPos;
-							const ty = margin.top + tickPos;
-							const pos = isRotated ? ty : tx;
-
-							if (!isInAxisRange(pos, rangeStart, rangeEnd)) {
-								continue;
-							}
-
-							if (isRotated) {
-								painter.traceLine(x, ty, x + (AXIS_TICK_SIZE * tickDirection), ty);
-							} else {
-								painter.traceLine(tx, y, tx, y + (AXIS_TICK_SIZE * tickDirection));
-							}
-						}
-					});
-				}
-
-				if (!axisOptions && !config.axis_x_tick_text_show) {
-					return;
-				}
-
-				// invariant across ticks: measure/resolve once per draw pass
-				const tickFont = getAxisTickFont(axis, "x");
-				const tickLineHeight = getXTickTextLineHeight(painter, getFontSize(tickFont));
-				const tickTextWidth = getXTickTextWidth($$, ticks, isRotated, targetScale);
-
-				ticks.forEach((tick, tickIndex) => {
-					this.drawXAxisTickText($$, tick, format, axis.labelColor, {
-						isRotated,
-						rangeEnd,
-						rangeStart,
-						tickCount: ticks.length,
-						tickFont,
-						tickIndex,
-						tickLineHeight,
-						tickTextDirection,
-						tickTextWidth,
-						tickRotate,
-						tickTextPosition,
-						targetScale,
-						ticks,
-						x,
-						y
-					});
-				});
-			}
+                throw new Error("STUB");
+            }
 		);
 	}
 
@@ -1576,7 +1064,7 @@ export default class CanvasAxisRenderer {
 		}
 
 		const ticks = getXTickValues($$);
-		const tickIndex = ticks.findIndex(value => isSameTickValue(value, focusX));
+		const tickIndex = ticks.findIndex(value => { throw new Error("STUB"); });
 		const tick = ticks[tickIndex];
 
 		if (tick === undefined) {
@@ -1596,21 +1084,8 @@ export default class CanvasAxisRenderer {
 				getRotatedXAxisClipRect(margin, current.width, height) :
 				getHorizontalXAxisClipRect(margin, width, current.height),
 			() => {
-				this.drawXAxisTickText($$, tick, format, axis.activeLabelColor, {
-					isRotated,
-					rangeEnd,
-					rangeStart,
-					targetScale: getXScale($$),
-					tickCount: ticks.length,
-					tickIndex,
-					tickTextDirection,
-					tickRotate: !isRotated ? ($$.getAxisTickRotate?.("x") || 0) : 0,
-					tickTextPosition: config.axis_x_tick_text_position,
-					ticks,
-					x,
-					y
-				});
-			}
+                throw new Error("STUB");
+            }
 		);
 	}
 
@@ -1685,74 +1160,8 @@ export default class CanvasAxisRenderer {
 		};
 
 		painter.withState(() => {
-			ctx.strokeStyle = grid.lineColor;
-			ctx.lineWidth = grid.lineWidth;
-			ctx.setLineDash([]);
-
-			painter.strokePath(() => {
-				if (isInXRange) {
-					painter.traceLine(absX, margin.top, absX, margin.top + height);
-				}
-
-				if (isInYRange) {
-					painter.traceLine(margin.left, absY, margin.left + width, absY);
-				}
-			});
-
-			ctx.setLineDash([]);
-
-			if (isRotated) {
-				isInYRange && config.axis_x_show &&
-					drawLabel(
-						"x",
-						localY,
-						margin.left - fontSize * 0.3,
-						absY + fontSize * 0.4,
-						"right"
-					);
-				isInXRange && config.axis_y_show &&
-					drawLabel(
-						"y",
-						localX,
-						absX - fontSize * 1.3,
-						margin.top + height + fontSize * 1.15,
-						"left"
-					);
-				isInXRange && config.axis_y2_show && $$.scale.y2 &&
-					drawLabel(
-						"y2",
-						localX,
-						absX - fontSize * 1.3,
-						margin.top - fontSize * 0.4,
-						"left"
-					);
-			} else {
-				isInXRange && config.axis_x_show &&
-					drawLabel(
-						"x",
-						localX,
-						absX - fontSize,
-						margin.top + height + fontSize * 1.15,
-						"left"
-					);
-				isInYRange && config.axis_y_show &&
-					drawLabel(
-						"y",
-						localY,
-						margin.left - fontSize * 0.4,
-						absY + fontSize * 0.3,
-						"right"
-					);
-				isInYRange && config.axis_y2_show && $$.scale.y2 &&
-					drawLabel(
-						"y2",
-						localY,
-						margin.left + width + fontSize * 0.4,
-						absY + fontSize * 0.3,
-						"left"
-					);
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1827,13 +1236,8 @@ export default class CanvasAxisRenderer {
 			ctx.textAlign = getXTickTextAlign($$, options);
 			ctx.textBaseline = "alphabetic";
 			painter.withState(textCtx => {
-				textCtx.translate(tx, y);
-				textCtx.rotate(tickRotate * Math.PI / 180);
-
-				lines.forEach((line, i) => {
-					textCtx.fillText(line, textDx, textY + (i * lineHeight));
-				});
-			});
+                throw new Error("STUB");
+            });
 
 			return;
 		} else {
@@ -1845,13 +1249,8 @@ export default class CanvasAxisRenderer {
 		}
 
 		painter.withState(textCtx => {
-			textCtx.translate(textX, textY);
-			tickRotate && textCtx.rotate(tickRotate * Math.PI / 180);
-
-			lines.forEach((line, i) => {
-				textCtx.fillText(line, 0, i * lineHeight);
-			});
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	/**
@@ -1892,7 +1291,7 @@ export default class CanvasAxisRenderer {
 		);
 		const format = axisOptions?.format || $$.axis?.[id]?.tickFormat?.() ||
 			config[`${prefix}_tick_format`]?.bind($$.api) ||
-			(v => v);
+			(v => { throw new Error("STUB"); });
 		const outerTick = axisOptions ? axisOptions.outerTick : config[`${prefix}_tick_outer`];
 		const tickDirection = isRotated ?
 			(isY2 ? (config.axis_y2_tick_inner ? 1 : -1) : (config.axis_y_tick_inner ? -1 : 1)) :
@@ -1908,91 +1307,7 @@ export default class CanvasAxisRenderer {
 			(axisOptions ? true : config[`${prefix}_tick_text_show`]);
 
 		painter.withState(() => {
-			ctx.strokeStyle = axis.lineColor;
-			ctx.lineWidth = axis.lineWidth;
-
-			painter.strokePath(() => {
-				if (isRotated) {
-					painter.traceLine(x1, y, x2, y);
-				} else {
-					painter.traceLine(x, y1, x, y2);
-				}
-
-				if (outerTick) {
-					if (isRotated) {
-						painter.traceLine(x1, y, x1, y + (AXIS_TICK_SIZE * outerTickDirection));
-						painter.traceLine(x2, y, x2, y + (AXIS_TICK_SIZE * outerTickDirection));
-					} else {
-						painter.traceLine(x, y1, x + (AXIS_TICK_SIZE * outerTickDirection), y1);
-						painter.traceLine(x, y2, x + (AXIS_TICK_SIZE * outerTickDirection), y2);
-					}
-				}
-			});
-
-			const tickFont = getAxisTickFont(axis, id);
-
-			ctx.font = tickFont;
-			ctx.fillStyle = axis.labelColor;
-			ctx.textAlign = isRotated ? "center" : (tickTextDirection > 0 ? "left" : "right");
-			ctx.textBaseline = isRotated ? (tickTextDirection > 0 ? "top" : "bottom") : "middle";
-			ctx.strokeStyle = axis.tickColor;
-			ctx.lineWidth = axis.tickWidth;
-
-			const drawableTicks: Array<{tick: any, tx: number, ty: number}> = [];
-			const drawableLineTicks: Array<{tick: any, tx: number, ty: number}> = [];
-
-			const addDrawableTick = (tick, target) => {
-				const value = normalizeYValue($$, tick, id);
-				const tx = plotMargin.left + targetScale(value);
-				const ty = plotMargin.top + targetScale(value);
-				const pos = isRotated ? tx : ty;
-
-				if (!isDrawable(pos)) {
-					return;
-				}
-
-				target.push({tick, tx, ty});
-			};
-
-			for (const tick of ticks) {
-				addDrawableTick(tick, drawableTicks);
-			}
-
-			for (const tick of lineTicks) {
-				addDrawableTick(tick, drawableLineTicks);
-			}
-
-			if (tickShow) {
-				painter.strokePath(() => {
-					for (const {tx, ty} of drawableLineTicks) {
-						if (isRotated) {
-							painter.traceLine(tx, y, tx, y + (AXIS_TICK_SIZE * tickDirection));
-						} else {
-							painter.traceLine(x, ty, x + (AXIS_TICK_SIZE * tickDirection), ty);
-						}
-					}
-				});
-			}
-
-			if (tickTextShow) {
-				for (const {tick, tx, ty} of drawableTicks) {
-					if (isRotated) {
-						painter.text(
-							formatTick(format, tick),
-							tx + (tickTextPosition.x || 0),
-							y + (AXIS_TICK_SIZE * tickTextDirection) +
-								(tickTextPosition.y || 0)
-						);
-					} else {
-						painter.text(
-							formatTick(format, tick),
-							x + ((AXIS_TICK_SIZE + AXIS_TICK_PADDING) * tickTextDirection) +
-								(tickTextPosition.x || 0),
-							ty + (tickTextPosition.y || 0)
-						);
-					}
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 }

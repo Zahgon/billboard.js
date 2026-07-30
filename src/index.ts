@@ -13,11 +13,11 @@ import * as shape from "./config/resolver/shape";
 
 // extends shape modules
 Object.keys(shape)
-	.forEach(v => shape[v]());
+	.forEach(v => { throw new Error("STUB"); });
 
 // extends interaction modules
 Object.keys(interaction)
-	.forEach(v => interaction[v]());
+	.forEach(v => { throw new Error("STUB"); });
 
 // always include optional API modules in UMD bundle
 exportApi();

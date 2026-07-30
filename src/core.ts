@@ -157,14 +157,8 @@ const bb = {
 	 * // stay SVG-only because canvas mode doesn't provide meaningful benefit.
 	 */
 	generate(config) {
-		const options = mergeObj(Object.create(null), defaults, config);
-		const inst = new Chart(options);
-
-		inst.internal.charts = this.instance;
-		this.instance.push(inst);
-
-		return inst;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set or get global default options.
@@ -189,12 +183,8 @@ const bb = {
 	 * var chart = bb.generate({ ... });
 	 */
 	defaults(options?) {
-		if (isObject(options)) {
-			defaults = options;
-		}
-
-		return defaults;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * An array containing instance created

@@ -134,19 +134,8 @@ function dsv(delimiter: string) {
 		let columns: string[] = [];
 
 		return parseRows(text, (row, i) => {
-			if (i === 0) {
-				columns = row;
-				return null;
-			}
-
-			const obj: Record<string, string> = {};
-
-			for (let j = 0; j < columns.length; j++) {
-				obj[columns[j]] = row[j] ?? "";
-			}
-
-			return callback ? callback(obj, i - 1, columns) : obj as T;
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	return {parse, parseRows};

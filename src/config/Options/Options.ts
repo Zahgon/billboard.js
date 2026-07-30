@@ -30,16 +30,6 @@ export default class Options {
 	}
 
 	constructor() {
-		return deepClone(
-			main,
-			boost,
-			data,
-			color,
-			interaction,
-			legend,
-			title,
-			tooltip,
-			Options.data
-		);
-	}
+        throw new Error("STUB");
+    }
 }

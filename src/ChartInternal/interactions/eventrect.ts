@@ -83,7 +83,7 @@ export default {
 			const xAxisTickValues = $$.getMaxDataCountTarget();
 
 			if (!config.data_xSort || isInverted) {
-				xAxisTickValues.sort((a, b) => (isInverted ? b.x - a.x : a.x - b.x));
+				xAxisTickValues.sort((a, b) => { throw new Error("STUB"); });
 			}
 
 			// update data's index value to be alinged with the x Axis
@@ -158,45 +158,18 @@ export default {
 		// bind touch events
 		eventRect
 			.on("touchstart", event => {
-				state.event = event;
-				$$.updateEventRect();
-			}, {passive: passiveOption})
+                throw new Error("STUB");
+            }, {passive: passiveOption})
 			.on("touchstart.eventRect touchmove.eventRect", event => {
-				state.event = event;
-
-				if (!eventRect.empty() && eventRect.classed($EVENT.eventRect)) {
-					// if touch points are > 1, means doing zooming interaction. In this case do not execute tooltip codes.
-					if (
-						state.dragging || state.flowing || $$.hasArcType() ||
-						event.touches.length > 1
-					) {
-						return;
-					}
-
-					preventEvent(event);
-					selectRect(eventRect.node());
-				} else {
-					unselectRect();
-				}
-			}, {passive: passiveOption})
+                throw new Error("STUB");
+            }, {passive: passiveOption})
 			.on("touchend.eventRect", event => {
-				state.event = event;
-
-				if (!eventRect.empty() && eventRect.classed($EVENT.eventRect)) {
-					if ($$.hasArcType() || !$$.toggleShape || state.cancelClick) {
-						state.cancelClick && (state.cancelClick = false);
-					}
-				}
-			}, {passive: passiveOption});
+                throw new Error("STUB");
+            }, {passive: passiveOption});
 
 		svg.on("touchstart", event => {
-			state.event = event;
-			const {target} = event;
-
-			if (target && target !== eventRect.node()) {
-				unselectRect();
-			}
-		}, {passive: passiveOption});
+            throw new Error("STUB");
+        }, {passive: passiveOption});
 	},
 
 	/**
@@ -305,7 +278,7 @@ export default {
 
 			if ($$.axis.isCategorized()) {
 				rectW = $$.getEventRectWidth();
-				rectX = d => xScale(d.x) - (rectW / 2);
+				rectX = d => { throw new Error("STUB"); };
 			} else {
 				const getPrevNextX = ({index}) => ({
 					prev: $$.getPrevX(index),
@@ -313,41 +286,12 @@ export default {
 				});
 
 				rectW = (d): number => {
-					const x = getPrevNextX(d);
-					const xDomain = xScale.domain();
-					let val: number;
-
-					// if there this is a single data point make the eventRect full width (or height)
-					if (x.prev === null && x.next === null) {
-						val = isRotated ? state.height : state.width;
-					} else if (x.prev === null) {
-						val = (xScale(x.next) + xScale(d.x)) / 2;
-					} else if (x.next === null) {
-						val = xScale(xDomain[1]) - (
-							(xScale(x.prev) + xScale(d.x)) / 2
-						);
-					} else {
-						val = Math.max(0, (xScale(x.next) - xScale(x.prev)) / 2);
-					}
-
-					return val;
-				};
+                    throw new Error("STUB");
+                };
 
 				rectX = (d): number => {
-					const x = getPrevNextX(d);
-					let val: number;
-
-					// if there this is a single data point position the eventRect at 0
-					if (x.prev === null && x.next === null) {
-						val = 0;
-					} else if (x.prev === null) {
-						val = xScale(xScale.domain()[0]);
-					} else {
-						val = (xScale(d.x) + xScale(x.prev)) / 2;
-					}
-
-					return val;
-				};
+                    throw new Error("STUB");
+                };
 			}
 
 			x = isRotated ? 0 : rectX;
@@ -363,13 +307,8 @@ export default {
 		eventReceiver.coords.splice(eventReceiver.data.length);
 
 		eventReceiver.data.forEach((d, i) => {
-			eventReceiver.coords[i] = {
-				x: call(x, d),
-				y: call(y, d),
-				w: call(w, d),
-				h: call(h, d)
-			};
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -408,41 +347,21 @@ export default {
 			.classed($COMMON.EXPANDED, true)
 			.style("cursor", isSelectable ? "pointer" : null)
 			.filter(function(d) {
-				return $$.isWithinShape(this, d);
-			});
+                throw new Error("STUB");
+            });
 
 		shapeAtIndex
 			.call(selected => {
-				const d = selected.data();
-
-				if (
-					isSelectionEnabled &&
-					(isSelectionGrouped || isSelectable?.bind($$.api)(d))
-				) {
-					context.style.cursor = "pointer";
-				}
-
-				if (!isTooltipGrouped) {
-					$$.showTooltip(d, context);
-					$$.showGridFocus?.(d);
-					$$.showSubchartGridFocus?.(d);
-					$$.unexpandCircles?.();
-
-					selected.each(d => $$.setExpand(index, d.id));
-				}
-			});
+                throw new Error("STUB");
+            });
 
 		if (!isTooltipGrouped && shapeAtIndex.empty()) {
 			// `point.focus.only` can render focus points away from the hovered data point.
 			// Fall back to data distance so ungrouped tooltips can still focus the intended point.
 			const mouse = getPointer(state.event, context);
 			const closestData = selectedData.filter(d => {
-				if ($$.isTargetToShow(d.id)) {
-					const dist = $$.dist(d, mouse);
-					return dist < $$.getPointSensitivity(d);
-				}
-				return false;
-			});
+                throw new Error("STUB");
+            });
 
 			if (closestData.length > 0) {
 				let closest = closestData[0];
@@ -517,7 +436,7 @@ export default {
 			$$.filterByX(targetsToShow, closest.x);
 
 		// show tooltip when cursor is close to some point
-		const selectedData = sameXData.map(d => $$.addName(d));
+		const selectedData = sameXData.map(d => { throw new Error("STUB"); });
 
 		$$.showTooltip(selectedData, context);
 
@@ -592,15 +511,8 @@ export default {
 			.style("cursor",
 				config.data_selection_enabled && config.data_selection_grouped ? "pointer" : null)
 			.on("click", function(event) {
-				state.event = event;
-
-				const {currentIdx, data} = eventReceiver;
-				const d = data[
-					currentIdx === -1 ? $$.getDataIndexFromEvent(event) : currentIdx
-				];
-
-				$$.clickHandlerForSingleX.bind(this)(d, $$);
-			})
+                throw new Error("STUB");
+            })
 			.datum({multipleX: false});
 
 		if (state.inputType === "mouse") {
@@ -612,119 +524,22 @@ export default {
 
 			rect
 				.on("mouseover", event => {
-					state.event = event;
-					$$.updateEventRect();
-
-					Object.values($$.$el.axisTooltip)
-						.forEach((v: d3Selection) => v?.style("display", null));
-				})
+                    throw new Error("STUB");
+                })
 				.on("mousemove", function(event) {
-					const d = getData(event);
-
-					state.event = event;
-
-					if (!d) {
-						return;
-					}
-
-					let {index} = d;
-					const stepType = config.line_step_type;
-
-					// tooltip position match for step-before & step-after
-					if (
-						config.line_step_tooltipMatch && $$.hasType("step") &&
-						/^step\-(before|after)$/.test(stepType)
-					) {
-						const scale = $$.scale.zoom || $$.scale.x;
-						const xs = $$.axis.xs[index];
-						const inverted = scale.invert(getPointer(event, this)[0]);
-
-						if (stepType === "step-after" && inverted < xs) {
-							index -= 1;
-						} else if (stepType === "step-before" && inverted > xs) {
-							index += 1;
-						}
-					}
-
-					$$.showAxisGridFocus();
-
-					const eventOnSameIdx = config.tooltip_grouped &&
-						index === eventReceiver.currentIdx;
-
-					// do nothing while dragging/flowing
-					if (state.dragging || state.flowing || $$.hasArcType() || eventOnSameIdx) {
-						// Throttle tooltip position updates: skip if mouse hasn't moved enough
-						if (config.tooltip_show && eventOnSameIdx) {
-							const [mx, my] = getPointer(event, this);
-							const last = state._lastTooltipMouse;
-
-							if (
-								!last ||
-								(mx - last[0]) ** 2 + (my - last[1]) ** 2 >= 9
-							) {
-								state._lastTooltipMouse = [mx, my];
-								$$.setTooltipPosition();
-							}
-						}
-
-						return;
-					}
-
-					if (index !== eventReceiver.currentIdx) {
-						$$.setOverOut(false, eventReceiver.currentIdx);
-						eventReceiver.currentIdx = index;
-					}
-
-					index === -1 ? $$.unselectRect() : $$.selectRectForSingle(this, index);
-
-					// As of individual data point(or <path>) element can't bind mouseover/out event
-					// to determine current interacting element, so use 'mousemove' event instead.
-					$$.setOverOut(index !== -1, index);
-				})
+                    throw new Error("STUB");
+                })
 				.on("mouseout", event => {
-					state.event = event;
-
-					// chart is destroyed ($$.config, not the closure-captured one, becomes null)
-					if (
-						!$$.config || $$.hasArcType() || eventReceiver.currentIdx === -1 ||
-						!config.interaction_onout
-					) {
-						return;
-					}
-
-					$$.hideAxisGridFocus();
-
-					$$.unselectRect();
-					$$.setOverOut(false, eventReceiver.currentIdx);
-
-					// reset the event current index
-					eventReceiver.currentIdx = -1;
-				});
+                    throw new Error("STUB");
+                });
 		}
 
 		return rect;
 	},
 
 	clickHandlerForSingleX(d, ctx): void {
-		const $$ = ctx;
-		const {config, state, $el: {main}} = $$;
-
-		if (!d || $$.hasArcType() || state.cancelClick) {
-			state.cancelClick && (state.cancelClick = false);
-
-			return;
-		}
-
-		const {index} = d;
-
-		main.selectAll(`.${$SHAPE.shape}-${index}`)
-			.each(function(d2) {
-				if (config.data_selection_grouped || $$.isWithinShape(this, d2)) {
-					$$.toggleShape?.(this, d2, index);
-					config.data_onclick.bind($$.api)(d2, this);
-				}
-			});
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Create an eventRect,
@@ -738,58 +553,22 @@ export default {
 
 		eventRectEnter
 			.on("click", function(event) {
-				state.event = event;
-				$$.clickHandlerForMultipleXS.bind(this)($$);
-			})
+                throw new Error("STUB");
+            })
 			.datum({multipleX: true});
 
 		if (state.inputType === "mouse") {
 			eventRectEnter
 				.on("mouseover mousemove", function(event) {
-					state.event = event;
-					$$.selectRectForMultipleXs(this);
-				})
+                    throw new Error("STUB");
+                })
 				.on("mouseout", event => {
-					state.event = event;
-
-					// chart is destroyed
-					if (!$$.config || $$.hasArcType() || !config.interaction_onout) {
-						return;
-					}
-
-					$$.unselectRect();
-				});
+                    throw new Error("STUB");
+                });
 		}
 	},
 
 	clickHandlerForMultipleXS(ctx): void {
-		const $$ = ctx;
-		const {config, state} = $$;
-		const targetsToShow = $$.getTargetsToShow();
-
-		if ($$.hasArcType(targetsToShow)) {
-			return;
-		}
-
-		const mouse = getPointer(state.event, this);
-		const closest = $$.findClosestFromTargets(targetsToShow, mouse);
-
-		if (!closest) {
-			return;
-		}
-
-		const sensitivity = $$.getPointSensitivity(closest);
-
-		// select if selection enabled
-		if ($$.isBarType(closest.id) || $$.dist(closest, mouse) < sensitivity) {
-			$$.$el.main.selectAll(`.${$SHAPE.shapes}${$$.getTargetSelectorSuffix(closest.id)}`)
-				.selectAll(`.${$SHAPE.shape}-${closest.index}`)
-				.each(function() {
-					if (config.data_selection_grouped || $$.isWithinShape(this, closest)) {
-						$$.toggleShape?.(this, closest, closest.index);
-						config.data_onclick.bind($$.api)(closest, this);
-					}
-				});
-		}
-	}
+        throw new Error("STUB");
+    }
 };

@@ -60,7 +60,7 @@ function _getColorFromCss(element: d3Selection): string[] {
 			pattern = content
 				.replace(/url[^#]*|["'()]|(\s|%20)/g, "")
 				.split(delimiter)
-				.map(v => v.trim().replace(/[\"'\s]/g, ""))
+				.map(v => { throw new Error("STUB"); })
 				.filter(Boolean);
 
 			body[cacheKey] = pattern;
@@ -104,67 +104,16 @@ export default {
 
 			// Add background color to patterns
 			const colorizedPatterns = pattern.map((p, index) => {
-				const color = p.replace(/[#\(\)\s,]/g, "");
-				const id = `${$$.state.datetimeId}-pattern-${color}-${index}`;
+                throw new Error("STUB");
+            });
 
-				return _colorizePattern(tiles[index % tiles.length], p, id);
-			});
-
-			pattern = colorizedPatterns.map(p => `url(#${p.id})`);
+			pattern = colorizedPatterns.map(p => { throw new Error("STUB"); });
 			$$.patterns = colorizedPatterns;
 		}
 
 		return function(d: IDataRow | IArcData | string): string {
-			const colors = config.data_colors;
-			const callback = config.data_color;
-			const id: string = (d as IDataRow).id ||
-				(d as IArcData).data?.id ||
-				d as string;
-
-			const isLine = $$.isTypeOf(id, ["line", "spline", "step"]) || !config.data_types[id];
-			let color;
-
-			// if callback function is provided
-			if (isFunction(colors[id])) {
-				color = colors[id].bind($$.api)(d);
-			} else if (colors[id]) {
-				// if specified, choose that color
-				color = colors[id];
-			} else {
-				// if not specified, choose from pattern
-				let idx = ids.indexOf(id);
-
-				if (idx < 0) {
-					ids.push(id);
-					idx = ids.length - 1;
-				}
-
-				color = isLine ?
-					originalColorPattern[idx % originalColorPattern.length] :
-					pattern[idx % pattern.length];
-
-				colors[id] = color;
-			}
-
-			color = isFunction(callback) ? callback.call($$.api, color, d) : color;
-
-			if (hasGradient && $el.defs) {
-				const stop = $$.$el.defs.selectAll(
-					`[id$='-gradient${$$.getTargetSelectorSuffix(id)}'] stop`
-				);
-				let hasSameColor;
-
-				stop.each(function(d, i) {
-					hasSameColor = i === 0 ?
-						this.style.stopColor :
-						this.style.stopColor === hasSameColor;
-				});
-
-				hasSameColor === true && stop.attr("stop-color", color);
-			}
-
-			return color;
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	generateLevelColor(): Function | null {
@@ -181,18 +130,8 @@ export default {
 
 		return notEmpty(threshold) ?
 			function(value) {
-				const v = asValue ? value : (value * 100 / max);
-				let color = colors[colors.length - 1];
-
-				for (let i = 0, l = values.length; i < l; i++) {
-					if (v <= values[i]) {
-						color = colors[i];
-						break;
-					}
-				}
-
-				return color;
-			} :
+                throw new Error("STUB");
+            } :
 			null;
 	},
 
@@ -223,23 +162,8 @@ export default {
 			}
 
 			ids.forEach(v => {
-				const id = `${state.datetimeId}-labels-bg${$$.getTargetSelectorSuffix(v)}${
-					isString(color) ? $$.getTargetSelectorSuffix(color) : ""
-				}`;
-				const colorValue = sanitize(v === "" ? color : color?.[v] || "");
-
-				if (defs.select(`#${id}`).empty()) {
-					const filter = defs.append("filter")
-						.attr("x", attr.x)
-						.attr("y", attr.y)
-						.attr("width", attr.width)
-						.attr("height", attr.height)
-						.attr("id", id);
-
-					filter.append("feFlood").attr("flood-color", colorValue);
-					filter.append("feComposite").attr("in", "SourceGraphic");
-				}
-			});
+                throw new Error("STUB");
+            });
 		}
 		// Note: For function type, filters will be created dynamically in updateTextBGColor
 	},
@@ -265,61 +189,8 @@ export default {
 		const {config, data: {targets}, state: {datetimeId}, $el: {defs}} = $$;
 
 		targets.forEach(d => {
-			const id = `${datetimeId}-gradient${$$.getTargetSelectorSuffix(d.id)}`;
-			const radialGradient = $$.hasPointType() && config.point_radialGradient;
-			const supportedType = ($$.isAreaType(d) && "area") || ($$.isBarType(d) && "bar");
-
-			if ((radialGradient || supportedType) && defs.select(`#${id}`).empty()) {
-				const color = $$.color(d);
-				const gradient = {
-					defs: <null | d3Selection>null,
-					stops: <[number, string | Function | null, number][]>[]
-				};
-
-				if (radialGradient) {
-					const {
-						cx = 0.3,
-						cy = 0.3,
-						r = 0.7,
-						stops = [[0.1, color, 0], [0.9, color, 1]]
-					} = radialGradient;
-
-					gradient.stops = stops;
-					gradient.defs = defs.append("radialGradient")
-						.attr("id", `${id}`)
-						.attr("cx", cx)
-						.attr("cy", cy)
-						.attr("r", r);
-				} else {
-					const isRotated = config.axis_rotated;
-					const {
-						x = isRotated ? [1, 0] : [0, 0],
-						y = isRotated ? [0, 0] : [0, 1],
-						stops = [[0, color, 1], [1, color, 0]]
-					} = config[`${supportedType}_linearGradient`];
-
-					gradient.stops = stops;
-					gradient.defs = defs.append("linearGradient")
-						.attr("id", `${id}`)
-						.attr("x1", x[0])
-						.attr("x2", x[1])
-						.attr("y1", y[0])
-						.attr("y2", y[1]);
-				}
-
-				gradient.stops.forEach((v: [number, string | Function | null, number]) => {
-					const [offset, stopColor, stopOpacity] = v;
-					const colorValue = isFunction(stopColor) ?
-						stopColor.bind($$.api)(d.id) :
-						stopColor;
-
-					gradient.defs && gradient.defs.append("stop")
-						.attr("offset", offset)
-						.attr("stop-color", colorValue || color)
-						.attr("stop-opacity", stopOpacity);
-				});
-			}
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -336,9 +207,9 @@ export default {
 		let color = isOver ? onover : $$.color;
 
 		if (isObject(color)) {
-			color = ({id}) => (id in onover ? onover[id] : $$.color(id));
+			color = ({id}) => { throw new Error("STUB"); };
 		} else if (isString(color)) {
-			color = () => onover;
+			color = () => { throw new Error("STUB"); };
 		} else if (isFunction(onover)) {
 			color = color.bind($$.api);
 		}

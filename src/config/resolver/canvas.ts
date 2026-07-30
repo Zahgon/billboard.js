@@ -88,7 +88,7 @@ function getLegendText($$, id: string): string {
  * @private
  */
 function escapeHtmlAttr(value: string): string {
-	return `${value}`.replace(/[&<>"']/g, char => CANVAS_HTML_ATTR_ESCAPE[char]);
+	return `${value}`.replace(/[&<>"']/g, char => { throw new Error("STUB"); });
 }
 
 /**
@@ -146,8 +146,8 @@ function updateCanvasLegendItemMap($$, item): void {
 	const itemMap = new Map<string, HTMLElement>();
 
 	item.each(function(id: string) {
-		itemMap.set(id, this);
-	});
+        throw new Error("STUB");
+    });
 
 	$$.cache.add(KEY.legendItemMap, itemMap);
 }
@@ -163,13 +163,10 @@ function setCanvasHtmlLegendItem($$, item): void {
 
 	item
 		.attr("class", function(id: string) {
-			const current = d3Select(this).attr("class") || "";
-			const next = `${current} ${$$.generateClass($LEGEND.legendItem, id)}`;
-
-			return Array.from(new Set(next.trim().split(/\s+/).filter(Boolean))).join(" ");
-		})
-		.style("visibility", id => ($$.isLegendToShow(id) ? null : "hidden"))
-		.classed($LEGEND.legendItemHidden, id => !$$.isTargetToShow(id))
+            throw new Error("STUB");
+        })
+		.style("visibility", id => { throw new Error("STUB"); })
+		.classed($LEGEND.legendItemHidden, id => { throw new Error("STUB"); })
 		.classed($CANVAS.legendItemInteractive, !!config.interaction_enabled);
 
 	updateCanvasLegendItemMap($$, item);
@@ -186,12 +183,10 @@ function setCanvasHtmlLegendFocus($$, id: string): void {
 	const targetIds = $$.mapToTargetIds?.([id]) || [id];
 
 	legend?.selectAll(`.${$LEGEND.legendItem}`)
-		.classed($FOCUS.legendItemFocused, (d: string) => targetIds.indexOf(d) >= 0)
+		.classed($FOCUS.legendItemFocused, (d: string) => { throw new Error("STUB"); })
 		.style("opacity", function(d: string) {
-			return targetIds.indexOf(d) >= 0 ?
-				null :
-				$$.opacityForUnfocusedLegend.call($$, d3Select(this));
-		});
+            throw new Error("STUB");
+        });
 }
 
 /**
@@ -219,7 +214,7 @@ function setCanvasLegendTargetFocus($$, id: string): void {
 	const focusedIds = targetIds.filter($$.isTargetToShow, $$);
 	const focusedSet = new Set(focusedIds);
 	const defocusedIds = ($$.mapToTargetIds?.() || [])
-		.filter(targetId => !focusedSet.has(targetId) && $$.isTargetToShow(targetId));
+		.filter(targetId => { throw new Error("STUB"); });
 
 	state.focusedTargetIds = focusedSet;
 	state.defocusedTargetIds = new Set(defocusedIds);
@@ -361,81 +356,36 @@ function bindCanvasHtmlLegendInteractions($$, item): void {
 	const touchOption = isTouch ? getCanvasTouchListenerOption(config) : undefined;
 
 	const handleCanvasLegendToggle = function(event, id): void {
-		if (
-			!callFn(config.legend_item_onclick, api, id, !state.hiddenTargetIds.has(id))
-		) {
-			const selected = d3Select(this);
-
-			if (event.type === "dblclick" || event.altKey) {
-				if (
-					state.hiddenTargetIds.size &&
-					!selected.classed($LEGEND.legendItemHidden)
-				) {
-					api.show();
-				} else {
-					api.hide();
-					api.show(id);
-				}
-			} else {
-				api.toggle(id);
-				selected.classed($FOCUS.legendItemFocused, false);
-			}
-			revertCanvasLegendTargetFocus($$);
-		}
-
-		isTouch && $$.hideTooltip?.();
-	};
+        throw new Error("STUB");
+    };
 
 	item.on(eventType, hasClickInteraction ?
 		function(event, id) {
-			if (
-				isTouch && event.type === "click" &&
-				isDuplicateCanvasLegendTouchClick($$, id)
-			) {
-				return;
-			}
-
-			handleCanvasLegendToggle.call(this, event, id);
-		} :
+            throw new Error("STUB");
+        } :
 		null);
 
 	isTouch && eventType === "click" && hasClickInteraction && item
 		.on("touchstart", function(event, id) {
-			setCanvasLegendTouchStart($$, id, event);
-		}, touchOption)
+            throw new Error("STUB");
+        }, touchOption)
 		.on("touchmove", event => {
-			updateCanvasLegendTouchMove($$, event);
-		}, touchOption)
+            throw new Error("STUB");
+        }, touchOption)
 		.on("touchend", function(event, id) {
-			if (isCanvasLegendTouchTap($$, id, event)) {
-				markCanvasLegendTouchClick($$, id);
-				handleCanvasLegendToggle.call(this, event, id);
-			}
-		}, touchOption);
+            throw new Error("STUB");
+        }, touchOption);
 
 	!isTouch && item
 		.on("mouseover", interaction || isFunction(config.legend_item_onover) ?
 			function(event, id) {
-				if (
-					!callFn(config.legend_item_onover, api, id, !state.hiddenTargetIds.has(id))
-				) {
-					// hidden data's legend shouldn't react on hover (mirrors SVG focus guard)
-					if (!state.transiting && $$.isTargetToShow(id)) {
-						setCanvasHtmlLegendFocus($$, id);
-						setCanvasLegendTargetFocus($$, id);
-					}
-				}
-			} :
+                throw new Error("STUB");
+            } :
 			null)
 		.on("mouseout", interaction || isFunction(config.legend_item_onout) ?
 			function(event, id) {
-				if (
-					!callFn(config.legend_item_onout, api, id, !state.hiddenTargetIds.has(id))
-				) {
-					revertCanvasHtmlLegendFocus($$);
-					revertCanvasLegendTargetFocus($$);
-				}
-			} :
+                throw new Error("STUB");
+            } :
 			null);
 }
 
@@ -604,9 +554,9 @@ function getCanvasTooltipData($$, d): any[] {
 			(config.tooltip_grouped ?
 				(sameXData?.length ?
 					sameXData :
-					targetsToShow.map(target => target.values[d.index]).filter(Boolean)) :
+					targetsToShow.map(target => { throw new Error("STUB"); }).filter(Boolean)) :
 				[d])))
-		.map(v => $$.addName?.(v) || v);
+		.map(v => { throw new Error("STUB"); });
 }
 
 /**
@@ -657,7 +607,7 @@ function normalizeCanvasSubchartDomain($$, domain): any[] | null {
 
 	const values = domain.slice(0, 2);
 
-	return $$.axis?.isTimeSeries?.() ? values.map(value => parseDate.call($$, value)) : values;
+	return $$.axis?.isTimeSeries?.() ? values.map(value => { throw new Error("STUB"); }) : values;
 }
 
 /**
@@ -917,22 +867,17 @@ function getCanvasSelectionDragDelta($$, dataRows): {included: Set<string>, rows
 	const rows: any[] = [];
 
 	dataRows
-		.filter(d => isCanvasSelectableData($$, d))
+		.filter(d => { throw new Error("STUB"); })
 		.forEach(d => {
-			const key = getCanvasDataKey(d);
-
-			if (key) {
-				included.add(key);
-				!currentRows.has(key) && currentRows.set(key, d);
-			}
-		});
+            throw new Error("STUB");
+        });
 
 	currentRows.forEach((d, key) => {
-		!previousKeys.has(key) && rows.push(d);
-	});
+        throw new Error("STUB");
+    });
 	previousRows.forEach((d, key) => {
-		!included.has(key) && rows.push(d);
-	});
+        throw new Error("STUB");
+    });
 	canvasSelectionDragRows.set($$, currentRows);
 
 	return {included, rows};
@@ -959,7 +904,7 @@ function isCanvasSelectableData($$, d): boolean {
 	return d &&
 		hasCanvasDrawableValue($$, d) &&
 		isCanvasTargetSupported($$, d, CANVAS_SELECTABLE_TYPE_FILTERS) &&
-		CANVAS_SELECTABLE_TYPE_FILTERS.some(filter => filter($$, d)) &&
+		CANVAS_SELECTABLE_TYPE_FILTERS.some(filter => { throw new Error("STUB"); }) &&
 		$$.config.data_selection_isselectable.bind($$.api)(d);
 }
 
@@ -971,12 +916,10 @@ function isCanvasSelectableData($$, d): boolean {
  */
 function eachCanvasSelectableData($$, callback: (d) => void): void {
 	$$.filterTargetsToShow($$.data.targets)
-		.filter(target => isCanvasTargetSupported($$, target, CANVAS_SELECTABLE_TYPE_FILTERS))
+		.filter(target => { throw new Error("STUB"); })
 		.forEach(target => {
-			target.values.forEach(d => {
-				isCanvasSelectableData($$, d) && callback(d);
-			});
-		});
+            throw new Error("STUB");
+        });
 }
 
 /**
@@ -1030,35 +973,8 @@ function getCanvasTouchPreventer(config): (event: TouchEvent) => void {
 	let startPx;
 
 	return event => {
-		const touch = event.changedTouches?.[0] || event.touches?.[0];
-
-		if (!touch) {
-			return;
-		}
-
-		const currentXY = touch[`client${config.axis_rotated ? "Y" : "X"}`];
-
-		if (event.type === "touchstart") {
-			if (isPrevented) {
-				event.preventDefault();
-			} else if (preventThreshold !== null) {
-				startPx = currentXY;
-			}
-		} else if (
-			event.type === "touchmove" &&
-			(
-				isPrevented ||
-				startPx === true ||
-				(
-					preventThreshold !== null &&
-					Math.abs(startPx - currentXY) >= preventThreshold
-				)
-			)
-		) {
-			startPx = true;
-			event.preventDefault();
-		}
-	};
+        throw new Error("STUB");
+    };
 }
 
 /**
@@ -1124,7 +1040,7 @@ function getCanvasAnimationTime(): number {
 function isCanvasFlowDomain(domain, isLog = false): boolean {
 	return Array.isArray(domain) &&
 		domain.length >= 2 &&
-		domain.every(v => Number.isFinite(+v) && (!isLog || +v > 0));
+		domain.every(v => { throw new Error("STUB"); });
 }
 
 /**
@@ -1138,12 +1054,8 @@ function isCanvasFlowDomain(domain, isLog = false): boolean {
  */
 function interpolateCanvasFlowDomain(start, end, ratio: number, isLog = false): any[] {
 	return start.slice(0, 2).map((value, index) => {
-		const next = isLog ?
-			Math.exp(Math.log(+value) + ((Math.log(+end[index]) - Math.log(+value)) * ratio)) :
-			+value + ((+end[index] - +value) * ratio);
-
-		return value instanceof Date || end[index] instanceof Date ? new Date(next) : next;
-	});
+        throw new Error("STUB");
+    });
 }
 
 /**
@@ -1153,7 +1065,7 @@ function interpolateCanvasFlowDomain(start, end, ratio: number, isLog = false): 
  * @private
  */
 function getCanvasFlowValueCount($$): number {
-	return $$.data.targets.reduce((sum, target) => sum + target.values.length, 0);
+	return $$.data.targets.reduce((sum, target) => { throw new Error("STUB"); }, 0);
 }
 
 /**
@@ -1166,13 +1078,12 @@ function syncCanvasFlowYDomains($$): void {
 	const targetsToShow = $$.filterTargetsToShow($$.data.targets);
 
 	(["y", "y2"] as const).forEach(key => {
-		scale[key]?.domain($$.getYDomain(targetsToShow, key));
-	});
+        throw new Error("STUB");
+    });
 
 	$$.withSubchartTypeContext(() => {
-		scale.subY?.domain($$.getYDomain(targetsToShow, "y"));
-		scale.subY2?.domain($$.getYDomain(targetsToShow, "y2"));
-	});
+        throw new Error("STUB");
+    });
 }
 
 const canvasInternal = {
@@ -1345,7 +1256,9 @@ const canvasInternal = {
 	animateCanvasFlow(flow): boolean {
 		const $$ = this;
 		const {axis, data, org, scale, state} = $$;
-		const {done = () => {}, duration, length, orgDataCount} = flow;
+		const {done = () => {
+            throw new Error("STUB");
+        }, duration, length, orgDataCount} = flow;
 		const requestFrame = window.requestAnimationFrame?.bind(window);
 		const isLog = !!axis.isLog?.("x");
 
@@ -1367,7 +1280,7 @@ const canvasInternal = {
 			return false;
 		}
 
-		const removed = data.targets.map(target => target.values.splice(0, length));
+		const removed = data.targets.map(target => { throw new Error("STUB"); });
 
 		$$.updateXDomain($$.filterTargetsToShow(data.targets), true, true);
 
@@ -1375,8 +1288,8 @@ const canvasInternal = {
 		const endOrgDomain = org.xDomain?.slice?.();
 
 		data.targets.forEach((target, index) => {
-			target.values.unshift(...removed[index]);
-		});
+            throw new Error("STUB");
+        });
 
 		if (!isCanvasFlowDomain(endDomain, isLog)) {
 			startOrgDomain && (org.xDomain = startOrgDomain);
@@ -1398,8 +1311,8 @@ const canvasInternal = {
 
 			finished = true;
 			data.targets.forEach(target => {
-				target.values.splice(0, length);
-			});
+                throw new Error("STUB");
+            });
 
 			endOrgDomain && (org.xDomain = endOrgDomain);
 			scale.x.domain(endDomain);
@@ -1425,23 +1338,8 @@ const canvasInternal = {
 			done.call($$.api);
 		};
 		const render = (timestamp: number) => {
-			const ratio = Math.min(1, Math.max(0, (timestamp - started) / duration));
-			const domain = interpolateCanvasFlowDomain(startDomain, endDomain, ratio, isLog);
-
-			scale.x.domain(domain);
-			axis.x.scale(scale.x);
-			state.canvasShape = null;
-			state._cachedDrawShape = null;
-			state._canvasVisibleRangeCache = null;
-			state._canvasXTickValuesCache = null;
-			$$.renderCanvasFrame(undefined, null, false);
-
-			if (ratio < 1) {
-				state.canvasFlowFrame = requestFrame(render);
-			} else {
-				finish();
-			}
-		};
+            throw new Error("STUB");
+        };
 
 		startOrgDomain && (org.xDomain = startOrgDomain);
 		scale.x.domain(startDomain);
@@ -1516,8 +1414,8 @@ const canvasInternal = {
 		];
 
 		unsupported.forEach(([condition, name]) => {
-			condition && warn(`canvas mode: ${name} is not yet supported.`);
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -1533,21 +1431,15 @@ const canvasInternal = {
 
 		canvas.addEventListener("mousemove", $$.onCanvasMouseMove.bind($$));
 		canvas.addEventListener("mouseenter", event => {
-			state.event = event;
-			config.onover?.bind($$.api)(event);
-		});
+            throw new Error("STUB");
+        });
 		canvas.addEventListener("mouseout", $$.onCanvasMouseOut.bind($$));
 		canvas.addEventListener("mouseleave", event => {
-			state.event = event;
-			config.onout?.bind($$.api)(event);
-		});
+            throw new Error("STUB");
+        });
 		canvas.addEventListener("mousedown", event => {
-			if ($$.onCanvasSubchartBrushStart?.(event)) {
-				return;
-			}
-
-			$$.onCanvasSelectionDragStart(event);
-		});
+            throw new Error("STUB");
+        });
 		canvas.addEventListener("click", $$.onCanvasClick.bind($$));
 
 		canvas.addEventListener("pointerdown", $$.onCanvasPointerDown.bind($$));
@@ -1559,13 +1451,11 @@ const canvasInternal = {
 
 		if (isCanvasTouchEnabled(config)) {
 			canvas.addEventListener("touchstart", event => {
-				preventTouchEvent(event);
-				$$.onCanvasTouchStart(event);
-			}, touchOption);
+                throw new Error("STUB");
+            }, touchOption);
 			canvas.addEventListener("touchmove", event => {
-				preventTouchEvent(event);
-				$$.onCanvasTouchMove(event);
-			}, touchOption);
+                throw new Error("STUB");
+            }, touchOption);
 			canvas.addEventListener("touchend", $$.onCanvasTouchEnd.bind($$), touchOption);
 			canvas.addEventListener("touchcancel", $$.onCanvasTouchCancel.bind($$), touchOption);
 		}
@@ -1595,7 +1485,7 @@ const canvasInternal = {
 		}
 
 		const targetIds = $$.mapToIds($$.data.targets)
-			.filter(id => config.data_names[id] !== null);
+			.filter(id => { throw new Error("STUB"); });
 
 		if (config.legend_contents_bindto && config.legend_contents_template) {
 			if ($$.updateHtmlLegendTemplate(targetIds)) {
@@ -1623,14 +1513,14 @@ const canvasInternal = {
 
 		const legendItems = $el.legend
 			.selectAll(`button.${$LEGEND.legendItem}`)
-			.data(targetIds, (id: string) => id);
+			.data(targetIds, (id: string) => { throw new Error("STUB"); });
 
 		legendItems.exit().remove();
 
 		const enter = legendItems.enter()
 			.append("button")
 			.attr("type", "button")
-			.attr("data-id", id => id);
+			.attr("data-id", id => { throw new Error("STUB"); });
 
 		enter.append("span")
 			.classed($LEGEND.legendItemTile, true);
@@ -1639,21 +1529,21 @@ const canvasInternal = {
 			.classed($CANVAS.legendItemTitle, true);
 
 		const item = enter.merge(legendItems as any)
-			.attr("class", id => $$.generateClass($LEGEND.legendItem, id).trim());
+			.attr("class", id => { throw new Error("STUB"); });
 
 		setCanvasHtmlLegendItem($$, item);
 
 		item.select(`.${$LEGEND.legendItemTile}`)
 			.classed($CANVAS.legendItemTileCircle,
 				!config.legend_usePoint && config.legend_item_tile_type === "circle")
-			.style("background-color", id => (config.legend_usePoint ? null : $$.color(id)))
-			.html(id => (config.legend_usePoint ? getCanvasLegendPointIcon($$, id) : ""));
+			.style("background-color", id => { throw new Error("STUB"); })
+			.html(id => { throw new Error("STUB"); });
 
 		item.select(`.${$CANVAS.legendItemTitle}`)
-			.text(id => getLegendText($$, id));
+			.text(id => { throw new Error("STUB"); });
 
 		if (config.legend_tooltip) {
-			item.attr("title", id => getLegendText($$, id));
+			item.attr("title", id => { throw new Error("STUB"); });
 		}
 
 		bindCanvasHtmlLegendInteractions($$, item);
@@ -1682,18 +1572,8 @@ const canvasInternal = {
 		}
 
 		targetIds.forEach(id => {
-			const content = isFunction(template) ?
-				sanitize(template.call(api, id, $$.color(id), api.data(id)[0].values)) :
-				tplProcess(template, {
-					COLOR: $$.color(id),
-					TITLE: id
-				});
-
-			if (content) {
-				ids.push(id);
-				html += content;
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		const legendItem = wrapper
 			.html(html)
@@ -1701,8 +1581,8 @@ const canvasInternal = {
 			.classed($CANVAS.legend, false)
 			.style("visibility", null)
 			.selectAll(function() {
-				return this.children;
-			})
+                throw new Error("STUB");
+            })
 			.data(ids);
 
 		setCanvasHtmlLegendItem($$, legendItem);
@@ -1731,17 +1611,8 @@ const canvasInternal = {
 		if (useTemplateLegend) {
 			$el.legend.selectAll(`.${$LEGEND.legendItem}`)
 				.each(function(id) {
-					const rect = getBoundingRect(this, true);
-					const text = `${getLegendText($$, id)}`;
-					const fallbackWidth = Math.max(32, text.length * 7 + 24);
-					const fallbackHeight = 20;
-					const width = Math.ceil(rect.width || fallbackWidth);
-					const height = Math.ceil(rect.height || fallbackHeight);
-
-					itemSizes.push(width);
-					maxWidth = Math.max(maxWidth, width);
-					maxHeight = Math.max(maxHeight, height);
-				});
+                    throw new Error("STUB");
+                });
 		} else if (targetIds.length) {
 			const isRightOrInset = state.isLegendRight || state.isLegendInset;
 			const isRectangle = config.legend_item_tile_type !== "circle";
@@ -1771,31 +1642,8 @@ const canvasInternal = {
 				steps: {}
 			};
 			const measured = targetIds.map((id, index) => {
-				const text = `${getLegendText($$, id)}`;
-				const rect = measureSvgLegendText($$, text);
-				const fallbackWidth = Math.max(32, text.length * 7);
-				const fallbackHeight = 12;
-				const isLast = index === targetIds.length - 1;
-				const hidden = config.legend_show && !$$.isLegendToShow(id);
-				const width = hidden ? 0 : (
-					(rect?.width || fallbackWidth) +
-					dimension.tileWidth +
-					(isLast && !isRightOrInset ? 0 : dimension.padding.right) +
-					config.legend_padding
-				);
-				const height = hidden ? 0 : (rect?.height || fallbackHeight) +
-					dimension.padding.top;
-
-				dimension.max.width = Math.max(dimension.max.width, width);
-				dimension.max.height = Math.max(dimension.max.height, height);
-
-				return {
-					id,
-					hidden,
-					width,
-					height
-				};
-			});
+                throw new Error("STUB");
+            });
 			const areaLength = isRightOrInset ? $$.getLegendHeight() : $$.getLegendWidth();
 			const updateValues = (id: string, itemLength: number, withoutStep = false) => {
 				let margin;
@@ -1824,60 +1672,23 @@ const canvasInternal = {
 			}
 
 			measured.forEach(({id, hidden, width, height}) => {
-				const itemWidth = config.legend_equally && !hidden ? dimension.max.width : width;
-				const itemHeight = config.legend_equally && !hidden ? dimension.max.height : height;
-				const itemLength = isRightOrInset ? itemHeight : itemWidth;
-
-				sizes.widths[id] = itemWidth;
-				sizes.heights[id] = itemHeight;
-				itemSizes.push(itemWidth);
-				maxWidth = Math.max(maxWidth, itemWidth);
-				maxHeight = Math.max(maxHeight, itemHeight);
-
-				if (hidden) {
-					sizes.steps[id] = 0;
-					sizes.offsets[id] = 0;
-					return;
-				}
-
-				updateValues(id, itemLength);
-			});
+                throw new Error("STUB");
+            });
 
 			const xForLegend = state.isLegendRight ?
-				(id: string) => dimension.max.width * sizes.steps[id] :
+				(id: string) => { throw new Error("STUB"); } :
 				state.isLegendInset ?
-				(id: string) => dimension.max.width * sizes.steps[id] + 10 :
-				(id: string) => sizes.margins[sizes.steps[id]] + sizes.offsets[id];
+				(id: string) => { throw new Error("STUB"); } :
+				(id: string) => { throw new Error("STUB"); };
 			const yForLegend = state.isLegendRight || state.isLegendInset ?
-				(id: string) => sizes.margins[sizes.steps[id]] + sizes.offsets[id] :
-				(id: string) => dimension.max.height * sizes.steps[id];
+				(id: string) => { throw new Error("STUB"); } :
+				(id: string) => { throw new Error("STUB"); };
 			const titleX = 4 + itemTileSize.width;
 			const tileCenterY = 9;
 
 			measured.forEach(({id, hidden}) => {
-				const x = hidden ? 0 : xForLegend(id);
-				const y = hidden ? 0 : yForLegend(id);
-
-				itemLayouts[id] = {
-					item: {
-						x,
-						y: y - 5,
-						width: sizes.widths[id],
-						height: sizes.heights[id]
-					},
-					title: {
-						x: titleX,
-						y: 0,
-						height: sizes.heights[id]
-					},
-					tile: {
-						x: -2,
-						y: tileCenterY - (itemTileSize.height / 2),
-						width: itemTileSize.width,
-						height: itemTileSize.height
-					}
-				};
-			});
+                throw new Error("STUB");
+            });
 			legendStep = dimension.step;
 		}
 
@@ -1895,13 +1706,8 @@ const canvasInternal = {
 			let rowWidth = 0;
 
 			itemSizes.forEach(width => {
-				if (rowWidth && rowWidth + rowGap + width > availableWidth) {
-					rows++;
-					rowWidth = width;
-				} else {
-					rowWidth += (rowWidth ? rowGap : 0) + width;
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			state.legendStep = Math.max(0, rows - 1);
 		} else {
@@ -1914,31 +1720,8 @@ const canvasInternal = {
 		if (!useTemplateLegend) {
 			$el.legend.selectAll(`button.${$LEGEND.legendItem}`)
 				.each(function(id) {
-					const layout = itemLayouts[id];
-					const item = d3Select(this);
-
-					if (!layout) {
-						return;
-					}
-
-					item
-						.style("left", `${layout.item.x}px`)
-						.style("top", `${layout.item.y}px`)
-						.style("width", `${layout.item.width}px`)
-						.style("height", `${layout.item.height}px`);
-
-					item.select(`.${$CANVAS.legendItemTitle}`)
-						.style("left", `${layout.title.x}px`)
-						.style("top", `${layout.title.y}px`)
-						.style("height", `${layout.title.height}px`)
-						.style("line-height", `${layout.title.height}px`);
-
-					item.select(`.${$LEGEND.legendItemTile}`)
-						.style("left", `${layout.tile.x}px`)
-						.style("top", `${layout.tile.y}px`)
-						.style("width", `${layout.tile.width}px`)
-						.style("height", `${layout.tile.height}px`);
-				});
+                    throw new Error("STUB");
+                });
 		}
 	},
 
@@ -2042,10 +1825,8 @@ const canvasInternal = {
 		}
 
 		eachCanvasSelectableData($$, d => {
-			(!targetId || d.id === targetId) &&
-				selected.has(getCanvasDataKey(d)) &&
-				data.push(d);
-		});
+            throw new Error("STUB");
+        });
 
 		return data;
 	},
@@ -2097,36 +1878,8 @@ const canvasInternal = {
 		}
 
 		eachCanvasSelectableData($$, d => {
-			const key = getCanvasDataKey(d);
-			const isTargetId = selectionGrouped || !targetIds || targetIds.indexOf(d.id) >= 0;
-			const isTargetIndex = !indices || indices.indexOf(d.index) >= 0;
-			const isSelected = selected.has(key);
-
-			if (isSelection) {
-				if (isTargetId && isTargetIndex && (!isSelected || singleSelection)) {
-					if (!resetDone) {
-						$$.setCanvasSelection(false);
-						resetDone = true;
-					}
-
-					if (selected.has(key)) {
-						return;
-					}
-
-					selected.add(key);
-					callFn(config.data_onselected, $$.api, d, $$.canvasEngine.canvas);
-					changed = true;
-				} else if ((!singleSelection || resetDone) && resetOther && isSelected) {
-					selected.delete(key);
-					callFn(config.data_onunselected, $$.api, d, $$.canvasEngine.canvas);
-					changed = true;
-				}
-			} else if (isTargetId && isTargetIndex && isSelected) {
-				selected.delete(key);
-				callFn(config.data_onunselected, $$.api, d, $$.canvasEngine.canvas);
-				changed = true;
-			}
-		});
+            throw new Error("STUB");
+        });
 
 		changed && $$.renderCanvasFrame?.(undefined, null, false);
 	},
@@ -2147,41 +1900,10 @@ const canvasInternal = {
 		}
 
 		dataRows
-			.filter(d => isCanvasSelectableData($$, d))
+			.filter(d => { throw new Error("STUB"); })
 			.forEach(d => {
-				const key = getCanvasDataKey(d);
-				const isSelected = selected.has(key);
-
-				if (!config.data_selection_multiple) {
-					eachCanvasSelectableData($$, selectedData => {
-						const selectedKey = getCanvasDataKey(selectedData);
-						const shouldReset = config.data_selection_grouped ?
-							selectedData.id === d.id :
-							selectedKey !== key;
-
-						if (shouldReset && selected.has(selectedKey)) {
-							selected.delete(selectedKey);
-							callFn(
-								config.data_onunselected,
-								$$.api,
-								selectedData,
-								$$.canvasEngine.canvas
-							);
-							changed = true;
-						}
-					});
-				}
-
-				if (isSelected && selected.has(key)) {
-					selected.delete(key);
-					callFn(config.data_onunselected, $$.api, d, $$.canvasEngine.canvas);
-				} else {
-					selected.add(key);
-					callFn(config.data_onselected, $$.api, d, $$.canvasEngine.canvas);
-				}
-
-				changed = true;
-			});
+                throw new Error("STUB");
+            });
 
 		changed && $$.renderCanvasFrame?.(undefined, null, false);
 	},
@@ -2222,10 +1944,10 @@ const canvasInternal = {
 			return data;
 		}
 
-		const indices = new Set(data.map(d => d.index));
+		const indices = new Set(data.map(d => { throw new Error("STUB"); }));
 
 		return $$.filterTargetsToShow($$.data.targets)
-			.flatMap(target => target.values.filter(d => indices.has(d.index)));
+			.flatMap(target => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -2396,12 +2118,12 @@ const canvasInternal = {
 		if (config.interaction_enabled) {
 			const dataRows = config.data_selection_grouped ?
 				$$.filterTargetsToShow($$.data.targets)
-					.map(target => target.values[d.index])
+					.map(target => { throw new Error("STUB"); })
 					.filter(Boolean) :
 				[d];
 
 			$$.toggleCanvasSelection?.(dataRows);
-			dataRows.forEach(row => callFn(config.data_onclick, $$.api, row, canvas));
+			dataRows.forEach(row => { throw new Error("STUB"); });
 			markInputClick && markCanvasInputClick($$, d);
 		}
 
@@ -2625,10 +2347,8 @@ const canvasInternal = {
 			$$.updateCanvasSubchartBrush(event);
 		};
 		const end = (event: MouseEvent) => {
-			$$.endCanvasSubchartBrush(event);
-			window.removeEventListener("mousemove", move);
-			window.removeEventListener("mouseup", end);
-		};
+            throw new Error("STUB");
+        };
 
 		window.addEventListener("mousemove", move);
 		window.addEventListener("mouseup", end);
@@ -2642,19 +2362,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasClick(event: MouseEvent): void {
-		const $$ = this;
-		const {config, state} = $$;
-
-		state.event = event;
-
-		if (state.flowing || state.cancelClick) {
-			state.cancelClick = false;
-			return;
-		}
-
-		$$.dispatchCanvasDataClick(event);
-		config.onclick?.bind($$.api)(event);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Start mouse-driven canvas draggable selection.
@@ -2673,12 +2382,8 @@ const canvasInternal = {
 			$$.updateCanvasSelectionDrag(event);
 		};
 		const end = (event: MouseEvent) => {
-			$$.endCanvasSelectionDrag(event);
-			window.removeEventListener("mousemove", move);
-			window.removeEventListener("mouseup", end);
-			state.canvasSelectionDragMoveHandler = null;
-			state.canvasSelectionDragEndHandler = null;
-		};
+            throw new Error("STUB");
+        };
 
 		state.canvasSelectionDragMoveHandler = move;
 		state.canvasSelectionDragEndHandler = end;
@@ -2692,59 +2397,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasPointerDown(event: PointerEvent): void {
-		if (!shouldHandleCanvasPointerEvent(this, event)) {
-			return;
-		}
-
-		const $$ = this;
-		const canvas = $$.$el.canvas.node();
-
-		if (!$$.startCanvasSubchartBrush(event)) {
-			return;
-		}
-
-		const pointerId = event.pointerId;
-		const matchesPointer = (event: PointerEvent) => event.pointerId === pointerId;
-		const move = (event: PointerEvent) => {
-			matchesPointer(event) && $$.updateCanvasSubchartBrush(event);
-		};
-		const end = (event: PointerEvent) => {
-			if (matchesPointer(event)) {
-				$$.endCanvasSubchartBrush(event);
-				cleanup();
-			}
-		};
-		const cancel = (event: PointerEvent) => {
-			if (matchesPointer(event)) {
-				$$.cancelCanvasSubchartBrush(event);
-				cleanup();
-			}
-		};
-
-		/**
-		 * Remove temporary pointer brush listeners.
-		 * @private
-		 */
-		function cleanup() {
-			window.removeEventListener("pointermove", move);
-			window.removeEventListener("pointerup", end);
-			window.removeEventListener("pointercancel", cancel);
-			try {
-				canvas.releasePointerCapture?.(pointerId);
-			} catch {
-				// Synthetic pointer events used by tests may not be capturable.
-			}
-		}
-
-		try {
-			canvas.setPointerCapture?.(pointerId);
-		} catch {
-			// Synthetic pointer events used by tests may not be capturable.
-		}
-		window.addEventListener("pointermove", move);
-		window.addEventListener("pointerup", end);
-		window.addEventListener("pointercancel", cancel);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Handle non-mouse pointer entering the canvas.
@@ -2752,13 +2406,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasPointerEnter(event: PointerEvent): void {
-		if (!shouldHandleCanvasPointerEvent(this, event)) {
-			return;
-		}
-
-		this.state.event = event;
-		this.config.onover?.bind(this.api)(event);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Handle non-mouse pointer movement over the canvas.
@@ -2766,16 +2415,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasPointerMove(event: PointerEvent): void {
-		if (!shouldHandleCanvasPointerEvent(this, event)) {
-			return;
-		}
-
-		if (this.updateCanvasSubchartBrush(event)) {
-			return;
-		}
-
-		this.onCanvasMouseMove(event);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Handle non-mouse pointer click.
@@ -2783,20 +2424,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasPointerUp(event: PointerEvent): void {
-		if (!shouldHandleCanvasPointerEvent(this, event)) {
-			return;
-		}
-
-		this.state.event = event;
-
-		if (this.endCanvasSubchartBrush(event)) {
-			this.config.onout?.bind(this.api)(event);
-			return;
-		}
-
-		this.dispatchCanvasDataClick(event, true);
-		this.dispatchCanvasDataOut(this.$el.canvas.node());
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Handle non-mouse pointer leaving the canvas.
@@ -2823,18 +2452,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasPointerCancel(event: PointerEvent): void {
-		if (!shouldHandleCanvasPointerEvent(this, event)) {
-			return;
-		}
-
-		this.state.event = event;
-		if (this.cancelCanvasSubchartBrush(event)) {
-			this.config.onout?.bind(this.api)(event);
-			return;
-		}
-
-		this.onCanvasPointerOut(event);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Handle touch start over the canvas.
@@ -2886,22 +2505,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasTouchEnd(event: TouchEvent): void {
-		this.state.event = event;
-
-		if (this.endCanvasSubchartBrush(event)) {
-			this.config.onout?.bind(this.api)(event);
-			return;
-		}
-
-		if (this.endCanvasSelectionDrag(event)) {
-			this.config.onout?.bind(this.api)(event);
-			return;
-		}
-
-		this.dispatchCanvasDataClick(event, true);
-		this.dispatchCanvasDataOut(this.$el.canvas.node());
-		this.config.onout?.bind(this.api)(event);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Handle touch cancellation.
@@ -2909,12 +2514,8 @@ const canvasInternal = {
 	 * @private
 	 */
 	onCanvasTouchCancel(event: TouchEvent): void {
-		this.state.event = event;
-		this.cancelCanvasSubchartBrush(event);
-		this.endCanvasSelectionDrag(event);
-		this.onCanvasMouseOut();
-		this.config.onout?.bind(this.api)(event);
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Update canvas focus state and tooltip on pointer movement.
@@ -2969,7 +2570,7 @@ const canvasInternal = {
 
 		const selectedData = getCanvasTooltipData($$, d);
 		const focusData = getCanvasFocusData($$, d, selectedData);
-		const focusKey = focusData.map(v => `${v.id}:${v.index}`).join("|");
+		const focusKey = focusData.map(v => { throw new Error("STUB"); }).join("|");
 
 		if (state.canvasFocusKey !== focusKey || config.axis_tooltip) {
 			state.canvasFocusKey = focusKey;
@@ -3008,7 +2609,7 @@ const canvasInternal = {
 		const {$el, state} = $$;
 		const canvas = $el.canvas?.node();
 		const targetsToShow = $$.filterTargetsToShow($$.data.targets);
-		const d = targetsToShow.map(target => target.values[index]).find(Boolean);
+		const d = targetsToShow.map(target => { throw new Error("STUB"); }).find(Boolean);
 
 		if (!canvas || !d) {
 			$$.hideTooltip?.();
@@ -3016,7 +2617,7 @@ const canvasInternal = {
 		}
 
 		const selectedData = getCanvasTooltipData($$, d);
-		const focus = selectedData.find(v => v && hasCanvasDrawableValue($$, v)) ||
+		const focus = selectedData.find(v => { throw new Error("STUB"); }) ||
 			selectedData[0];
 
 		if (!selectedData.length || !focus) {
@@ -3037,7 +2638,7 @@ const canvasInternal = {
 			currentTarget: canvas,
 			target: canvas
 		};
-		state.canvasFocusKey = selectedData.map(v => `${v.id}:${v.index}`).join("|");
+		state.canvasFocusKey = selectedData.map(v => { throw new Error("STUB"); }).join("|");
 
 		$$.renderCanvasFocus(selectedData, eventPoint);
 		$$.showTooltip?.(selectedData, canvas);
@@ -3055,10 +2656,8 @@ const canvasInternal = {
 		const $$ = this;
 
 		$$.canvasEngine.withOverlay(ctx => {
-			$$.canvasRenderer.withContext(ctx, () => {
-				$$.canvasRenderer.drawZoomBrush($$, start, end);
-			});
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -3078,10 +2677,8 @@ const canvasInternal = {
 		const $$ = this;
 
 		$$.canvasEngine.withOverlay(ctx => {
-			$$.canvasRenderer.withContext(ctx, () => {
-				$$.canvasRenderer.drawSelectionDragArea($$, rect);
-			});
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -3159,14 +2756,8 @@ const canvasInternal = {
 
 		state.canvasFocusMainRedraw = !!withMainRedraw;
 		$$.canvasEngine.withOverlay(ctx => {
-			$$.canvasRenderer.withContext(ctx, () => {
-				$$.canvasRenderer.drawFocus($$, focusData);
-			});
-			$$.canvasAxisRenderer.withContext(ctx, () => {
-				$$.canvasAxisRenderer.drawFocusedXAxisTick($$, focusData);
-				point && $$.canvasAxisRenderer.drawAxisTooltip($$, point);
-			});
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -3178,10 +2769,8 @@ const canvasInternal = {
 		const $$ = this;
 
 		$$.canvasEngine.withOverlay(ctx => {
-			$$.canvasAxisRenderer.withContext(ctx, () => {
-				$$.canvasAxisRenderer.drawAxisTooltip($$, point);
-			});
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	/**
@@ -3221,5 +2810,5 @@ const canvasInternal = {
 export let canvas = (): "canvas" => {
 	extend(ChartInternal.prototype, canvasInternal);
 
-	return (canvas = () => "canvas")();
+	return (canvas = () => { throw new Error("STUB"); })();
 };

@@ -175,8 +175,8 @@ function parseViewBox(value: string | null): CustomPointBox | null {
  * @private
  */
 function getPointsBox(points: number[][]): CustomPointBox {
-	const xs = points.map(([x]) => x);
-	const ys = points.map(([, y]) => y);
+	const xs = points.map(([x]) => { throw new Error("STUB"); });
+	const ys = points.map(([, y]) => { throw new Error("STUB"); });
 	const x = Math.min(...xs);
 	const y = Math.min(...ys);
 
@@ -196,20 +196,17 @@ function getPointsBox(points: number[][]): CustomPointBox {
  */
 function mergePointBoxes(boxes: CustomPointBox[]): CustomPointBox {
 	const validBoxes = boxes.filter(box =>
-		Number.isFinite(box.x) &&
-		Number.isFinite(box.y) &&
-		Number.isFinite(box.w) &&
-		Number.isFinite(box.h)
+		{ throw new Error("STUB"); }
 	);
 
 	if (!validBoxes.length) {
 		return {...DEFAULT_POINT_VIEWBOX};
 	}
 
-	const x = Math.min(...validBoxes.map(box => box.x));
-	const y = Math.min(...validBoxes.map(box => box.y));
-	const right = Math.max(...validBoxes.map(box => box.x + box.w));
-	const bottom = Math.max(...validBoxes.map(box => box.y + box.h));
+	const x = Math.min(...validBoxes.map(box => { throw new Error("STUB"); }));
+	const y = Math.min(...validBoxes.map(box => { throw new Error("STUB"); }));
+	const right = Math.max(...validBoxes.map(box => { throw new Error("STUB"); }));
+	const bottom = Math.max(...validBoxes.map(box => { throw new Error("STUB"); }));
 
 	return {
 		x,
@@ -247,39 +244,8 @@ function parsePointTransform(value: string | null): CustomPointMatrix {
 	let matrix: CustomPointMatrix = [...IDENTITY_POINT_MATRIX];
 
 	(value?.match(/[a-z]+\([^)]*\)/gi) || []).forEach(token => {
-		const [, rawName, body] = token.match(/^([a-z]+)\(([^)]*)\)$/i) || [];
-		const name = rawName?.toLowerCase();
-		const values = (body?.match(/[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/gi) || [])
-			.map(Number)
-			.filter(Number.isFinite);
-		let next: CustomPointMatrix | null = null;
-
-		if (name === "matrix" && values.length >= 6) {
-			next = values.slice(0, 6) as CustomPointMatrix;
-		} else if (name === "translate" && values.length) {
-			next = [1, 0, 0, 1, values[0], values[1] || 0];
-		} else if (name === "scale" && values.length) {
-			next = [values[0], 0, 0, values[1] ?? values[0], 0, 0];
-		} else if (name === "rotate" && values.length) {
-			const angle = values[0] * Math.PI / 180;
-			const cos = Math.cos(angle);
-			const sin = Math.sin(angle);
-			const rotate: CustomPointMatrix = [cos, sin, -sin, cos, 0, 0];
-
-			next = values.length >= 3 ?
-				multiplyPointMatrix(
-					multiplyPointMatrix([1, 0, 0, 1, values[1], values[2]], rotate),
-					[1, 0, 0, 1, -values[1], -values[2]]
-				) :
-				rotate;
-		} else if (name === "skewx" && values.length) {
-			next = [1, 0, Math.tan(values[0] * Math.PI / 180), 1, 0, 0];
-		} else if (name === "skewy" && values.length) {
-			next = [1, Math.tan(values[0] * Math.PI / 180), 0, 1, 0, 0];
-		}
-
-		next && (matrix = multiplyPointMatrix(matrix, next));
-	});
+        throw new Error("STUB");
+    });
 
 	return matrix;
 }
@@ -330,10 +296,8 @@ function parsePointStyle(node: Element, inherited: CustomPointStyle): CustomPoin
 	}
 
 	[opacity, fillOpacity, strokeOpacity].forEach(value => {
-		const alpha = value === null ? NaN : parseFloat(value);
-
-		Number.isFinite(alpha) && (style.alpha = (style.alpha ?? 1) * alpha);
-	});
+        throw new Error("STUB");
+    });
 
 	return style;
 }
@@ -348,10 +312,8 @@ function collectPointDefs(root: Element): Map<string, Element> {
 	const defs = new Map<string, Element>();
 
 	Array.from(root.querySelectorAll("[id]")).forEach(node => {
-		const id = node.getAttribute("id");
-
-		id && defs.set(id, node);
-	});
+        throw new Error("STUB");
+    });
 
 	return defs;
 }
@@ -425,18 +387,10 @@ function parsePointPaintOffset(value: string | null): number {
  */
 function parsePointPaintStops(node: Element): CustomPointPaintStop[] {
 	return Array.from(node.children || [])
-		.filter(child => child.tagName.toLowerCase() === "stop")
+		.filter(child => { throw new Error("STUB"); })
 		.map(stop => {
-			const color = getPointPresentationValue(stop, "stop-color") || "#000";
-			const opacity = getPointPresentationValue(stop, "stop-opacity");
-			const parsedOpacity = opacity === null ? NaN : parseFloat(opacity);
-
-			return {
-				offset: parsePointPaintOffset(stop.getAttribute("offset")),
-				color,
-				opacity: Number.isFinite(parsedOpacity) ? parsedOpacity : undefined
-			};
-		});
+            throw new Error("STUB");
+        });
 }
 
 /**
@@ -449,35 +403,8 @@ function collectPointPaints(defs: Map<string, Element>): Map<string, CustomPoint
 	const paints = new Map<string, CustomPointPaint>();
 
 	defs.forEach((node, id) => {
-		const tagName = node.tagName.toLowerCase();
-		const stops = parsePointPaintStops(node);
-
-		if (!stops.length) {
-			return;
-		}
-
-		if (tagName === "lineargradient") {
-			paints.set(id, {
-				type: "linearGradient",
-				x1: parsePointPaintLength(node.getAttribute("x1"), "0%"),
-				y1: parsePointPaintLength(node.getAttribute("y1"), "0%"),
-				x2: parsePointPaintLength(node.getAttribute("x2"), "100%"),
-				y2: parsePointPaintLength(node.getAttribute("y2"), "0%"),
-				stops
-			});
-		} else if (tagName === "radialgradient") {
-			paints.set(id, {
-				type: "radialGradient",
-				cx: parsePointPaintLength(node.getAttribute("cx"), "50%"),
-				cy: parsePointPaintLength(node.getAttribute("cy"), "50%"),
-				r: parsePointPaintLength(node.getAttribute("r"), "50%"),
-				fx: parsePointPaintLength(node.getAttribute("fx"), "50%"),
-				fy: parsePointPaintLength(node.getAttribute("fy"), "50%"),
-				fr: parsePointPaintLength(node.getAttribute("fr"), 0),
-				stops
-			});
-		}
-	});
+        throw new Error("STUB");
+    });
 
 	return paints;
 }
@@ -515,9 +442,7 @@ function parseCustomPointNode(
 	if (tagName === "svg" || tagName === "g" || tagName === "symbol") {
 		return children.reduce<CustomPointShape[]>(
 			(shapes, child) =>
-				shapes.concat(
-					parseCustomPointNode(child, fallbackBox, defs, transform, style, seen)
-				),
+				{ throw new Error("STUB"); },
 			[]
 		);
 	}
@@ -672,7 +597,7 @@ function parseCustomPointPattern(pattern: string): CustomPointPattern | null {
 				shapes,
 				box: root.tagName.toLowerCase() === "svg" ?
 					fallbackBox :
-					mergePointBoxes(shapes.map(shape => shape.box)),
+					mergePointBoxes(shapes.map(shape => { throw new Error("STUB"); })),
 				paints: collectPointPaints(defs)
 			};
 		}
@@ -696,7 +621,7 @@ function traceCustomPointShape(ctx: CanvasRenderingContext2D, shape: CustomPoint
 		const [start, ...rest] = shape.points;
 
 		ctx.moveTo(start[0], start[1]);
-		rest.forEach(([x, y]) => ctx.lineTo(x, y));
+		rest.forEach(([x, y]) => { throw new Error("STUB"); });
 		shape.type === "polygon" && ctx.closePath();
 	} else if (shape.type === "circle") {
 		ctx.moveTo(shape.cx + shape.r, shape.cy);
@@ -755,8 +680,8 @@ function createCustomPointPaint(
 		);
 
 	paint.stops.forEach(({offset, color, opacity}) => {
-		gradient.addColorStop(offset, opacity === undefined ? color : withOpacity(color, opacity));
-	});
+        throw new Error("STUB");
+    });
 
 	return gradient;
 }
@@ -847,43 +772,6 @@ export function drawPointPattern(
 	}
 
 	painter.withState(ctx => {
-		const {box, paints, shapes} = parsed;
-		const scale = baseR > 0 ? r / baseR : 1;
-		const drawShape = (shape: CustomPointShape) => {
-			const {
-				style: drawStyle,
-				shouldFill,
-				shouldStroke,
-				alpha
-			} = getCustomPointDrawStyle(ctx, style, shape.style, paints, box);
-
-			ctx.save();
-			painter.applyStyle(drawStyle);
-			alpha !== undefined && (ctx.globalAlpha *= alpha);
-			ctx.transform(...shape.matrix);
-			ctx.beginPath();
-
-			if (shape.type === "path") {
-				if (window.Path2D) {
-					const path = shape.path2D || (shape.path2D = new window.Path2D(shape.d));
-
-					shouldFill && ctx.fill(path);
-					shouldStroke && ctx.stroke(path);
-				}
-			} else {
-				traceCustomPointShape(ctx, shape);
-				shouldFill && ctx.fill();
-				shouldStroke && ctx.stroke();
-			}
-
-			ctx.restore();
-		};
-
-		ctx.translate(
-			x - (box.x + box.w / 2) * scale,
-			y - (box.y + box.h / 2) * scale
-		);
-		ctx.scale(scale, scale);
-		shapes.forEach(drawShape);
-	});
+        throw new Error("STUB");
+    });
 }

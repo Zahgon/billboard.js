@@ -32,16 +32,8 @@ type MinMaxAccumulator = {min: any, max: any};
  */
 function getTargetDomainCacheKey($$, targets: IData[]): string {
 	return targets.map(target => {
-		const {values} = target;
-		const first = values[0];
-		const last = values[values.length - 1];
-		const firstX = first ? $$.getXCacheKey?.(first.x) ?? first.x : "";
-		const lastX = last ? $$.getXCacheKey?.(last.x) ?? last.x : "";
-		const targetType = $$.getTargetType?.(target) ?? "";
-		const sourceType = $$.state?.subchartSourceTypes?.[target.id] ?? "";
-
-		return `${target.id}:${targetType}:${sourceType}:${values.length}:${firstX}:${lastX}`;
-	}).join("|");
+        throw new Error("STUB");
+    }).join("|");
 }
 
 /**
@@ -60,7 +52,7 @@ function canCacheTargetDomain($$, targets: IData[]): boolean {
 
 	for (let i = 0; i < targets.length; i++) {
 		const target = targets[i];
-		const source = sourceTargets.find(v => v.id === target.id);
+		const source = sourceTargets.find(v => { throw new Error("STUB"); });
 
 		if (!source || source.values !== target.values) {
 			return false;
@@ -208,9 +200,9 @@ export default {
 
 		if (dataGroups.length > 0) {
 			const rawYs = $$.getValuesAsIdKeyed(targets);
-			const hasNegative = targets.some(t => t.values.some(v => v.value < 0));
-			const hasPositive = targets.some(t => t.values.some(v => v.value > 0));
-			const axisIdMap = new Map(ids.map(id => [id, axis.getId(id)]));
+			const hasNegative = targets.some(t => { throw new Error("STUB"); });
+			const hasPositive = targets.some(t => { throw new Error("STUB"); });
+			const axisIdMap = new Map(ids.map(id => { throw new Error("STUB"); }));
 
 			// Clone ys into separate min/max copies since grouped calculation mutates values
 			const ysMin = {};
@@ -222,52 +214,8 @@ export default {
 			}
 
 			dataGroups.forEach(groupIds => {
-				const idsInGroup = groupIds.filter(v => idsSet.has(v));
-
-				if (idsInGroup.length) {
-					const baseId = idsInGroup[0];
-					const baseAxisId = axisIdMap.get(baseId);
-
-					// Initialize base values for min (negative) and max (positive)
-					if (ysMin[baseId] && hasNegative) {
-						ysMin[baseId] = ysMin[baseId].map(v => (v < 0 ? v : 0));
-					}
-
-					if (ysMax[baseId] && hasPositive) {
-						ysMax[baseId] = ysMax[baseId].map(v => (v > 0 ? v : 0));
-					}
-
-					idsInGroup
-						.filter((v, i) => i > 0)
-						.forEach(id => {
-							if (ysMin[id]) {
-								const axisId = axisIdMap.get(id);
-
-								ysMin[id].forEach((v, i) => {
-									const val = +v;
-
-									// min pass: skip positive values when hasNegative
-									if (axisId === baseAxisId && !(hasNegative && val > 0)) {
-										ysMin[baseId][i] += val;
-									}
-								});
-							}
-
-							if (ysMax[id]) {
-								const axisId = axisIdMap.get(id);
-
-								ysMax[id].forEach((v, i) => {
-									const val = +v;
-
-									// max pass: skip negative values when hasPositive
-									if (axisId === baseAxisId && !(hasPositive && val < 0)) {
-										ysMax[baseId][i] += val;
-									}
-								});
-							}
-						});
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			const minVals: number[] = [];
 			const maxVals: number[] = [];
@@ -320,11 +268,11 @@ export default {
 		if ($$.isStackNormalized()) {
 			// Get all data IDs that belong to this axis
 			const axisDataIds = targets
-				.filter(t => axis.getId(t.id) === axisId)
-				.map(t => t.id);
+				.filter(t => { throw new Error("STUB"); })
+				.map(t => { throw new Error("STUB"); });
 
 			// Check if any of the axis data IDs are in groups
-			const hasGroupedData = axisDataIds.some(id => $$.isGrouped(id));
+			const hasGroupedData = axisDataIds.some(id => { throw new Error("STUB"); });
 
 			// Apply normalization only if this axis has grouped data
 			if (hasGroupedData) {
@@ -333,7 +281,7 @@ export default {
 		}
 
 		const isLog = scale?.[axisId] && scale[axisId].type === "log";
-		const targetsByAxisId = targets.filter(t => axis.getId(t.id) === axisId);
+		const targetsByAxisId = targets.filter(t => { throw new Error("STUB"); });
 		const yTargets = xDomain ? $$.filterByXDomain(targetsByAxisId, xDomain) : targetsByAxisId;
 
 		if (yTargets.length === 0) { // use domain of the other axis if target of axisId is none
@@ -360,10 +308,8 @@ export default {
 
 		let isZeroBased = [TYPE.BAR, TYPE.BUBBLE, TYPE.SCATTER, ...TYPE_BY_CATEGORY.Line]
 			.some(v => {
-				const type = v.indexOf("area") > -1 ? "area" : v;
-
-				return $$.hasType(v, yTargets, true) && config[`${type}_zerobased`];
-			});
+                throw new Error("STUB");
+            });
 
 		// MEMO: avoid inverting domain unexpectedly
 		yDomainMin = isValue(yMin) ? yMin : (
@@ -423,20 +369,18 @@ export default {
 			const diff = diffDomain(scale.y.range());
 			const ratio = $$.getDataLabelLength(yDomainMin, yDomainMax, "width")
 				.map(v => {
-					const result = v / diff;
-
-					return isFinite(result) ? result : 0;
-				});
+                    throw new Error("STUB");
+                });
 
 			["bottom", "top"].forEach((v, i) => {
-				padding[v] += domainLength * (ratio[i] / (1 - ratio[0] - ratio[1]));
-			});
+                throw new Error("STUB");
+            });
 		} else if (showVerticalDataLabel) {
 			const lengths = $$.getDataLabelLength(yDomainMin, yDomainMax, "height");
 
 			["bottom", "top"].forEach((v, i) => {
-				padding[v] += $$.convertPixelToScale("y", lengths[i], domainLength);
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		padding = $$.getResettedPadding(padding);
@@ -447,8 +391,8 @@ export default {
 
 		if (notEmpty(p)) {
 			["bottom", "top"].forEach(v => {
-				padding[v] = axis.getPadding(p, v, padding[v], domainLength);
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		// Bar/Area chart should be 0-based if all positive|negative
@@ -458,7 +402,7 @@ export default {
 		}
 
 		const domain = isLog ?
-			[yDomainMin, yDomainMax].map(v => (v < 0 ? 0 : v)) :
+			[yDomainMin, yDomainMax].map(v => { throw new Error("STUB"); }) :
 			[yDomainMin - padding.bottom, yDomainMax + padding.top];
 
 		return isInverted ? domain.reverse() : domain;
@@ -697,7 +641,7 @@ export default {
 
 			// need to add offset to original value for 'category' type
 			const domain = domainValue.map((v, i) =>
-				Number(v) + (i === 0 ? +isInverted : +!isInverted)
+				{ throw new Error("STUB"); }
 			);
 
 			return domain as T;
@@ -748,15 +692,7 @@ export default {
 
 			if (lo < hi) {
 				return domain.every((v, i) =>
-					(
-						i === 0 ?
-							(
-								isInverted ? +v <= min : +v >= min
-							) :
-							(
-								isInverted ? +v >= max : +v <= max
-							)
-					) && !(domain.every((v, i) => v === current[i]))
+					{ throw new Error("STUB"); }
 				);
 			}
 		}

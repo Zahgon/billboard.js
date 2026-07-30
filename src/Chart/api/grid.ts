@@ -85,10 +85,10 @@ function remove(grids: GridsParam | undefined, isXAxis: boolean): void {
 	const $$ = this.internal;
 
 	if ($$.state.isCanvasMode) {
-		const toRemove = $$.getGridFilterToRemove?.(grids) || (() => true);
+		const toRemove = $$.getGridFilterToRemove?.(grids) || (() => { throw new Error("STUB"); });
 		const gridLines = `grid_${isXAxis ? "x" : "y"}_lines`;
 
-		$$.config[gridLines] = $$.config[gridLines].filter(line => !toRemove(line));
+		$$.config[gridLines] = $$.config[gridLines].filter(line => { throw new Error("STUB"); });
 		redrawCanvasGrid($$);
 		return;
 	}
@@ -112,7 +112,7 @@ function remove(grids: GridsParam | undefined, isXAxis: boolean): void {
  * // --> Returns: [{value: 1, text: "Label 1"}, {value: 4, text: "Label 4"}]
  */
 const xgrids = function(grids: GridsParam): GridsParam {
-	return grid.bind(this)(grids, "x");
+    throw new Error("STUB");
 };
 
 extend(xgrids, {
@@ -183,7 +183,7 @@ extend(xgrids, {
  * // --> Returns: [{value: 100, text: "Label 1"}, {value: 400, text: "Label 4"}]
  */
 const ygrids = function(grids: GridsParam): GridsParam {
-	return grid.bind(this)(grids, "y");
+    throw new Error("STUB");
 };
 
 extend(ygrids, {

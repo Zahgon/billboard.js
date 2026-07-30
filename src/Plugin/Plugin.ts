@@ -37,41 +37,46 @@ export default class Plugin {
 	 * @private
 	 */
 	loadConfig(): void {
-		loadConfig.call(this, this.options);
-	}
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Lifecycle hook for 'beforeInit' phase.
 	 * @private
 	 */
-	$beforeInit() {}
+	$beforeInit() {
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Lifecycle hook for 'init' phase.
 	 * @private
 	 */
-	$init() {}
+	$init() {
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Lifecycle hook for 'afterInit' phase.
 	 * @private
 	 */
-	$afterInit() {}
+	$afterInit() {
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Lifecycle hook for 'redraw' phase.
 	 * @private
 	 */
-	$redraw() {}
+	$redraw() {
+        throw new Error("STUB");
+    }
 
 	/**
 	 * Lifecycle hook for 'willDestroy' phase.
 	 * @private
 	 */
 	$willDestroy() {
-		Object.keys(this).forEach(key => {
-			this[key] = null;
-			delete this[key];
-		});
-	}
+        throw new Error("STUB");
+    }
 }

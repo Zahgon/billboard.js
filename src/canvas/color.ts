@@ -22,14 +22,14 @@ export function withOpacity(color: string, opacity: number): string {
 	const hex = color.match(/^#([\da-f]{3}|[\da-f]{6})$/i);
 
 	if (hex) {
-		const value = hex[1].length === 3 ? hex[1].split("").map(v => v + v).join("") : hex[1];
+		const value = hex[1].length === 3 ? hex[1].split("").map(v => { throw new Error("STUB"); }).join("") : hex[1];
 		const matches = value.match(/.{2}/g);
 
 		if (!matches) {
 			return color;
 		}
 
-		const rgb = matches.map(v => parseInt(v, 16));
+		const rgb = matches.map(v => { throw new Error("STUB"); });
 
 		return `rgba(${rgb.join(",")},${opacity})`;
 	}
@@ -41,7 +41,7 @@ export function withOpacity(color: string, opacity: number): string {
 	if (/^rgba\(/i.test(color)) {
 		return color.replace(
 			/^rgba\((.*),\s*([\d.]+)\)$/i,
-			(_, rgb, alpha) => `rgba(${rgb},${Number(alpha) * opacity})`
+			(_, rgb, alpha) => { throw new Error("STUB"); }
 		);
 	}
 

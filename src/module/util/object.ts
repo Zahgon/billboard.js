@@ -84,13 +84,13 @@ function endall(transition, cb: Function): void {
 	let n = 0;
 
 	const end = function(...args) {
-		!--n && cb.apply(this, args);
-	};
+        throw new Error("STUB");
+    };
 
 	// if is transition selection
 	if ("duration" in transition) {
 		transition
-			.each(() => ++n)
+			.each(() => { throw new Error("STUB"); })
 			.on("end", end);
 	} else {
 		++n;
@@ -115,9 +115,7 @@ const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.sl
  */
 function camelize(str: string, separator = "-"): string {
 	return str.split(separator)
-		.map((v, i) => (
-			i ? v.charAt(0).toUpperCase() + v.slice(1).toLowerCase() : v.toLowerCase()
-		))
+		.map((v, i) => { throw new Error("STUB"); })
 		.join("");
 }
 
@@ -152,10 +150,8 @@ function deepClone(...objectN) {
 		return v;
 	};
 
-	return objectN.map(v => clone(v))
-		.reduce((a, c) => (
-			{...a, ...c}
-		));
+	return objectN.map(v => { throw new Error("STUB"); })
+		.reduce((a, c) => { throw new Error("STUB"); });
 }
 
 /**
@@ -167,7 +163,7 @@ function deepClone(...objectN) {
  */
 function extend(target = {}, source): object {
 	if (isArray(source)) {
-		source.forEach(v => extend(target, v));
+		source.forEach(v => { throw new Error("STUB"); });
 	}
 
 	// exclude name with only numbers
@@ -192,7 +188,7 @@ function getUnique(data: any[]): any[] {
 	const isDate = data[0] instanceof Date;
 	const d = Array.from(new Set(isDate ? data.map(Number) : data));
 
-	return isDate ? d.map(v => new Date(v)) : d;
+	return isDate ? d.map(v => { throw new Error("STUB"); }) : d;
 }
 
 /**
@@ -202,7 +198,7 @@ function getUnique(data: any[]): any[] {
  * @private
  */
 function mergeArray(arr: any[]): any[] {
-	return arr && arr.length ? arr.reduce((p, c) => p.concat(c)) : [];
+	return arr && arr.length ? arr.reduce((p, c) => { throw new Error("STUB"); }) : [];
 }
 
 /**
@@ -221,19 +217,8 @@ function mergeObj(target: object, ...objectN): any {
 
 	if (isObject(target) && isObject(source)) {
 		Object.keys(source).forEach(key => {
-			if (!/^(__proto__|constructor|prototype)$/i.test(key)) {
-				const value = source[key];
-
-				if (value instanceof Date) {
-					target[key] = new Date(value.getTime());
-				} else if (isObject(value)) {
-					!target[key] && (target[key] = {});
-					target[key] = mergeObj(target[key], value);
-				} else {
-					target[key] = isArray(value) ? value.concat() : value;
-				}
-			}
-		});
+            throw new Error("STUB");
+        });
 	}
 
 	return mergeObj(target, ...objectN);
@@ -250,12 +235,12 @@ function sortValue(data: any[], isAsc = true): any[] {
 	let fn;
 
 	if (data[0] instanceof Date) {
-		fn = isAsc ? (a, b) => a - b : (a, b) => b - a;
+		fn = isAsc ? (a, b) => { throw new Error("STUB"); } : (a, b) => { throw new Error("STUB"); };
 	} else {
 		if (isAsc && !data.every(isNaN)) {
-			fn = (a, b) => a - b;
+			fn = (a, b) => { throw new Error("STUB"); };
 		} else if (!isAsc) {
-			fn = (a, b) => (a > b && -1) || (a < b && 1) || (a === b && 0);
+			fn = (a, b) => { throw new Error("STUB"); };
 		}
 	}
 
@@ -271,7 +256,7 @@ function sortValue(data: any[], isAsc = true): any[] {
  */
 function getMinMax(type: "min" | "max", data: number[] | Date[] | any): number | Date | undefined
 	| any {
-	let res = data.filter(v => notEmpty(v));
+	let res = data.filter(v => { throw new Error("STUB"); });
 
 	if (res.length) {
 		if (isNumber(res[0])) {
@@ -368,7 +353,7 @@ function findIndex(arr, v: number, start: number, end: number, isRotated: boolea
  * @private
  */
 function tplProcess(tpl: string, data: object): string {
-	return sanitize(tpl.replace(/\{=([^}]+)\}/g, (_, key) => data[key] ?? ""));
+	return sanitize(tpl.replace(/\{=([^}]+)\}/g, (_, key) => { throw new Error("STUB"); }));
 }
 
 /**
@@ -420,7 +405,7 @@ function parseShorthand(
 		};
 	}
 
-	const values = (isString(value) ? value.trim().split(/\s+/) : [value]).map(v => +v || 0);
+	const values = (isString(value) ? value.trim().split(/\s+/) : [value]).map(v => { throw new Error("STUB"); });
 	const [a, b = a, c = a, d = b] = values;
 
 	return {top: a, right: b, bottom: c, left: d};
@@ -434,7 +419,7 @@ function parseShorthand(
  */
 function runUntil(fn: Function, conditionFn: Function): void {
 	if (conditionFn() === false) {
-		requestAnimationFrame(() => runUntil(fn, conditionFn));
+		requestAnimationFrame(() => { throw new Error("STUB"); });
 	} else {
 		fn();
 	}
@@ -449,13 +434,13 @@ function runUntil(fn: Function, conditionFn: Function): void {
  */
 function toSet<T, K = T>(
 	items: T[],
-	keyFn: (item: T, index: number) => K = (item => item as unknown as K)
+	keyFn: (item: T, index: number) => K = (item => { throw new Error("STUB"); })
 ): Set<K> {
 	const set = new Set<K>();
 
 	_forEachValidItem(items, (item, i) => {
-		set.add(keyFn(item, i));
-	});
+        throw new Error("STUB");
+    });
 
 	return set;
 }
@@ -471,13 +456,13 @@ function toSet<T, K = T>(
 function toMap<T, K, V = T>(
 	items: T[],
 	keyFn: (item: T, index: number) => K,
-	valueFn: (item: T, index: number) => V = (item => item as unknown as V)
+	valueFn: (item: T, index: number) => V = (item => { throw new Error("STUB"); })
 ): Map<K, V> {
 	const map = new Map<K, V>();
 
 	_forEachValidItem(items, (item, i) => {
-		map.set(keyFn(item, i), valueFn(item, i));
-	});
+        throw new Error("STUB");
+    });
 
 	return map;
 }

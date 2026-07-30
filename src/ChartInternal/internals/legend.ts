@@ -29,11 +29,7 @@ const LEGEND_TOUCH_CLICK_TIMEOUT = 750;
  * @private
  */
 function _getLegendColor(id: string): string {
-	const $$ = this;
-	const data = $$.getDataById(id);
-	const color = $$.levelColor ? $$.levelColor(data.values[0].value) : $$.color(data);
-
-	return color;
+    throw new Error("STUB");
 }
 
 /**
@@ -45,14 +41,7 @@ function _getLegendColor(id: string): string {
  * @private
  */
 function _getFormattedText<T = string>(id: T, formatted = true): T {
-	const {config} = this;
-	let text = config.data_names[id] ?? id;
-
-	if (formatted && isFunction(config.legend_format)) {
-		text = config.legend_format(text, id !== text ? id : undefined);
-	}
-
-	return text;
+    throw new Error("STUB");
 }
 
 /**
@@ -79,14 +68,14 @@ function _buildLegendItemMap($$, legendItems): void {
 	const items: Array<{id: string, node: HTMLElement}> = [];
 
 	legendItems.each(function(id) {
-		items.push({id, node: this});
-	});
+        throw new Error("STUB");
+    });
 
 	// Create Map for O(1) lookups using toMap utility
 	const itemMap = toMap(
 		items,
-		item => item.id,
-		item => item.node
+		item => { throw new Error("STUB"); },
+		item => { throw new Error("STUB"); }
 	);
 
 	// Cache the map
@@ -273,14 +262,8 @@ export default {
 		// toggle legend state
 		$el.legend?.selectAll(`.${$LEGEND.legendItem}`)
 			.classed($LEGEND.legendItemHidden, function(id) {
-				const hide = !$$.isTargetToShow(id);
-
-				if (hide) {
-					this.style.opacity = null;
-				}
-
-				return hide;
-			});
+                throw new Error("STUB");
+            });
 
 		// Update size and scale
 		$$.updateScales(false, !scale.zoom);
@@ -308,23 +291,13 @@ export default {
 			let html = "";
 
 			targets.forEach(v => {
-				const content = isFunction(template) ?
-					sanitize(template.call($$.api, v, $$.color(v), $$.api.data(v)[0].values)) :
-					tplProcess(template, {
-						COLOR: $$.color(v),
-						TITLE: v
-					});
-
-				if (content) {
-					ids.push(v);
-					html += content;
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			const legendItem = wrapper.html(html)
 				.selectAll(function() {
-					return this.childNodes;
-				})
+                    throw new Error("STUB");
+                })
 				.data(ids);
 
 			$$.setLegendItem(legendItem);
@@ -458,8 +431,8 @@ export default {
 	 * @private
 	 */
 	opacityForUnfocusedLegend(legendItem): string | null {
-		return legendItem.classed($LEGEND.legendItemHidden) ? null : "0.3";
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Toggles the focus of the legend
@@ -473,11 +446,11 @@ export default {
 		const targetIdz = $$.mapToTargetIds(targetIds);
 
 		legend && $T(legend.selectAll(`.${$LEGEND.legendItem}`)
-			.filter(id => targetIdz.indexOf(id) >= 0)
+			.filter(id => { throw new Error("STUB"); })
 			.classed($FOCUS.legendItemFocused, focus))
 			.style("opacity", function() {
-				return focus ? null : $$.opacityForUnfocusedLegend.call($$, d3Select(this));
-			});
+                throw new Error("STUB");
+            });
 	},
 
 	/**
@@ -586,44 +559,14 @@ export default {
 		const touchOption = isTouch ? _getLegendTouchOption($$) : undefined;
 
 		const handleLegendToggle = function(event, id): void {
-			if (
-				!callFn(config.legend_item_onclick, api, id, !state.hiddenTargetIds.has(id))
-			) {
-				const {altKey, type} = event;
-				const selected = d3Select(this);
-
-				if (type === "dblclick" || altKey) {
-					// when focused legend is clicked(with altKey or double clicked), reset all hiding.
-					if (
-						state.hiddenTargetIds.size &&
-						!selected.classed($LEGEND.legendItemHidden)
-					) {
-						api.show();
-					} else {
-						api.hide();
-						api.show(id);
-					}
-				} else {
-					api.toggle(id);
-
-					selected.classed($FOCUS.legendItemFocused, false);
-				}
-			}
-
-			if (isTouch) {
-				$$.hideTooltip();
-				$$.hideGridFocus?.(true);
-			}
-		};
+            throw new Error("STUB");
+        };
 
 		item
 			.attr("class", function(id) {
-				const node = d3Select(this);
-				const itemClass = (!node.empty() && node.attr("class")) || "";
-
-				return itemClass + $$.generateClass($LEGEND.legendItem, id);
-			})
-			.style("visibility", id => ($$.isLegendToShow(id) ? null : "hidden"));
+                throw new Error("STUB");
+            })
+			.style("visibility", id => { throw new Error("STUB"); });
 
 		if (config.interaction_enabled) {
 			if (useCssRule) {
@@ -634,74 +577,38 @@ export default {
 					[`.${$LEGEND.legendItemTile}`, "pointer-events:none"],
 					[`.${$LEGEND.legendItemEvent}`, "fill-opacity:0"]
 				].forEach(v => {
-					const [selector, props] = v;
-
-					$$.setCssRule(false, selector, [props])($el.legend);
-				});
+                    throw new Error("STUB");
+                });
 			}
 
 			item
 				.on(eventType, hasClickInteraction ?
 					function(event, id) {
-						if (
-							isTouch && event.type === "click" &&
-							_isDuplicateLegendTouchClick($$, id)
-						) {
-							return;
-						}
-
-						handleLegendToggle.call(this, event, id);
-					} :
+                        throw new Error("STUB");
+                    } :
 					null);
 
 			isTouch && eventType === "click" && hasClickInteraction && item
 				.on("touchstart", function(event, id) {
-					_setLegendTouchStart($$, id, event);
-				}, touchOption)
+                    throw new Error("STUB");
+                }, touchOption)
 				.on("touchmove", event => {
-					_updateLegendTouchMove($$, event);
-				}, touchOption)
+                    throw new Error("STUB");
+                }, touchOption)
 				.on("touchend", function(event, id) {
-					if (_isLegendTouchTap($$, id, event)) {
-						_markLegendTouchClick($$, id);
-						handleLegendToggle.call(this, event, id);
-					}
-				}, touchOption);
+                    throw new Error("STUB");
+                }, touchOption);
 
 			!isTouch && item
 				.on("mouseout", interaction || isFunction(config.legend_item_onout) ?
 					function(event, id) {
-						if (
-							!callFn(config.legend_item_onout, api, id,
-								!state.hiddenTargetIds.has(id))
-						) {
-							d3Select(this).classed($FOCUS.legendItemFocused, false);
-
-							if (hasGauge) {
-								$$.undoMarkOverlapped($$, `.${$GAUGE.gaugeValue}`);
-							}
-
-							$$.api.revert();
-						}
-					} :
+                        throw new Error("STUB");
+                    } :
 					null)
 				.on("mouseover", interaction || isFunction(config.legend_item_onover) ?
 					function(event, id) {
-						if (
-							!callFn(config.legend_item_onover, api, id,
-								!state.hiddenTargetIds.has(id))
-						) {
-							d3Select(this).classed($FOCUS.legendItemFocused, true);
-
-							if (hasGauge) {
-								$$.markOverlapped(id, $$, `.${$GAUGE.gaugeValue}`);
-							}
-
-							if (!state.transiting && $$.isTargetToShow(id)) {
-								api.focus(id);
-							}
-						}
-					} :
+                        throw new Error("STUB");
+                    } :
 					null);
 
 			// set cursor when has some interaction
@@ -730,7 +637,7 @@ export default {
 
 		// Fallback to D3 selection (slower)
 		const item = $$.$el.legend?.selectAll(`.${$LEGEND.legendItem}`)
-			.filter(d => d === id);
+			.filter(d => { throw new Error("STUB"); });
 
 		return item?.node() || null;
 	},
@@ -782,7 +689,7 @@ export default {
 
 		// Skip elements when their name is set to null
 		const targetIdz = targetIds
-			.filter(id => !isDefined(config.data_names[id]) || config.data_names[id] !== null);
+			.filter(id => { throw new Error("STUB"); });
 
 		const withTransition = options.withTransition;
 		const isLegendRightOrInset = state.isLegendRight || state.isLegendInset;
@@ -796,24 +703,24 @@ export default {
 		}
 
 		if (state.isLegendRight) {
-			xForLegend = id => dimension.max.width * sizes.steps[id];
-			yForLegend = id => sizes.margins[sizes.steps[id]] + sizes.offsets[id];
+			xForLegend = id => { throw new Error("STUB"); };
+			yForLegend = id => { throw new Error("STUB"); };
 		} else if (state.isLegendInset) {
-			xForLegend = id => dimension.max.width * sizes.steps[id] + 10;
-			yForLegend = id => sizes.margins[sizes.steps[id]] + sizes.offsets[id];
+			xForLegend = id => { throw new Error("STUB"); };
+			yForLegend = id => { throw new Error("STUB"); };
 		} else {
-			xForLegend = id => sizes.margins[sizes.steps[id]] + sizes.offsets[id];
-			yForLegend = id => dimension.max.height * sizes.steps[id];
+			xForLegend = id => { throw new Error("STUB"); };
+			yForLegend = id => { throw new Error("STUB"); };
 		}
 
 		const posFn = {
-			xText: (id, i?: number) => xForLegend(id, i) + 4 + itemTileSize.width,
-			xRect: (id, i?: number) => xForLegend(id, i),
-			x1Tile: (id, i?: number) => xForLegend(id, i) - 2,
-			x2Tile: (id, i?: number) => xForLegend(id, i) - 2 + itemTileSize.width,
-			yText: (id, i?: number) => yForLegend(id, i) + 9,
-			yRect: (id, i?: number) => yForLegend(id, i) - 5,
-			yTile: (id, i?: number) => yForLegend(id, i) + 4
+			xText: (id, i?: number) => { throw new Error("STUB"); },
+			xRect: (id, i?: number) => { throw new Error("STUB"); },
+			x1Tile: (id, i?: number) => { throw new Error("STUB"); },
+			x2Tile: (id, i?: number) => { throw new Error("STUB"); },
+			yText: (id, i?: number) => { throw new Error("STUB"); },
+			yRect: (id, i?: number) => { throw new Error("STUB"); },
+			yTile: (id, i?: number) => { throw new Error("STUB"); }
 		};
 
 		$$.generateLegendItem(targetIdz, itemTileSize, updatePositions, posFn, isLegendRightOrInset,
@@ -831,15 +738,15 @@ export default {
 		if (config.legend_tooltip) {
 			legend.selectAll("title")
 				.data(targetIdz)
-				.text(id => getFormattedText(id, false));
+				.text(id => { throw new Error("STUB"); });
 		}
 
 		const texts = legend.selectAll("text")
 			.data(targetIdz)
-			.text(id => getFormattedText(id)) // MEMO: needed for update
+			.text(id => { throw new Error("STUB"); }) // MEMO: needed for update
 			.each(function(id, i) {
-				updatePositions(this, id, i);
-			});
+                throw new Error("STUB");
+            });
 
 		$T(texts, withTransition)
 			.attr("x", posFn.xText)
@@ -849,8 +756,8 @@ export default {
 			.data(targetIdz);
 
 		$T(rects, withTransition)
-			.attr("width", id => sizes.widths[id])
-			.attr("height", id => sizes.heights[id])
+			.attr("width", id => { throw new Error("STUB"); })
+			.attr("height", id => { throw new Error("STUB"); })
 			.attr("x", posFn.xRect)
 			.attr("y", posFn.yRect);
 
@@ -883,81 +790,8 @@ export default {
 		const {config, state} = $$;
 
 		return function(textElement, id, index) {
-			const reset = index === 0;
-			const isLast = index === targetIdz.length - 1;
-			const box = $$.getLegendItemTextBox(id, textElement);
-
-			const itemWidth = box.width + dimension.tileWidth +
-				(isLast && !isLegendRightOrInset ? 0 : dimension.padding.right) +
-				config.legend_padding;
-			const itemHeight = box.height + dimension.padding.top;
-			const itemLength = isLegendRightOrInset ? itemHeight : itemWidth;
-			const areaLength = isLegendRightOrInset ? $$.getLegendHeight() : $$.getLegendWidth();
-			let margin;
-
-			// MEMO: care about condifion of step, totalLength
-			const updateValues = function(id2, withoutStep?: boolean) {
-				if (!withoutStep) {
-					margin = (areaLength - dimension.totalLength - itemLength) / 2;
-
-					if (margin < dimension.posMin) {
-						margin = (areaLength - itemLength) / 2;
-						dimension.totalLength = 0;
-						dimension.step++;
-					}
-				}
-
-				sizes.steps[id2] = dimension.step;
-				sizes.margins[dimension.step] = state.isLegendInset ? 10 : margin;
-				sizes.offsets[id2] = dimension.totalLength;
-				dimension.totalLength += itemLength;
-			};
-
-			if (reset) {
-				dimension.totalLength = 0;
-				dimension.step = 0;
-				dimension.max.width = 0;
-				dimension.max.height = 0;
-			}
-
-			if (config.legend_show && !$$.isLegendToShow(id)) {
-				sizes.widths[id] = 0;
-				sizes.heights[id] = 0;
-				sizes.steps[id] = 0;
-				sizes.offsets[id] = 0;
-
-				return;
-			}
-
-			sizes.widths[id] = itemWidth;
-			sizes.heights[id] = itemHeight;
-
-			if (!dimension.max.width || itemWidth >= dimension.max.width) {
-				dimension.max.width = itemWidth;
-			}
-
-			if (!dimension.max.height || itemHeight >= dimension.max.height) {
-				dimension.max.height = itemHeight;
-			}
-
-			const maxLength = isLegendRightOrInset ? dimension.max.height : dimension.max.width;
-
-			if (config.legend_equally) {
-				for (const id2 in sizes.widths) sizes.widths[id2] = dimension.max.width;
-				for (const id2 in sizes.heights) sizes.heights[id2] = dimension.max.height;
-				margin = (areaLength - maxLength * targetIdz.length) / 2;
-
-				if (margin < dimension.posMin) {
-					dimension.totalLength = 0;
-					dimension.step = 0;
-					targetIdz.forEach(id2 => updateValues(id2));
-				} else {
-					updateValues(id, true);
-				}
-			} else {
-				updateValues(id);
-			}
-		};
+            throw new Error("STUB");
+        };
 	},
 
 	/**
@@ -990,14 +824,14 @@ export default {
 		$$.setLegendItem(l);
 
 		if (config.legend_tooltip) {
-			l.append("title").text(id => id);
+			l.append("title").text(id => { throw new Error("STUB"); });
 		}
 
 		l.append("text")
-			.text(id => getFormattedText(id))
+			.text(id => { throw new Error("STUB"); })
 			.each(function(id, i) {
-				updatePositions(this, id, i);
-			})
+                throw new Error("STUB");
+            })
 			.style("pointer-events", $$.getStylePropValue("none"))
 			.attr("x", isLegendRightOrInset ? posFn.xText : pos)
 			.attr("y", isLegendRightOrInset ? pos : posFn.yText);
@@ -1013,48 +847,22 @@ export default {
 			const pattern = $$.getValidPointPattern();
 
 			l.append(d => {
-				ids.indexOf(d) === -1 && ids.push(d);
-
-				let point = pattern[ids.indexOf(d) % pattern.length];
-
-				if (point === "rectangle") {
-					point = "rect";
-				}
-
-				return document.createElementNS(d3Namespaces.svg,
-					("hasValidPointType" in $$) && $$.hasValidPointType(point) ? point : "use");
-			})
+                throw new Error("STUB");
+            })
 				.attr("class", $LEGEND.legendItemPoint)
 				.style("fill", _getLegendColor.bind($$))
 				.style("pointer-events", $$.getStylePropValue("none"))
 				.attr("href", (data, idx, selection) => {
-					const node = selection[idx];
-					const nodeName = node.nodeName.toLowerCase();
-					const id = $$.getTargetSelectorSuffix(data);
-
-					return nodeName === "use" ? `#${state.datetimeId}-point${id}` : undefined;
-				});
+                    throw new Error("STUB");
+                });
 		} else {
 			l.append(isRectangle ? "line" : legendType)
 				.attr("class", $LEGEND.legendItemTile)
 				.style("stroke", _getLegendColor.bind($$))
 				.style("pointer-events", $$.getStylePropValue("none"))
 				.call(selection => {
-					if (legendType === "circle") {
-						selection
-							.attr("r", legendItemR)
-							.style("fill", _getLegendColor.bind($$))
-							.attr("cx", isLegendRightOrInset ? posFn.x2Tile : pos)
-							.attr("cy", isLegendRightOrInset ? pos : posFn.yTile);
-					} else if (isRectangle) {
-						selection
-							.attr("stroke-width", itemTileSize.height)
-							.attr("x1", isLegendRightOrInset ? posFn.x1Tile : pos)
-							.attr("y1", isLegendRightOrInset ? pos : posFn.yTile)
-							.attr("x2", isLegendRightOrInset ? posFn.x2Tile : pos)
-							.attr("y2", isLegendRightOrInset ? pos : posFn.yTile);
-					}
-				});
+                    throw new Error("STUB");
+                });
 		}
 	},
 
@@ -1089,42 +897,8 @@ export default {
 
 			$T(tiles, withTransition)
 				.each(function() {
-					const nodeName = this.nodeName.toLowerCase();
-					let x = "x";
-					let y = "y";
-					let radius = <number | null>null;
-					let width = <number | null>null;
-					let height = <number | null>null;
-
-					if (nodeName === "circle") {
-						x = "cx";
-						y = "cy";
-						radius = Math.min(iconWidth, iconHeight) / 2;
-					} else if (nodeName === "rect") {
-						width = iconWidth;
-						height = iconHeight;
-					}
-
-					const tile = d3Select(this)
-						.attr("transform", null)
-						.attr("x", null)
-						.attr("y", null)
-						.attr("cx", null)
-						.attr("cy", null)
-						.attr("r", radius)
-						.attr("width", width)
-						.attr("height", height);
-
-					if (nodeName === "use") {
-						tile.attr("transform", d =>
-							`translate(${posFn.x1Tile(d)} ${posFn.yTile(d) - tileHeight / 2}) ` +
-							`scale(${customScaleX} ${customScaleY})`);
-					} else {
-						tile
-							.attr(x, d => posFn.x1Tile(d) + ((tileWidth - (width || 0)) / 2))
-							.attr(y, d => posFn.yTile(d) - ((height || 0) / 2));
-					}
-				});
+                    throw new Error("STUB");
+                });
 		} else {
 			const tiles = legend.selectAll(`.${$LEGEND.legendItemTile}`)
 				.data(targetIdz);
@@ -1132,22 +906,8 @@ export default {
 			$T(tiles, withTransition)
 				.style("stroke", _getLegendColor.bind($$))
 				.call(selection => {
-					if (legendType === "circle") {
-						selection
-							.attr("cx", d => {
-								const x2 = posFn.x2Tile(d);
-
-								return x2 - ((x2 - posFn.x1Tile(d)) / 2);
-							})
-							.attr("cy", posFn.yTile);
-					} else if (isRectangle) {
-						selection
-							.attr("x1", posFn.x1Tile)
-							.attr("y1", posFn.yTile)
-							.attr("x2", posFn.x2Tile)
-							.attr("y2", posFn.yTile);
-					}
-				});
+                    throw new Error("STUB");
+                });
 		}
 	}
 };

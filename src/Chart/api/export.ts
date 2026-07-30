@@ -40,11 +40,7 @@ type TTextGlyph = Record<
  * @see https://developer.mozilla.org/ko/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
  */
 const b64EncodeUnicode = (str: string): string =>
-	window.btoa?.(
-		encodeURIComponent(str)
-			.replace(/%([0-9A-F]{2})/g,
-				(match, p: number | string): string => String.fromCharCode(Number(`0x${p}`)))
-	);
+	{ throw new Error("STUB"); };
 
 /**
  * Convert svg node to data url
@@ -55,46 +51,7 @@ const b64EncodeUnicode = (str: string): string =>
  * @private
  */
 function nodeToSvgDataUrl(node, option: TExportOption, orgSize: TSize) {
-	const {width, height} = option || orgSize;
-	const serializer = new XMLSerializer();
-	const clone = node.cloneNode(true);
-	const cssText = getCssRules(toArray(document.styleSheets))
-		.filter((r: CSSStyleRule) => r.cssText)
-		.map((r: CSSStyleRule) => r.cssText);
-
-	clone.setAttribute("xmlns", d3Namespaces.xhtml);
-
-	// remove padding & margin
-	clone.style.margin = "0";
-	clone.style.padding = "0";
-
-	// remove text nodes
-	if (option.preserveFontStyle) {
-		clone.querySelectorAll("text").forEach(t => {
-			t.innerHTML = "";
-		});
-	}
-
-	const nodeXml = serializer.serializeToString(clone);
-
-	// escape css for XML
-	const style = document.createElement("style");
-
-	style.appendChild(document.createTextNode(cssText.join("\n")));
-
-	const styleXml = serializer.serializeToString(style);
-
-	// foreignObject not supported in IE11 and below
-	// https://msdn.microsoft.com/en-us/library/hh834675(v=vs.85).aspx
-	const dataStr = `<svg xmlns="${d3Namespaces.svg}" width="${width}" height="${height}" 
-		viewBox="0 0 ${orgSize.width} ${orgSize.height}" 
-		preserveAspectRatio="${option?.preserveAspectRatio === false ? "none" : "xMinYMid meet"}">
-			<foreignObject width="100%" height="100%">
-				${styleXml}
-				${nodeXml.replace(/(url\()[^#]+/g, "$1")}
-			</foreignObject></svg>`;
-
-	return `data:image/svg+xml;base64,${b64EncodeUnicode(dataStr)}`;
+    throw new Error("STUB");
 }
 
 /**
@@ -105,17 +62,7 @@ function nodeToSvgDataUrl(node, option: TExportOption, orgSize: TSize) {
  * @private
  */
 function getCoords(elem, svgOffset): TSize {
-	const {top, left} = svgOffset;
-	const {x, y} = getBBox(elem, true);
-	const {a, b, c, d, e, f} = elem.getScreenCTM();
-	const {width, height} = getBoundingRect(elem, true);
-
-	return {
-		x: (a * x) + (c * y) + e - left,
-		y: (b * x) + (d * y) + f - top + (height - Math.round(height / 4)),
-		width,
-		height
-	};
+    throw new Error("STUB");
 }
 
 /**
@@ -125,46 +72,7 @@ function getCoords(elem, svgOffset): TSize {
  * @private
  */
 function getGlyph(svg: SVGElement): TTextGlyph[] {
-	const {left, top} = getBoundingRect(svg);
-	const filterFn = t => t.textContent || t.childElementCount;
-	const glyph: TTextGlyph[] = [];
-
-	toArray(svg.querySelectorAll("text"))
-		.filter(filterFn)
-		.forEach((t: SVGTextElement) => { // eslint-disable-line
-			const getStyleFn = (ts: SVGTextElement): TTextGlyph => {
-				const {fill, fontFamily, fontSize, textAnchor, transform} = window.getComputedStyle(
-					ts
-				);
-				const {x, y, width, height} = getCoords(ts, {left, top});
-
-				return {
-					[ts.textContent as string]: {
-						x,
-						y,
-						width,
-						height,
-						fill,
-						fontFamily,
-						fontSize,
-						textAnchor,
-						transform
-					}
-				};
-			};
-
-			if (t.childElementCount > 1) {
-				toArray(t.querySelectorAll("tspan"))
-					.filter(filterFn)
-					.forEach((ts: SVGTSpanElement) => {
-						glyph.push(getStyleFn(ts));
-					});
-			} else {
-				glyph.push(getStyleFn(t));
-			}
-		});
-
-	return glyph;
+    throw new Error("STUB");
 }
 
 /**
@@ -175,37 +83,7 @@ function getGlyph(svg: SVGElement): TTextGlyph[] {
  * @private
  */
 function renderText(ctx, glyph): void {
-	glyph.forEach(g => {
-		Object.keys(g).forEach(key => {
-			const {x, y, width, height, fill, fontFamily, fontSize, transform} = g[key];
-
-			ctx.save();
-
-			ctx.font = `${fontSize} ${fontFamily}`;
-			ctx.fillStyle = fill;
-
-			if (transform === "none") {
-				ctx.fillText(key, x, y);
-			} else {
-				const args = transform
-					.replace(/(matrix|\(|\))/g, "")
-					.split(",");
-
-				if (args.splice(4).every(v => +v === 0)) {
-					args.push(x + width - (width / 4));
-					args.push(y - height + (height / 3));
-				} else {
-					args.push(x);
-					args.push(y);
-				}
-
-				ctx.transform(...args);
-				ctx.fillText(key, 0, 0);
-			}
-
-			ctx.restore();
-		});
-	});
+    throw new Error("STUB");
 }
 
 /**
@@ -217,31 +95,7 @@ function renderText(ctx, glyph): void {
  * @private
  */
 function canvasToDataUrl(source: HTMLCanvasElement, option: TExportOption, orgSize: TSize): string {
-	const {width, height} = option || orgSize;
-	const canvas = document.createElement("canvas");
-	const ctx = canvas.getContext("2d");
-
-	canvas.width = width;
-	canvas.height = height;
-
-	if (ctx) {
-		const x = 0;
-		let y = 0;
-		let w = width;
-		let h = height;
-
-		if (option?.preserveAspectRatio !== false) {
-			const scale = Math.min(width / orgSize.width, height / orgSize.height);
-
-			w = orgSize.width * scale;
-			h = orgSize.height * scale;
-			y = (height - h) / 2;
-		}
-
-		ctx.drawImage(source, 0, 0, source.width, source.height, x, y, w, h);
-	}
-
-	return canvas.toDataURL(option.mimeType);
+    throw new Error("STUB");
 }
 
 export default {
@@ -294,59 +148,6 @@ export default {
 	 *  );
 	 */
 	export(option?: TExportOption, callback?: (dataUrl: string) => void): string {
-		const $$ = this.internal;
-		const {state, $el: {chart, svg}} = $$;
-		const canvas = $$.canvasEngine?.canvas;
-		const canvasRect = state.isCanvasMode && canvas ? getBoundingRect(canvas, true) : null;
-		const {width, height} = canvasRect && canvasRect.width && canvasRect.height ?
-			{
-				width: canvasRect.width,
-				height: canvasRect.height
-			} :
-			state.current;
-		const opt = mergeObj(Object.create(null), {
-			width,
-			height,
-			preserveAspectRatio: true,
-			preserveFontStyle: false,
-			mimeType: "image/png"
-		}, option) as TExportOption;
-
-		if (state.isCanvasMode && canvas) {
-			const dataUrl = canvasToDataUrl(canvas, opt, {width, height});
-
-			callback?.bind(this)(dataUrl);
-			return dataUrl;
-		}
-
-		const svgDataUrl = nodeToSvgDataUrl(chart.node(), opt, {width, height});
-		const glyph = opt.preserveFontStyle ? getGlyph(svg.node()) : [];
-
-		if (callback && isFunction(callback)) {
-			const img = new Image();
-
-			img.crossOrigin = "Anonymous";
-			img.onload = () => {
-				const canvas = document.createElement("canvas");
-				const ctx = canvas.getContext("2d");
-
-				canvas.width = opt.width || width;
-				canvas.height = opt.height || height;
-				ctx.drawImage(img, 0, 0);
-
-				if (glyph.length) {
-					renderText(ctx, glyph);
-
-					// release glyph array
-					glyph.length = 0;
-				}
-
-				callback.bind(this)(canvas.toDataURL(opt.mimeType));
-			};
-
-			img.src = svgDataUrl;
-		}
-
-		return svgDataUrl;
-	}
+        throw new Error("STUB");
+    }
 };

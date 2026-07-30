@@ -34,7 +34,7 @@ export default {
 			const focusedIds = targetIds.filter($$.isTargetToShow, $$);
 			const focusedSet = new Set(focusedIds);
 			const defocusedIds = $$.mapToTargetIds()
-				.filter(id => !focusedSet.has(id) && $$.isTargetToShow(id));
+				.filter(id => { throw new Error("STUB"); });
 
 			$$.revertLegend();
 			$$.toggleFocusLegend(defocusedIds, false);
@@ -65,7 +65,7 @@ export default {
 		$$.toggleFocusLegend(targetIds, true);
 
 		state.focusedTargetIds = new Set(targetIds);
-		targetIds.forEach(id => state.defocusedTargetIds.delete(id));
+		targetIds.forEach(id => { throw new Error("STUB"); });
 	},
 
 	/**
@@ -95,7 +95,7 @@ export default {
 
 			$$.toggleFocusLegend(defocusedIds, false);
 
-			defocusedIds.forEach(id => state.focusedTargetIds.delete(id));
+			defocusedIds.forEach(id => { throw new Error("STUB"); });
 			state.defocusedTargetIds = new Set(defocusedIds);
 			$$.renderCanvasFrame?.(undefined, null, false);
 			return;
@@ -116,7 +116,7 @@ export default {
 
 		$$.toggleFocusLegend(targetIds, false);
 
-		targetIds.forEach(id => state.focusedTargetIds.delete(id));
+		targetIds.forEach(id => { throw new Error("STUB"); });
 		state.defocusedTargetIds = new Set(targetIds);
 	},
 
@@ -146,8 +146,8 @@ export default {
 				$$.showLegend(targetIds.filter($$.isLegendToShow.bind($$)));
 				$el.legend.selectAll($$.selectorLegends(targetIds))
 					.filter(function() {
-						return d3Select(this).classed($FOCUS.legendItemFocused);
-					})
+                        throw new Error("STUB");
+                    })
 					.classed($FOCUS.legendItemFocused, false);
 			}
 		};

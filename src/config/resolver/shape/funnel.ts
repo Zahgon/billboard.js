@@ -7,6 +7,4 @@ import {TYPE} from "../../const";
 import optFunnel from "../../Options/shape/funnel";
 import {extendArc} from "./arc.helpers";
 
-export let funnel = (): string => (
-	extendArc([shapeFunnel], [optFunnel]), (funnel = () => TYPE.FUNNEL)()
-);
+export let funnel = (): string => { throw new Error("STUB"); };

@@ -65,7 +65,7 @@ export default {
 	 *    }
 	 * }
 	 */
-	data_selection_isselectable: () => true,
+	data_selection_isselectable: () => { throw new Error("STUB"); },
 
 	/**
 	 * Set multiple data points selection enabled.<br><br>
@@ -115,7 +115,9 @@ export default {
 	 *    }
 	 * }
 	 */
-	data_onselected: () => {},
+	data_onselected: () => {
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Set a callback for on data un-selection.
@@ -132,5 +134,7 @@ export default {
 	 *    }
 	 * }
 	 */
-	data_onunselected: () => {}
+	data_onunselected: () => {
+        throw new Error("STUB");
+    }
 };

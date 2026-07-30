@@ -104,8 +104,8 @@ export default {
 			state._cachedDrawShape = null;
 
 			$$.mapToIds($$.data.targets).forEach(id => {
-				state.withoutFadeIn[id] = true;
-			});
+                throw new Error("STUB");
+            });
 
 			callFn(config.onrendered, $$.api);
 			return;
@@ -143,14 +143,8 @@ export default {
 			config.regions.length && $$.updateRegion?.();
 
 			["bar", "candlestick", "line", "area"].forEach(v => {
-				const name = capitalize(v);
-
-				if ((/^(line|area)$/.test(v) && $$.hasTypeOf(name)) || $$.hasType(v)) {
-					if (needShapeUpdate) {
-						$$[`update${name}`](wth.TransitionForExit);
-					}
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			// circles for select
 			$el.text && main.selectAll(`.${$SELECT.selectedCircles}`)
@@ -261,10 +255,8 @@ export default {
 			// transition should be derived from one transition
 			d3Transition().duration(duration)
 				.each(() => {
-					redrawList
-						.flatMap(t1 => t1)
-						.forEach(t => waitForDraw.add(t));
-				})
+                    throw new Error("STUB");
+                })
 				.call(waitForDraw, afterRedraw);
 		} else if (!state.transiting) {
 			afterRedraw();
@@ -272,8 +264,8 @@ export default {
 
 		// update fadein condition
 		$$.mapToIds($$.data.targets).forEach(id => {
-			state.withoutFadeIn[id] = true;
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	getRedrawList(shape, flow, flowFn, withTransition: boolean): Function[] {

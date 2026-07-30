@@ -186,7 +186,7 @@ export default class HitDetector {
 		this.pointBased = !($$.config.axis_x_forceAsSingle && this.grouped) && (
 			!!$$.isMultipleX?.() ||
 			targets.some(target =>
-				isCanvasScatterType($$, target) || isCanvasBubbleType($$, target)
+				{ throw new Error("STUB"); }
 			)
 		);
 		const needsIndex = this.grouped &&
@@ -243,32 +243,10 @@ export default class HitDetector {
 
 			targets
 				.filter(isBar)
-				.filter(target => isCanvasTargetSupported($$, target, HIT_GROUPED_TYPE_FILTERS))
+				.filter(target => { throw new Error("STUB"); })
 				.forEach(target => {
-					const range = getCanvasTargetVisibleRange($$, target);
-
-					for (let i = range.start; i < range.end; i++) {
-						const d = target.values[i];
-
-						if (!hasCanvasDrawableValue($$, d)) {
-							continue;
-						}
-
-						const geometry = getCanvasBarGeometry($$, getPoints, d, i);
-
-						if (!geometry) {
-							continue;
-						}
-
-						const {rect} = geometry;
-						const x = margin.left + rect.x;
-						const y = margin.top + rect.y;
-						const {w, h} = rect;
-
-						this.addBar({x, y, w, h, data: d});
-						addIndex(x + w / 2, y + h / 2, d);
-					}
-				});
+                    throw new Error("STUB");
+                });
 		}
 
 		if (
@@ -282,39 +260,10 @@ export default class HitDetector {
 			if (getPoints) {
 				targets
 					.filter(isCandlestick)
-					.filter(target => isCanvasTargetSupported($$, target, HIT_GROUPED_TYPE_FILTERS))
+					.filter(target => { throw new Error("STUB"); })
 					.forEach(target => {
-						const range = getCanvasTargetVisibleRange($$, target);
-
-						for (let i = range.start; i < range.end; i++) {
-							const d = target.values[i];
-							const value = $$.getCandlestickData?.(d);
-
-							if (!value) {
-								continue;
-							}
-
-							const geometry = getCanvasCandlestickGeometry($$, getPoints, d, i);
-
-							if (!geometry) {
-								continue;
-							}
-
-							const {body: rect} = geometry;
-							const x = margin.left + rect.x;
-							const y = margin.top + rect.y;
-							const {w, h} = rect;
-
-							this.addBar({
-								x,
-								y,
-								w: Math.max(1, w),
-								h: Math.max(1, h),
-								data: d
-							});
-							addIndex(x + w / 2, y + h / 2, d);
-						}
-					});
+                        throw new Error("STUB");
+                    });
 			}
 		}
 
@@ -323,54 +272,16 @@ export default class HitDetector {
 		if (cx && cy) {
 			targets
 				.filter(isCanvasPointType.bind(null, $$))
-				.filter(target => isCanvasTargetSupported($$, target, HIT_GROUPED_TYPE_FILTERS))
+				.filter(target => { throw new Error("STUB"); })
 				.forEach(target => {
-					const range = getCanvasTargetVisibleRange($$, target);
-					const occupancy = shouldCullDenseScatterHitPoints($$, target) ?
-						createCanvasPointOccupancyGrid(width, height, $$.config.point_r) :
-						null;
-
-					for (let i = range.start; i < range.end; i++) {
-						const d = target.values[i];
-
-						if (!hasCanvasDrawableValue($$, d)) {
-							continue;
-						}
-
-						const x = margin.left + cx(d, i);
-						const y = margin.top + cy(d, i);
-						const sensitivity = getPointHitSensitivity($$, d);
-
-						if (!isFiniteCanvasCoordinate(x, y)) {
-							continue;
-						}
-
-						if (
-							occupancy &&
-							!markCanvasPointOccupancy(
-								occupancy,
-								x - margin.left,
-								y - margin.top
-							)
-						) {
-							continue;
-						}
-
-						this.addPoint({
-							x,
-							y,
-							sensitivity,
-							data: d
-						});
-						addIndex(x, y, d);
-					}
-				});
+                    throw new Error("STUB");
+                });
 		}
 
 		this.buildPointGrid();
 		this.indices = indexMap ?
 			Array.from(indexMap.values())
-				.sort((a, b) => a[this.indexAxis] - b[this.indexAxis]) :
+				.sort((a, b) => { throw new Error("STUB"); }) :
 			[];
 	}
 
@@ -501,7 +412,7 @@ export default class HitDetector {
 			const max = axis === "y" ? y2 : x2;
 
 			this.indices
-				.filter(item => item[axis] >= min && item[axis] <= max)
+				.filter(item => { throw new Error("STUB"); })
 				.forEach(add);
 
 			return data;
@@ -509,16 +420,12 @@ export default class HitDetector {
 
 		this.bars
 			.filter(item => {
-				const w = item.w ?? 0;
-				const h = item.h ?? 0;
-
-				return !(x2 < item.x || item.x + w < x1) &&
-					!(y2 < item.y || item.y + h < y1);
-			})
+                throw new Error("STUB");
+            })
 			.forEach(add);
 
 		this.points
-			.filter(item => item.x >= x1 && item.x <= x2 && item.y >= y1 && item.y <= y2)
+			.filter(item => { throw new Error("STUB"); })
 			.forEach(add);
 
 		return data;

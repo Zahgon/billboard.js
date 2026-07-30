@@ -60,9 +60,8 @@ export default {
 
 		if (args.json || args.rows || args.columns) {
 			$$.convertData(args, res => {
-				data = res;
-				_();
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		/**
@@ -89,98 +88,19 @@ export default {
 
 			// Update/Add data
 			$$.data.targets.forEach(t => {
-				let found = false;
-
-				for (let i = 0; i < targets.length; i++) {
-					if (t.id === targets[i].id) {
-						found = true;
-
-						if (t.values[t.values.length - 1]) {
-							tail = t.values[t.values.length - 1].index + 1;
-						}
-
-						const values = targets[i].values;
-
-						length = values.length;
-
-						for (let j = 0; j < length; j++) {
-							values[j].index = tail + j;
-
-							if (!isTimeSeries) {
-								values[j].x = tail + j;
-							}
-
-							t.values.push(values[j]);
-						}
-
-						targets.splice(i, 1);
-						break;
-					}
-				}
-
-				!found && notfoundIds.push(t.id);
-			});
+                throw new Error("STUB");
+            });
 
 			// Append null for not found targets
 			$$.data.targets.forEach(t => {
-				for (let i = 0; i < notfoundIds.length; i++) {
-					if (t.id === notfoundIds[i]) {
-						// target can have no values when fully flowed out
-						if (!t.values[t.values.length - 1]) {
-							continue;
-						}
-
-						tail = t.values[t.values.length - 1].index + 1;
-
-						for (let j = 0; j < length; j++) {
-							t.values.push({
-								id: t.id,
-								index: tail + j,
-								x: isTimeSeries ? $$.getOtherTargetX(tail + j) : tail + j,
-								value: null
-							});
-						}
-					}
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			// Generate null values for new target
 			if ($$.data.targets.length) {
 				targets.forEach(t => {
-					const firstIndex = $$.data.targets[0].values[0].index;
-					const values = t.values;
-					const valueLength = values.length;
-					const missingLength = Math.max(tail - firstIndex, 0);
-
-					if (missingLength) {
-						values.length = valueLength + missingLength;
-
-						for (let i = valueLength - 1; i >= 0; i--) {
-							values[i + missingLength] = values[i];
-						}
-
-						for (let i = 0; i < missingLength; i++) {
-							const index = firstIndex + i;
-
-							values[i] = {
-								id: t.id,
-								index,
-								x: isTimeSeries ? $$.getOtherTargetX(index) : index,
-								value: null
-							};
-						}
-					}
-
-					for (let i = missingLength; i < values.length; i++) {
-						const v = values[i];
-
-						v.index += tail;
-
-						if (!isTimeSeries) {
-							v.x += tail;
-						}
-					}
-				});
+                    throw new Error("STUB");
+                });
 			}
 
 			for (let i = 0; i < targets.length; i++) {
@@ -198,8 +118,8 @@ export default {
 				to = isTimeSeries ? parseDate.call($$, args.to) : args.to;
 
 				baseTarget.values.forEach(v => {
-					v.x < to && length++;
-				});
+                    throw new Error("STUB");
+                });
 			} else if (isDefined(args.length)) {
 				length = args.length;
 			}
@@ -241,8 +161,8 @@ export default {
 				// post-flow state, then redraw the final frame.
 				if (length && orgDataCount) {
 					$$.data.targets.forEach(d => {
-						d.values.splice(0, length);
-					});
+                        throw new Error("STUB");
+                    });
 				}
 
 				$$.state.dirty.data = true;

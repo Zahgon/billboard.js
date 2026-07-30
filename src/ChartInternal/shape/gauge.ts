@@ -8,32 +8,8 @@ import {isFunction} from "../../module/util";
 
 export default {
 	initGauge(): void {
-		const $$ = this;
-		const {config, $el: {arcs}} = $$;
-		const appendText = (className = <null | string>null, value = "") => {
-			arcs.append("text")
-				.attr("class", className)
-				.style("text-anchor", "middle")
-				.style("pointer-events", "none")
-				.text(value);
-		};
-
-		if ($$.hasType("gauge")) {
-			const hasMulti = $$.hasMultiArcGauge();
-
-			arcs.append(hasMulti ? "g" : "path")
-				.attr("class", $ARC.chartArcsBackground)
-				.style("fill", (!hasMulti && config.gauge_background) || null);
-
-			config.gauge_units && appendText($GAUGE.chartArcsGaugeUnit);
-
-			// append min/max value text
-			if (config.gauge_label_show) {
-				appendText($GAUGE.chartArcsGaugeMin);
-				!config.gauge_fullCircle && appendText($GAUGE.chartArcsGaugeMax);
-			}
-		}
-	},
+        throw new Error("STUB");
+    },
 
 	updateGaugeMax(): void {
 		const $$ = this;
@@ -67,44 +43,16 @@ export default {
 		const mainArcLabelLine = arcLabelLines.enter()
 			.append("rect")
 			.attr("class",
-				d => `${$ARC.arcLabelLine} ${$COMMON.target} ${$COMMON.target}-${d.data.id}`)
+				d => { throw new Error("STUB"); })
 			.merge(arcLabelLines);
 
 		mainArcLabelLine
 			.style("fill",
-				d => ($$.levelColor ? $$.levelColor(d.data.values[0].value) : $$.color(d.data)))
+				d => { throw new Error("STUB"); })
 			.style("display", config.gauge_label_show ? null : "none")
 			.each(function(d) {
-				let lineLength = 0;
-				const lineThickness = 2;
-				let x = 0;
-				let y = 0;
-				let transform = "";
-
-				if (!hiddenTargetIds.has(d.data.id)) {
-					const updated = $$.updateAngle(d);
-					const innerLineLength = state.gaugeArcWidth /
-						$$.getTargetsToShow().length *
-						(updated.index + 1);
-					const lineAngle = updated.endAngle - Math.PI / 2;
-					const arcInnerRadius = state.radius - innerLineLength;
-					const linePositioningAngle = lineAngle -
-						(arcInnerRadius === 0 ? 0 : (1 / arcInnerRadius));
-
-					lineLength = state.radiusExpanded - state.radius + innerLineLength;
-					x = Math.cos(linePositioningAngle) * arcInnerRadius;
-					y = Math.sin(linePositioningAngle) * arcInnerRadius;
-					transform = `rotate(${lineAngle * 180 / Math.PI}, ${x}, ${y})`;
-				}
-
-				d3Select(this)
-					.attr("x", x)
-					.attr("y", y)
-					.attr("width", lineLength)
-					.attr("height", lineThickness)
-					.attr("transform", transform)
-					.style("stroke-dasharray", `0, ${lineLength + lineThickness}, 0`);
-			});
+                throw new Error("STUB");
+            });
 	},
 
 	textForGaugeMinMax(value: number, isMax?: boolean): number | string {

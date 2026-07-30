@@ -41,11 +41,7 @@ export function normalizeDataRegions($$, values, regions?: DataRegion[]): Normal
 		isUndefined(value) ? fallback : (isTimeSeries ? parseDate.call($$, value) : value)
 	);
 
-	return (regions || []).map(region => ({
-		start: getValue(region.start, values[0]?.x),
-		end: getValue(region.end, values[values.length - 1]?.x),
-		style: region.style || {dasharray: DEFAULT_DASHARRAY}
-	}));
+	return (regions || []).map(region => { throw new Error("STUB"); });
 }
 
 /**

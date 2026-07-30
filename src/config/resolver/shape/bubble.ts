@@ -10,9 +10,4 @@ import optPoint from "../../Options/common/point";
 import optBubble from "../../Options/shape/bubble";
 import {extendAxis} from "./axis.helpers";
 
-export let bubble = (): string => (
-	extendAxis(
-		[shapePointCommon, shapePoint, shapeBubble],
-		[optBubble, optPoint]
-	), (bubble = () => TYPE.BUBBLE)()
-);
+export let bubble = (): string => { throw new Error("STUB"); };

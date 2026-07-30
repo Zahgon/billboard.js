@@ -30,13 +30,13 @@ function setMinMax($$, type: "min" | "max", value: AxisOption): void {
 	if (isDefined(value)) {
 		if (isObjectType(value)) {
 			Object.keys(value).forEach(key => {
-				helper(key, value[key]);
-			});
+                throw new Error("STUB");
+            });
 		} else if (isNumber(value) || value === false) {
 			// shorthand values affects only y and y2.
 			["y", "y2"].forEach(key => {
-				helper(key, value);
-			});
+                throw new Error("STUB");
+            });
 		}
 
 		$$.state.dirty.data = true;
@@ -97,32 +97,8 @@ const axis = {
 	 * // }
 	 */
 	labels: function<T>(labels?: {x?: string, y?: string, y2?: string}): T | undefined {
-		const $$ = this.internal;
-		let labelText;
-
-		if (labels) {
-			Object.keys(labels).forEach(axisId => {
-				$$.axis.setLabelText(axisId, labels[axisId]);
-			});
-
-			if ($$.state.isCanvasMode) {
-				$$.renderCanvasFrame?.(undefined, null, false);
-			} else {
-				$$.axis.updateLabels();
-			}
-		}
-
-		["x", "y", "y2"].forEach(v => {
-			const text = $$.axis.getLabelText(v);
-
-			if (text) {
-				!labelText && (labelText = {});
-				labelText[v] = text;
-			}
-		});
-
-		return <T>labelText;
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get and set axis min value.
@@ -155,12 +131,8 @@ const axis = {
 	 * chart.axis.min(false);
 	 */
 	min: function(min?: AxisOption): object | void {
-		const $$ = this.internal;
-
-		return isValue(min) || min === false ?
-			setMinMax($$, "min", min as AxisOption) :
-			getMinMax($$, "min");
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get and set axis max value.
@@ -193,12 +165,8 @@ const axis = {
 	 * chart.axis.max(false);
 	 */
 	max: function(max?: AxisOption): object | void {
-		const $$ = this.internal;
-
-		return isValue(max) || max === false ?
-			setMinMax($$, "max", max as AxisOption) :
-			getMinMax($$, "max");
-	},
+        throw new Error("STUB");
+    },
 
 	/**
 	 * Get and set axis min and max value.
@@ -244,22 +212,8 @@ const axis = {
 	 * chart.axis.range({ min: false, max: false });
 	 */
 	range: function(range: RangeAxisOption): object | void {
-		const {axis} = this;
-
-		if (arguments.length) {
-			const {min, max} = range;
-
-			isDefined(max) && axis.max(max);
-			isDefined(min) && axis.min(min);
-		} else {
-			return {
-				max: axis.max(),
-				min: axis.min()
-			};
-		}
-
-		return undefined;
-	}
+        throw new Error("STUB");
+    }
 };
 
 export default {axis};

@@ -132,24 +132,14 @@ export default {
 			scale[key] = scaleValue[key];
 		}
 
-		scale.orgDomain = () => scaleValue.domain();
-		scale.orgScale = () => scaleValue;
+		scale.orgDomain = () => { throw new Error("STUB"); };
+		scale.orgScale = () => { throw new Error("STUB"); };
 
 		// define custom domain() for categorized axis
 		if ($$.axis.isCategorized()) {
 			scale.domain = function(domainValue) {
-				let domain = domainValue;
-
-				if (!arguments.length) {
-					domain = this.orgDomain();
-
-					return isInverted ? [domain[0] + 1, domain[1]] : [domain[0], domain[1] + 1];
-				}
-
-				scaleValue.domain(domain);
-
-				return scale;
-			};
+                throw new Error("STUB");
+            };
 		}
 
 		return scale;
@@ -200,10 +190,8 @@ export default {
 				org.xDomain :
 				(scale.zoom ? undefined : scale.subX?.domain?.());
 
-			scale.x = $$.getXScale(min.x, max.x, xDomain, () => axis.x.tickOffset());
-			scale.subX = $$.getXScale(min.x, max.x, xSubDomain, d => (
-				d % 1 ? 0 : (axis.subX ?? axis.x).tickOffset()
-			));
+			scale.x = $$.getXScale(min.x, max.x, xDomain, () => { throw new Error("STUB"); });
+			scale.subX = $$.getXScale(min.x, max.x, xSubDomain, d => { throw new Error("STUB"); });
 
 			format.xAxisTick = axis.getXAxisTickFormat();
 			format.subXAxisTick = axis.getXAxisTickFormat(true);
@@ -274,29 +262,14 @@ export default {
 	},
 
 	xv(d: IGridData): number {
-		const $$ = this;
-		const {axis, config, scale: {x, zoom}} = $$;
-		const fn = config.zoom_enabled && zoom ? zoom : x;
-		let value = $$.getBaseValue(d);
-
-		if (axis.isTimeSeries()) {
-			value = parseDate.call($$, value);
-		} else if (axis.isCategorized() && isString(value)) {
-			value = config.axis_x_categories.indexOf(value);
-		}
-
-		return fn(value);
-	},
+        throw new Error("STUB");
+    },
 
 	yv(d: IGridData): number {
-		const $$ = this;
-		const {scale: {y, y2}} = $$;
-		const yScale = d.axis && d.axis === "y2" ? y2 : y;
-
-		return yScale($$.getBaseValue(d));
-	},
+        throw new Error("STUB");
+    },
 
 	subxx(d: IDataRow): number | null {
-		return d ? this.scale.subX(d.x) : null;
-	}
+        throw new Error("STUB");
+    }
 };

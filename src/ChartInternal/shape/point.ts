@@ -59,33 +59,12 @@ function getPointBBox(node: SVGElement): {width: number, height: number} {
 
 export default {
 	initialOpacityForCircle(d): string | number | null {
-		const {config, state: {withoutFadeIn}} = this;
-		let opacity = config.point_opacity;
-
-		if (isUndefined(opacity)) {
-			opacity = this.getBaseValue(d) !== null &&
-					withoutFadeIn[d.id] ?
-				this.opacityForCircle(d) :
-				"0";
-		}
-
-		return opacity;
-	},
+        throw new Error("STUB");
+    },
 
 	opacityForCircle(d): string | number | null {
-		const {config} = this;
-		let opacity = config.point_opacity;
-
-		if (isUndefined(opacity)) {
-			opacity = config.point_show && !this.isPointFocusOnly?.() ? null : "0";
-
-			opacity = isValue(this.getBaseValue(d)) ?
-				(this.isBubbleType(d) || this.isScatterType(d) ? "0.5" : opacity) :
-				"0";
-		}
-
-		return opacity;
-	},
+        throw new Error("STUB");
+    },
 
 	initCircle(): void {
 		const $$ = this;
@@ -122,7 +101,7 @@ export default {
 		// only for scatter & bubble type should generate seprate <g> node
 		if (!targets) {
 			targets = $$.filterNullish(data.targets)
-				.filter(d => this.isScatterType(d) || this.isBubbleType(d));
+				.filter(d => { throw new Error("STUB"); });
 
 			const mainCircle = $el.main.select(`.${$CIRCLE.chartCircles}`)
 				.style("pointer-events", "none")
@@ -135,31 +114,21 @@ export default {
 
 		// Circles for each data point on lines
 		selectionEnabled && enterNode.append("g")
-			.attr("class", d => $$.generateClass($SELECT.selectedCircles, d.id));
+			.attr("class", d => { throw new Error("STUB"); });
 
 		enterNode.append("g")
 			.attr("class", classCircles)
 			.call(selection => {
-				$$.setCssRule(true, `.${$CIRCLE.circles}`, ["cursor:pointer"], isSelectable)(
-					selection
-				);
-				$$.setCssRule(true, ` .${$CIRCLE.circle}`, ["fill", "stroke"], $$.color)(selection);
-			})
+                throw new Error("STUB");
+            })
 			.style("opacity", function() {
-				const parent = d3Select(this.parentNode);
-
-				// if the parent node is .bb-chart-circles (bubble, scatter), initialize <g bb-circles> with opacity "0"
-				return parent.classed($CIRCLE.chartCircles) ? "0" : null;
-			});
+                throw new Error("STUB");
+            });
 
 		// Update date for selected circles
 		selectionEnabled && targets.forEach(t => {
-			$el.main.selectAll(`.${$SELECT.selectedCircles}${$$.getTargetSelectorSuffix(t.id)}`)
-				.selectAll(`${$SELECT.selectedCircle}`)
-				.each(d => {
-					d.value = t.values[d.index].value;
-				});
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	updateCircle(isSub = false): void {
@@ -174,14 +143,8 @@ export default {
 			const circles = $root.main.selectAll(`.${$CIRCLE.circles}`)
 				.selectAll(`.${$CIRCLE.circle}`)
 				.data(d => {
-					const data = ($$.isLineType(d) && $$.shouldDrawPointsForLine(d)) ||
-							$$.isBubbleType(d) || $$.isRadarType(d) || $$.isScatterType(d) ?
-						(focusOnly ? [d.values[0]] : d.values) :
-						[];
-
-					// return data;
-					return $$.filterNullish(data);
-				});
+                    throw new Error("STUB");
+                });
 
 			circles.exit().remove();
 
@@ -209,9 +172,7 @@ export default {
 		const $$ = this;
 		const fn = $$.getStylePropValue($$.color);
 
-		return (d: IDataRow) => (
-			$$.config.point_radialGradient ? $$.getGradienColortUrl(d.id) : (fn ? fn(d) : null)
-		);
+		return (d: IDataRow) => { throw new Error("STUB"); };
 	},
 
 	/**
@@ -221,8 +182,8 @@ export default {
 	 * @private
 	 */
 	updateCircleColor(d: IDataRow): string | null {
-		return this.generateUpdateCircleColor()(d);
-	},
+        throw new Error("STUB");
+    },
 
 	redrawCircle(cx: Function, cy: Function, withTransition: boolean, flow, isSub = false) {
 		const $$ = this;
@@ -256,13 +217,13 @@ export default {
 				// reusing the same name would interrupt the cx/cy transition before
 				// it can commit, leaving circles stranded at their old scale positions.
 				$T(sel.filter(function() {
-					return !!this.getAttribute("cx");
-				}), true, `${t}-pos`)
+                    throw new Error("STUB");
+                }), true, `${t}-pos`)
 					.attr("cx", cx).attr("cy", cy).style("fill", updateCircleColor);
 
 				sel.filter(function() {
-					return !this.getAttribute("cx");
-				})
+                    throw new Error("STUB");
+                })
 					.attr("cx", cx).attr("cy", cy).style("fill", updateCircleColor);
 			} else {
 				sel.attr("cx", cx).attr("cy", cy).style("fill", updateCircleColor);
@@ -282,13 +243,8 @@ export default {
 		const mainCircles: any[] = [];
 
 		$root.circle.each(function(d) {
-			let result: d3Selection | any = fn.bind(this)(d);
-
-			result = $T(result, withTransition || !rendered, t)
-				.style("opacity", opacityStyleFn);
-
-			mainCircles.push(result);
-		});
+            throw new Error("STUB");
+        });
 
 		return [
 			mainCircles,
@@ -318,27 +274,16 @@ export default {
 			if (d) {
 				circle = circle
 					.filter(function(t) {
-						const data = d.filter?.(v => v.id === t.id);
-
-						return data.length ? d3Select(this).datum(data[0]) : false;
-					});
+                        throw new Error("STUB");
+                    });
 			}
 
 			circle
 				.attr("class", this.updatePointClass.bind(this))
 				.style("opacity", null)
 				.each(function(d) {
-					const {id, index, value} = d;
-					let visibility = "hidden";
-
-					if (isValue(value)) {
-						fn.bind(this)(d);
-						$$.expandCircles(index, id);
-						visibility = "";
-					}
-
-					this.style.visibility = visibility;
-				});
+                    throw new Error("STUB");
+                });
 		}
 	},
 
@@ -371,18 +316,8 @@ export default {
 		} else {
 			// transform must be applied to each node individually
 			circles.each(function() {
-				const point = d3Select(this);
-
-				if (this.tagName === "circle") {
-					point.attr("r", r);
-				} else {
-					const {width, height} = getPointBBox(this);
-					const x = ratio * (+point.attr("x") + width / 2);
-					const y = ratio * (+point.attr("y") + height / 2);
-
-					point.attr("transform", `translate(${x} ${y}) scale(${scale})`);
-				}
-			});
+                throw new Error("STUB");
+            });
 		}
 	},
 
@@ -392,8 +327,8 @@ export default {
 
 		const circles = $$.getShapeByIndex("circle", i)
 			.filter(function() {
-				return d3Select(this).classed($COMMON.EXPANDED);
-			})
+                throw new Error("STUB");
+            })
 			.classed($COMMON.EXPANDED, false);
 
 		circles.attr("r", r);
@@ -437,14 +372,8 @@ export default {
 		if (isObject(d) || circle) {
 			pointClass = d === true ?
 				circle.each(function(d) {
-					let className = $$.getClass("circle", true)(d);
-
-					if (this.getAttribute("class").indexOf($COMMON.EXPANDED) > -1) {
-						className += ` ${$COMMON.EXPANDED}`;
-					}
-
-					this.setAttribute("class", className);
-				}) :
+                    throw new Error("STUB");
+                }) :
 				$$.getClass("circle", true)(d);
 		}
 
@@ -464,8 +393,8 @@ export default {
 			const $$ = this;
 			const {width, height} = getPointBBox(element.node());
 
-			const xPosFn2 = d => (isValue(d.value) ? xPosFn(d) - width / 2 : 0);
-			const yPosFn2 = d => (isValue(d.value) ? yPosFn(d) - height / 2 : 0);
+			const xPosFn2 = d => { throw new Error("STUB"); };
+			const yPosFn2 = d => { throw new Error("STUB"); };
 			let mainCircles = element;
 
 			if (withTransition) {
@@ -521,7 +450,7 @@ export default {
 	// 'rectangle' data point
 	rectangle: {
 		create(element, sizeFn, fillStyleFn) {
-			const rectSizeFn = d => sizeFn(d) * 2.0;
+			const rectSizeFn = d => { throw new Error("STUB"); };
 
 			return element.append("rect")
 				.attr("class", this.updatePointClass.bind(this))
@@ -534,8 +463,8 @@ export default {
 		update(element, xPosFn, yPosFn, fillStyleFn, withTransition, flow, selectedCircles) {
 			const $$ = this;
 			const r = $$.config.point_r;
-			const rectXPosFn = d => xPosFn(d) - r;
-			const rectYPosFn = d => yPosFn(d) - r;
+			const rectXPosFn = d => { throw new Error("STUB"); };
+			const rectYPosFn = d => { throw new Error("STUB"); };
 
 			let mainCircles = element;
 

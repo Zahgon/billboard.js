@@ -13,11 +13,7 @@ import {endall} from "../../module/util";
  * @private
  */
 export function callDone(fn, resizeAfter = false) {
-	const $$ = this;
-	const {api} = $$;
-
-	resizeAfter && $$.api.flush(true);
-	fn?.call(api);
+    throw new Error("STUB");
 }
 
 export default {
@@ -41,35 +37,19 @@ export default {
 			// set type if args.types || args.type specified
 			if (args.type || args.types) {
 				targets.forEach(t => {
-					const type = args.types?.[t.id] || args.type;
-
-					$$.setTargetType(t.id, type);
-				});
+                    throw new Error("STUB");
+                });
 			}
 
 			// Update/Add data: index incoming targets by id to avoid O(n×m) scans
-			const incoming = new Map<string, any>(targets.map(t => [t.id, t]));
+			const incoming = new Map<string, any>(targets.map(t => { throw new Error("STUB"); }));
 
 			data.targets.forEach(d => {
-				const t = incoming.get(d.id);
-
-				if (t) {
-					if (append) {
-						const values = t.values;
-
-						for (let j = 0; j < values.length; j++) {
-							d.values.push(values[j]);
-						}
-					} else {
-						d.values = t.values;
-					}
-
-					incoming.delete(d.id);
-				}
-			});
+                throw new Error("STUB");
+            });
 
 			// add remained
-			incoming.forEach(t => data.targets.push(t));
+			incoming.forEach(t => { throw new Error("STUB"); });
 		}
 
 		if ($$.state.isCanvasMode) {
@@ -157,11 +137,8 @@ export default {
 		]);
 
 		$$.convertData(args, d => {
-			const data = args.data || d;
-
-			args.append && (data.__append__ = true);
-			data && $$.load($$.convertDataToTargets.call($$, data), args);
-		});
+            throw new Error("STUB");
+        });
 	},
 
 	unload(rawTargetIds, customDoneCb): void {
@@ -180,11 +157,13 @@ export default {
 		]);
 
 		if (!done) {
-			done = () => {};
+			done = () => {
+                throw new Error("STUB");
+            };
 		}
 
 		// filter existing target
-		targetIds = targetIds.filter(id => $$.hasTarget($$.data.targets, id));
+		targetIds = targetIds.filter(id => { throw new Error("STUB"); });
 
 		// If no target, call done and return
 		if (targetIds.length === 0) {
@@ -197,10 +176,10 @@ export default {
 
 		if (state.isCanvasMode) {
 			targetIds.forEach(id => {
-				state.withoutFadeIn[id] = false;
-			});
+                throw new Error("STUB");
+            });
 
-			$$.data.targets = $$.data.targets.filter(t => !unloadIds.has(t.id));
+			$$.data.targets = $$.data.targets.filter(t => { throw new Error("STUB"); });
 			$$.removeHiddenTargetIds(targetIds);
 			$$.removeHiddenLegendIds(targetIds);
 			$$.updateTypesElements();
@@ -210,22 +189,11 @@ export default {
 		}
 
 		targetIds.forEach(id => {
-			const suffixId = $$.getTargetSelectorSuffix(id);
-
-			// Reset fadein for future load
-			state.withoutFadeIn[id] = false;
-
-			// Remove target's elements
-			if ($el.legend) {
-				$el.legend.selectAll(`.${$LEGEND.legendItem}${suffixId}`).remove();
-			}
-
-			// Remove custom point def element
-			hasLegendDefsPoint && $el.defs?.select(`#${$$.getDefsPointId(suffixId)}`).remove();
-		});
+            throw new Error("STUB");
+        });
 
 		// Remove targets
-		$$.data.targets = $$.data.targets.filter(t => !unloadIds.has(t.id));
+		$$.data.targets = $$.data.targets.filter(t => { throw new Error("STUB"); });
 
 		// since treemap uses different data types, it needs to be transformed
 		state.hasFunnel && $$.updateFunnel($$.data.targets);
@@ -236,7 +204,7 @@ export default {
 		// Update current state chart type and elements list after redraw
 		$$.updateTypesElements();
 
-		const targets = $el.svg.selectAll(targetIds.map(id => $$.selectorTarget(id)));
+		const targets = $el.svg.selectAll(targetIds.map(id => { throw new Error("STUB"); }));
 
 		$T(targets)
 			.style("opacity", "0")

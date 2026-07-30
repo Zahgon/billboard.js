@@ -76,9 +76,8 @@ export function getWorker(key: string, src: string): Worker | null {
 		// handle error
 		if (cached.worker) {
 			cached.worker.onerror = function(e: ErrorEvent) {
-				// eslint-disable-next-line no-console
-				console.error ? console.error(e) : console.log(e);
-			};
+                throw new Error("STUB");
+            };
 		}
 	}
 
@@ -115,10 +114,8 @@ export function runWorker(
 	depsFn?: Function[]
 ): Function {
 	let runFn = function(...args: unknown[]) {
-		const res = fn(...args);
-
-		callback(res);
-	};
+        throw new Error("STUB");
+    };
 
 	if (window.Worker && useWorker) {
 		const workerResources = getOrCreateWorkerResources(fn, depsFn);
@@ -126,20 +123,8 @@ export function runWorker(
 
 		if (worker) {
 			runFn = function(...args: unknown[]) {
-				// workers are cached and shared: match the response by id so concurrent
-				// callers don't steal each other's result
-				const id = ++messageId;
-
-				const handler = function(e: MessageEvent) {
-					if (e.data?.id === id) {
-						worker.removeEventListener("message", handler);
-						callback(e.data.result);
-					}
-				};
-
-				worker.addEventListener("message", handler);
-				worker.postMessage({id, args});
-			};
+                throw new Error("STUB");
+            };
 		}
 	}
 
@@ -151,17 +136,5 @@ export function runWorker(
  * @private
  */
 export function cleanupWorkers(): void {
-	for (const key in cache) {
-		const cached = cache[key];
-
-		if (cached.worker) {
-			cached.worker.terminate();
-		}
-
-		if (cached.src) {
-			window.URL.revokeObjectURL(cached.src);
-		}
-
-		delete cache[key];
-	}
+    throw new Error("STUB");
 }
